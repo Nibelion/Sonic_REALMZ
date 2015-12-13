@@ -4,7 +4,7 @@ If after you've logged in you can't move - click anywhere on the page or better 
 Welcome to Sonic RealmZ!
 
 To start playing enter your character's name in the "Login (Name)" form. No password needed at this point.
-After you've logged in click on a canvas element of the webpage (window with level graphics and other things). asd
+After you've logged in click on a canvas element of the webpage (window with level graphics and other things).
 
 --Controls:
 A - Move left

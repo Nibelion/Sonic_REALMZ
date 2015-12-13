@@ -40,6 +40,7 @@ var _spriteKnuckles = new Image();      _spriteKnuckles.src = "../assets/i/playe
 var _spriteTails = new Image();         _spriteTails.src = "../assets/i/player/_spriteTails.png";
 var _spriteAmy = new Image();           _spriteAmy.src = "../assets/i/player/_spriteAmy.png";
 var _spriteClic = new Image();          _spriteClic.src     = "../assets/i/player/_spriteClic.png";
+var _spriteSNIF = new Image();          _spriteSNIF.src     = "../assets/i/player/_spriteSNIF.png";
 
 var _sprite_prj001 = new Image();       _sprite_prj001.src     = "../assets/i/_sprite_prj001.png";
 
