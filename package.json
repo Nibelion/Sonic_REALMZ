@@ -1,0 +1,25 @@
+{
+  "name": "Sonic-RealmZ.com",
+  "version": "1.7.2",
+  "description": "Sonic RealmZ web-server",
+  "main": "server.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "&",
+    "start": "nodejs server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "null"
+  },
+  "keywords": [
+    "Sonic",
+    "RealmZ",
+    "Hedgehog",
+    "MMORPG",
+    "SEGA"
+  ],
+  "author": "Mikhail Galich",
+  "license": "None"
+}

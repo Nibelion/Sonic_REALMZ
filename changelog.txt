@@ -1,0 +1,296 @@
+Water v1.7.7 (Public beta) - 13.12.2015
+
+*Back-end:
+-Badniks & players now regen their health over time.
+-Default normal ring spawn rate is now 20 seconds.
+
+*Front-end:
+-Both badniks' and players' health bars work properly now (kudos to Nibelion).
+-"Players online" field is working properly again.
+-Index page renamed to "Server" for SEO purpose.
+
+=== === === === === === === === === =
+
+Water v1.7.6 (Public beta) - 12.12.2015
+
+*Back-end:
+-Super Ring introduced. Spawns at random location every five minutes (unless there is another super ring present) and awards 50 rings instead of 1 and replenishes health. Super ring's spawn is marked by a server message (The super ring has appeared in this world.)
+-Badniks now have health.
+-Badniks fight back if you shoot them.
+-Shooting causes random damage between 8 and 12 HP.
+-Jumping on badniks causes 10 damage.
+-Rings respawn rate config line has been removed as different type of items have different spawn rates.
+
+*Front-end:
+-Sounds can now be toggled on and off.
+
+=== === === === === === === === === =
+
+Water v1.7.5 (Public beta) - 09.12.2015
+
+*Back-end:
+-maxHP formula: level * 10 + 100.
+-Server messages introduced.
+-Rings introduced and stored in the database. Rings heal and award players with 100 score.
+-Rings' and badniks' locations are adjusted. More badniks added.
+-Added config line: RingRespawnRate - rate at which rings respawn (Default: 15 seconds).
+-Player movement has been adjusted.
+
+*Front-end:
+-System chat messages have purple background and bold white text.
+-Player animation is now affected by their speed.
+
+=== === === === === === === === === =
+
+Water v1.7.4 (Public beta) - 05.12.2015
+
+*Back-end:
+-Level, experience and score is now stored in the database so you can continue.
+-Progress is saved every 5 seconds.
+
+*Front-end:
+-Blackout sound is back.
+-Fixed minor client-side bugs.
+-HTML crosshair is back.
+-Tails and Amy sprites introduced.
+
+=== === === === === === === === === =
+
+Water v1.7.3a (Public beta) - 04.12.2015
+
+*Back-end:
+-Player's score is now stored in a database.
+
+=== === === === === === === === === =
+
+
+Water v1.7.3 (Public beta) - 04.12.2015
+
+*Back-end:
+-Players hit by other players now suffer minor consequences.
+-Network traffic optimization: Badniks that are not in the field of view now are not updated.
+
+*Front-end:
+-Sort of a title screen is back again.
+
+Correctness issues resolved:
+-Players that didn't move upon other player's login are now properly visible to that player.
+-Same goes for hp changes.
+
+=== === === === === === === === === =
+
+Water v1.7.2 (Public beta) - 03.12.2015
+
+*Back-end:
+-Network traffic optimization: Players' locations are updated upon movement only.
+-Registration form is now functional.
+--To register enter your desired name, password twice and existing email adress.
+
+CONFIG FILE:
+-"LastMessagesAmmount" changed to "LMA".
+
+*Front-end:
+-Login form now hides itself after logging in. This frees up space on the webpage.
+
+=== === === === === === === === === =
+
+Water v1.7.1 (Public beta) - 02.12.2015
+
+*Back-end:
+Correctness issues resolved:
+-Fixed authorization.
+
+*Front-end:
+-Projectiles now look like STH1 Buzzbomber projectiles.
+
+=== === === === === === === === === =
+
+Water v1.7.0 (Public beta) - 02.12.2015
+
+*Back-end:
+-Major security improvements.
+-Authorization system is now implemented. Registration is currently available on forum 'sonic-world.ru'.
+-Projectiles and player's movement are calculated on the server side now.
+-Projectiles now hit platforms and ground.
+
+*Front-end:
+-Block sprites are now same-ish height to look decent.
+
+GAMEPLAY:
+-Badniks' hitbox for jump attacks increased.
+
+CONFIG FILE:
+-updateDelay - sets the interval before sending information to players about everything. (21 by default)
+
+Correctness issues resolved:
+-Players no longer stop in midair if switched tabs during jump.
+-Players' animation no longer stops when switching tabs.
+-Players online counter works properly now.
+-Players no longer go invisible randomly.
+
+=== === === === === === === === === =
+
+Water v1.6.9 (Public beta) - 29.11.2015
+
+*Back-end:
+-Medium security improvements.
+-Event system introduced.
+
+*Front-end:
+-Jump sound changed from annoying STH1 to Sonic 06.
+-Added sprite: Knuckles
+
+=== === === === === === === === === =
+
+Water v1.6.8 (Public beta) - 29.11.2015
+
+*Front-end:
+-Added sprites for players to use:
+--Silver
+--Espio
+--Blaze
+--Fiona
+--Scourge
+--Rogue
+
+=== === === === === === === === === =
+
+Water v1.6.7 (Public beta) - 28.11.2015
+
+*Back-end:
+-Minor essential security improvements.
+
+*Front-end:
+-Players look different depending on what character they've chosen during login.
+
+=== === === === === === === === === =
+
+Water v1.6.5 (Public beta) - 27.11.2015
+
+*Back-end:
+-Cached chat messages are back on.
+-By default last 20 messages are cached and sent to newly logged in players.
+-Minor security improments.
+
+*Front-end:
+-Minor performance improvements.
+
+=== === === === === === === === === =
+
+Water v1.6.0 (Public beta) - 26.11.2015
+
+*Back-end:
+-Fixed a bug that caused players to see other players before they've logged in.
+-Players are no longer able to use the same names.
+-Badniks featured! Killable, they respawn and award players with score.
+
+*Front-end:
+-Level expanded a bit.
+-Performance optimization: Player's coordinates are now sent once in 20 milliseconds.
+-Beware of Dark Vortex!
+
+=== === === === === === === === === =
+
+Water v1.5.0 (pre-alpha) - 25.11.2015
+
+*Back-end:
+-Log in functionality in development
+
+*Front-end:
+-Fixed a bug when chatting caused player to move.
+-Fixed a bug when jumping caused screen to scroll down on windows with low width.
+-Pressing ESCAPE if focused on chat form erases everything you've typed and focuses on the game canvas.
+-After logging in browser properly focuses on the canvas to enable moving right away.
+-Level "Tech Tower" expanded.
+-You can choose a character to play with (Sonic or Shadow). It doesn't display for other players though.
+-Sonic font introduced to canvas.
+
+=== === === === === === === === === =
+
+Water v1.1.2 (pre-alpha) - 24.11.2015
+
+*Back-end:
+-Major support for projectiles and exclusive socket access.
+
+*Front-end:
+-Controls have been changed: use WASD to move.
+-Left mouse click launches a projectile towards the cursor.
+-Rings and score counts added (currently nothing to collect).
+-Health bars are partially working (You see the number but the bar doesn't deplete)
+
+=== === === === === === === === === =
+
+Water v1.1.0 (pre-alpha) - 21.11.2015
+
+*Back-end:
+
+*Front-end:
+-Minimal platforms added.
+-Realm has been changed:
+- -Water has been added. It's deadly.
+- -Camera controll for the water.
+- -Angel Island removed. Replaced by platforms.
+
+=== === === === === === === === === =
+
+Water v1.0.7 (pre-alpha) - 19.11.2015
+
+*Back-end:
+-Added config.json in order to configure server.
+-Added logging.
+-Password input is back on (For now just for admin).
+-404 errorpage added.
+-Chat caching!
+- -Server can now be set up to send a certain ammount of messages that were last received during this session.
+- -If "lastMessagesAmmount" is set to 5 then last five messages will be sent to a newly connected player. 0 - off.
+
+*Front-end:
+-Added sky-ish background.
+
+=== === === === === === === === === =
+
+Water v1.0.5 (pre-alpha) - 17.11.2015
+
+*Back-end:
+- ! Minimal chat engine is up and running. Here is a few things you should:
+- -Messages are only received if online. There is no database or caching for chat yet.
+
+*Front-end:
+- ! Real-time chat added.
+-Jump sound added.
+
+=== === === === === === === === === =
+
+Water v1.0.2 (pre-alpha) - 15.11.2015
+
+*Front-end:
+-Local player is now created only after "logging in" to avoid commotion.
+-Fixed sprites animation speed bug that caused players' log in to increase animation speed for all sprites.
+-Removed that nasty platform-looking pointer. Default pointer is back.
+-Password and select server fields are disabled.
+-Login form autocomplete is disabled in order not to disable connect button until hard-refresh (e.g. CTRL+SHIFT+R).
+-2D camera implemeted.
+-Level expanded.
+-Players' name now have a cute stroke.
+
+=== === === === === === === === === =
+
+Water v1.0.1 (pre-alpha) - 14.11.2015
+
+*Back-end:
+-Players are properly removed when disconnected
+-Tweaked HTTP server a little bit so all files can be accessed without uneccessary routing.
+
+*Front-end:
+-Title changed from "This server though" to "Sonic RealmZ"
+-Favicon added.
+-Added sprites (Currently only Sonic).
+
+=== === === === === === === === === =
+
+Water v1.0.0 (pre-alpha) - 13.11.2015
+
+*Back-end core is complete.
+*Added front-end elements:
+-Login form
+-Tiny 2d context added.

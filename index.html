@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Server</title>
+        <link rel="shortcut icon" href="../assets/i/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"/>
+        <link rel="stylesheet" type="text/css" href="assets/css/main.css"/>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="assets/js/main.js"></script>
+    </head>
+    
+<body onload="init()">
+    <div id="wrap">
+        <div id="widgetLogin">
+            <form id="formLogin" autocomplete="off">
+                <input id="formName" maxlength="10" type="text" placeholder="Login... (Name)" class="forms" />
+                <input id="formPass" maxlength="10" type="password" placeholder="Password..." class="forms" />
+                <select id="char">
+                    <option value="1">Sonic</option>
+                    <option value="2">Shadow</option>
+                    <option value="3">Silver</option>
+                    <option value="4">Espio</option>
+                    <option value="5">Blaze</option>
+                    <option value="6">Fiona</option>
+                    <option value="7">Scourge</option>
+                    <option value="8">Rogue</option>
+                    <option value="9">Knuckles</option>
+                    <option value="10">Tails</option>
+                    <option value="11">Amy</option>
+                </select>
+                <select class="forms">
+                    <option>-= Sonic RealmZ =- vm14965.hv8.ru</option>
+                    <option>(Unavailable) Local server - 127.0.0.1</option>
+                    <option>(Unavailable) Lost server - 48.151.6.234:2</option>
+                </select>
+                <br>
+                <input id="btnConnect" type="button" value="Connect" onclick="netLogin()" class="forms" />
+                <!--<input id="btnForgot" type="button" value="Forgot password" onclick="netForgot()" class="forms" />-->
+            </form>
+            <hr>
+            <form id="formSignup" autocomplete="off">
+                <input id="formSignupName" maxlength="10" type="text" placeholder="Login (Name)" class="forms" />
+                <input id="formSignupPass1" maxlength="10" type="password" placeholder="Password" class="forms" />
+                <input id="formSignupPass2" maxlength="10" type="password" placeholder="Password (Repeat)" class="forms" />
+                <input id="formEmail" maxlength="20" type="email" placeholder="E-mail" class="forms" />
+                <input id="btnSignup" type="button" value="Signup" onclick="netSignup()" class="forms" />
+            </form>
+        </div>
+        <canvas id="game" ondragstart="return false" ondrop="return false" tabindex="1"></canvas>
+        <div id="widgetChat">
+            <span>Sound:</span><input id="optionsSound" type="checkbox" checked></input>
+            <span>Players online: </span><span id="userCount">Unknown</span>
+            <div id="messages"></div>
+            <form id="formChat" autocomplete="off">
+                <input id="formText" maxlength="120" type="text" placeholder="Type your text to chat here..." class="forms" />
+                <input id="btnChat" type="button" value="Send" class="forms" onclick="sendMessage()" />
+            </form>
+        </div>
+    </div>
+</body>
+
+        <script src="assets/js/assets.js"></script>
+        <script src="assets/js/classes.js"></script>
+        <script src="assets/js/socket.js"></script>
+        <script src="client.js"></script>
+    
+</html>

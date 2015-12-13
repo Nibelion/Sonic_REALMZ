@@ -1,0 +1,89 @@
+* { padding: 0; margin: 0 }
+
+body { 
+    background-color: #CEF;
+}
+
+#wrap {
+    display: inline-block;
+    margin: 5px auto;
+}
+
+#widgetLogin {
+    width: 320px;
+    height: 460px;
+    display: inline-block;
+    background: #ACE;
+    border-radius: 15px;
+    margin: 5px;
+    padding: 10px;
+    float: left;
+}
+
+#widgetLogin #btnConnect, #btnForgot {
+    width: 100%; /* 49% */
+}
+
+#widgetLogin select{
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.forms {
+    border-radius: 10px;
+    padding: 2px;
+    width: 320px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+hr { margin: 1px auto 5px; }
+
+#game {
+    width: 640px;
+    height: 480px;
+    margin: 5px;
+    border-radius: 15px;
+    float: left;
+    cursor: crosshair;
+}
+
+#widgetChat {
+    width: 550px;
+    height: 460px;
+    display: inline-block;
+    background: #ACE;
+    border-radius: 15px;
+    margin: 5px;
+    padding: 10px;
+}
+
+#messages {
+    background-color: white;
+    width: 550px;
+    height: 412px;
+    margin-bottom: 5px;
+    overflow-y: scroll;
+}
+
+.chatMessage {
+    padding: 2px;
+}
+
+.normal:nth-child(odd) {
+    background-color: beige;
+}
+
+.system {
+    background-color: mediumslateblue;
+    color: aquamarine;
+    font-weight: bold;
+}
+
+#formText { float: left ; width: 80% }
+#btnChat { width: 20% }
+
+@font-face {
+    font-family: 'SonicTitle';
+    src: url('../fonts/_fntTitle.ttf');
+}
