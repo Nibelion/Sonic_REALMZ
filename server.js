@@ -274,15 +274,10 @@ io.on('connection', function(socket){
                                 thisPlayer.sck = socket;
                                 thisPlayer.lastShot = now();
                                 thisPlayer.hp = thisPlayer.level * 10 + 100;
-                                                        
-                                if( userName == "Metakimi" )
-                                    {
-                                        thisPlayer.cpic = "clic"
-                                    } else {
-                                        if( thisPlayer.cpic == "clic" ){
-                                            thisPlayer.cpic = 1;
-                                        } else { thisPlayer.cpic = data.cpic };
-                                    };
+
+                                thisPlayer.cpic = data.cpic;
+                                if( userName == "Metakimi" ) { thisPlayer.cpic = "clic"};
+                                if( userName == "SN1F" ) { thisPlayer.cpic = "snif"};
                                 
                                 players.push(thisPlayer);
                                 sendPlayersOnce();

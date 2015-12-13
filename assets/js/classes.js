@@ -56,6 +56,9 @@ function player(x,y,name,cpic){
         case "clic":
             this.i = _spriteClic;
             break;
+        case "snif":
+            this.i = _spriteSNIF;
+            break;
         default:
             this.i = _spriteSonic;
             break;
