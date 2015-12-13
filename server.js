@@ -47,8 +47,11 @@ setInterval(function(){
                 item.u = true;
                 p.rings += item.award;
                 p.score += 100;
-                p.hp += 1;
-                if( item.t == "ringBig" ){ p.hp += p.maxHP };
+                p.hp += item.award;
+                p.Energy += item.award/10;
+                p.ESP += item.award/10;
+                p.Chaos += item.award;
+                if( item.type == "ringBig" ){ p.hp = p.maxHP };
                 p.sck.emit("event",{
                     name: "jump",
                     type: "sound",
@@ -61,7 +64,7 @@ setInterval(function(){
             io.emit("item", {
                 x: item.x,
                 y: item.y,
-                t: item.t,
+                type: item.type,
                 a: item.a,
                 id: i
             }); 
@@ -178,7 +181,12 @@ setInterval(function(){
             y: p.y,
             score: p.score,
             rings: p.rings,
-            exper: p.xp
+            exper: p.xp,
+            Energy: p.Energy,
+            ESP: p.ESP,
+            Chaos: p.Chaos,
+            HP: p.hp,
+            PlayerLevel: p.level
         });
         
         if ( p.mode != "f" ) { p.vY += 0.15 };
@@ -298,7 +306,7 @@ io.on('connection', function(socket){
                                     socket.emit("item", {
                                         x: thisItem.x,
                                         y: thisItem.y,
-                                        t: thisItem.t,
+                                        type: thisItem.type,
                                         a: thisItem.a,
                                         id: i
                                     });
@@ -361,6 +369,7 @@ io.on('connection', function(socket){
                                                 var d = now();                    
                                                 if( thisPlayer.lastShot + 500 < d ){
                                                     thisPlayer.lastShot = d;
+                                                    thisPlayer.Energy -= 10;
                                                     var pj = new projectile(thisPlayer.x, thisPlayer.y-16, data.sX, data.sY, socket.id)
                                                     proj.push(pj);
                                                     thisPlayer.sck.emit("event",{

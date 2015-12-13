@@ -17,6 +17,11 @@ var textChat ="";
 var score = 0;
 var rings = 0;
 var exper = 0;
+var Energy = 0;
+var ESP = 0;
+var Chaos = 0;
+var HP = 0;
+var PlayerLevel = 0;
 
 var e = document.getElementById('char');
 var optionsSound = document.getElementById('optionsSound');

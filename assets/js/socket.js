@@ -66,7 +66,7 @@ function netSocket()
             });
             
             socket.on('item',           function(data){
-                var newItem = new item( data.x, data.y, data.t, data.a );
+                var newItem = new item( data.x, data.y, data.type, data.a );
                 items[data.id] = newItem;
             });
             
@@ -76,7 +76,14 @@ function netSocket()
                 score = data.score;
                 rings = data.rings;
                 exper = data.exper;
+                Energy = data.Energy;
+                ESP = data.ESP;
+                Chaos = data.Chaos;
+                HP = data.HP;
+                PlayerLevel = data.PlayerLevel;
+            
             });
+            
             
         });
 

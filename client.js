@@ -115,11 +115,30 @@ function init(){
             
             context.restore();
 
+            context.strokeStyle = 'black';
+            context.font = "10px Andale Mono";
+            context.fillStyle = "black";
+            context.fillRect(10, 20,100,10);
+            context.fillStyle = "red";
+            context.fillRect(12, 22,(96*HP)/(PlayerLevel*10+100),6);
+            context.textAlign = "center";
+            context.fillStyle = "#FFF";
+            context.fillText(parseInt(HP), 60, 25);
+            
+            context.fillStyle = "black";
+            context.fillRect(10, 30,100,10);
+            context.fillStyle = "yellow";
+            context.fillRect(12, 32,(96*Energy)/(PlayerLevel*10+100),6);
+            context.fillStyle = "#FFF";
+            context.textAlign = "center"
+            context.fillText(parseInt(Energy), 60, 35);
+            
             context.font = "18px SonicTitle";
             context.fillStyle = "#FFF";
-            context.fillText("rings: "+rings,10,30);
-            context.fillText("score: "+score,10,50);
-            context.fillText("xp: "+exper,10,70);
+            context.textAlign = "left"
+            context.fillText("rings: "+rings,10,65);
+            context.fillText("score: "+score,10,85);
+            context.fillText("xp: "+exper,10,105);
             //context.drawImage( _spriteRing, 32,0,16,16,mX-8,mY-8,16,16);
         };
         

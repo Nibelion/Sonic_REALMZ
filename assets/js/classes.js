@@ -12,10 +12,14 @@ function player(x,y,name,cpic){
     this.fW = 64, this.fH = 64;    
     this.face = 1;
     
+    this.Energy;
+    this.ESP;
+    this.Chaos;
+    
     this.type = "Normal";
     this.mode = "n";
-    this.hp = 100;
-    this.level = 1;
+    this.hp;
+    this.level;
     
     this.cpic = cpic;
     
@@ -212,7 +216,10 @@ function item(x,y,t,a){
             break;
         case "ringBig":
             this.i = _spriteBigRing;
-            break;            
+            break;
+/*        default:
+            this.i = _spriteRing;
+            break;*/
     };
 
     this.f = 0.0;

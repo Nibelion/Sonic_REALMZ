@@ -46,7 +46,7 @@ global.player = function(x,y,name,ip){
     this.lastX = 0;
     this.lastY = 0;
     this.lastHP = 100;
-
+    
     this.score = 0;
     this.rings = 0;
     this.xp = 0;
@@ -55,15 +55,31 @@ global.player = function(x,y,name,ip){
     this.accel = 0.25;
     this.keyA = false;
     this.keyD = false;
-
+    
+    this.MaxEnergy = this.level * 10 + 100;
+    this.MaxChaos = this.level * 10 + 100;
+    this.MaxESP = this.level * 10 + 100;
     this.maxHP = this.level * 10 + 100;
     this.hp = this.maxHP;
+    this.Energy = this.MaxEnergy;
+    this.ESP = this.MaxESP;
+    this.Chaos = this.MaxChaos;
     
     this.update = function(){
         var updateThis = false;
-
+        
         this.maxHP = this.level * 10 + 100;
-        if(this.hp < this.maxHP ) { this.hp += 0.01 };
+        this.MaxEnergy = this.level * 10 + 100;
+        this.MaxChaos = this.level * 10 + 100;
+        this.MaxESP = this.level * 10 + 100; 
+        
+        if(this.hp < this.maxHP )                       //Regen HP and SP
+            { this.hp += 0.01 };
+        if(this.Energy < this.MaxEnergy) 
+            { this.Energy += 0.5 };
+        if(this.ESP < this.MaxESP ) 
+            { this.ESP += 0.3 };
+        
         if ( this.xp >= 100 * this.level ) {
             this.level = parseInt( this.level ) + 1;
             this.xp = 0;
@@ -149,16 +165,15 @@ global.platform = function(x,y,w,h,i){
     this.i = i;
 };
 
-global.item = function(x,y,t){
+global.item = function(x,y,type){
     this.x = x;
     this.y = y;
-    this.t = t;
+    this.type = type;
     this.r = 0;
-
     
     this.a = true;
     
-    switch( this.t ){
+    switch( this.type ){
         case "ring":
             this.award = 1; this.d = 24; this.rr = 20;
             break;
@@ -176,7 +191,7 @@ global.item = function(x,y,t){
             this.a = true;
             this.u = true;
             
-            if(this.t == "ringBig"){
+            if(this.type == "ringBig"){
                 var rR = parseInt( Math.random() * level.length );
                 this.x = level[rR].x + level[rR].w * 0.5 - 16;
                 this.y = level[rR].y - 46;
