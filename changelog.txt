@@ -1,3 +1,18 @@
+Water v1.7.7 ( BRANCH 1 ) (Public beta) - 15.12.2015
+
+*Back-end:
+-Players now has 4 pools: Health points, Energy, ESP and Chaos.
+-Players now use Energy to jump and shoot.
+-Jumping costs 40 energy. If player doesn't have that ammount of energy they won't jump.
+-Shooting costs 10 energy.
+
+*Front-end:
+-Four bars of HP, Energy, ESP and Chaos are added.
+-Fifth bar of XP is also added on the bottom of the screen.
+-Player's HP are now only show in the top-left corner.
+
+=== === === === === === === === === =
+
 Water v1.7.7 (Public beta) - 13.12.2015
 
 *Back-end:

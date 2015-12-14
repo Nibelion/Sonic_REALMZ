@@ -71,19 +71,17 @@ function netSocket()
             });
             
             socket.on('this',           function(data){
-                camera.x = data.x;
-                camera.y = data.y;
-                score = data.score;
-                rings = data.rings;
-                exper = data.exper;
-                Energy = data.Energy;
-                ESP = data.ESP;
-                Chaos = data.Chaos;
-                HP = data.HP;
-                PlayerLevel = data.PlayerLevel;
+                localPlayer = p[data.id];
+                localPlayer.Score = data.score;
+                localPlayer.Rings = data.rings;
+                localPlayer.XP = data.exper;
+                localPlayer.Energy = data.Energy;
+                localPlayer.ESP = data.ESP;
+                localPlayer.Chaos = data.Chaos;
+                localPlayer.HP = data.HP;
+                localPlayer.Level = data.PlayerLevel;
             
-            });
-            
+            });            
             
         });
 

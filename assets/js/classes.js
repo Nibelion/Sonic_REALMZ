@@ -15,6 +15,7 @@ function player(x,y,name,cpic){
     this.Energy;
     this.ESP;
     this.Chaos;
+    this.XP;
     
     this.type = "Normal";
     this.mode = "n";
@@ -117,15 +118,16 @@ function player(x,y,name,cpic){
         };
         if (this.mode == "f") { context.drawImage(_sprite_Eggmobile,this.face * 64, 0, 64, 46, this.x-32, this.y-25, 64, 46) };
 
-        context.strokeStyle = 'black';
-        context.font = "10px Andale Mono";
-        context.fillStyle = "black";
-        context.fillRect(this.x-25, this.y+3,50,12);
-        context.fillStyle = "red";
-        context.fillRect(this.x-22, this.y+5,(44*this.hp)/(this.level*10+100),8);
-        //44
-        context.fillStyle = "#FFF";
-        context.fillText(this.hp, this.x, this.y + 12);
+        if (localPlayer != this ) {
+            context.strokeStyle = 'black';
+            context.font = "10px Andale Mono";
+            context.fillStyle = "black";
+            context.fillRect(this.x-25, this.y+3,50,12);
+            context.fillStyle = "red";
+            context.fillRect(this.x-22, this.y+5,(44*this.hp)/(this.level*10+100),8);
+            context.fillStyle = "#FFF";
+            context.fillText(this.hp, this.x, this.y + 12);
+        };
     };
 };
 

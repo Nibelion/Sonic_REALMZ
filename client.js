@@ -91,54 +91,58 @@ function init(){
         } else {
 
             context.save();
-                context.translate(parseInt(cw * 0.5 - camera.x), parseInt(Math.max( ch * 0.5 - camera.y, -_gameWaterLever + ch * 0.5 )) ) ;
-
-                context.globalAlpha = 0.25;
-                context.drawImage(_imgIsland, 400 + camera.x * 0.15,
-                                  parseInt(Math.min( camera.y * 0.25, 145 ))*0.25
-                                  ,1039,540);
-                context.globalAlpha = 1;
-                context.drawImage(_level_TechnoTower,0,-860);
-
-                for ( var i = 0; i < badniks.length; i++) { if ( badniks[i] ) { badniks[i].draw() } };
             
-                for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
+            if( localPlayer ){     // IF WE HAVE OUR LOCAL PLAYER
+                context.translate(
+                    parseInt(cw * 0.5 - localPlayer.x),
+                    parseInt(Math.max( ch * 0.5 - localPlayer.y, -_gameWaterLever + ch * 0.5 ))
+                );
+                context.globalAlpha = 0.25;
+                context.drawImage(
+                    _imgIsland,
+                    400 + localPlayer.x * 0.15,
+                    parseInt(Math.min( localPlayer.y * 0.25, 145 ))*0.25,
+                    1039,
+                    540
+                );
+            };
 
-                for ( var i = 0; i < level.length; i++) { level[i].draw() };
+            context.globalAlpha = 1;
+            context.drawImage(_level_TechnoTower,0,-860);
 
-                for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
+            for ( var i = 0; i < badniks.length; i++) { if ( badniks[i] ) { badniks[i].draw() } };
 
-                for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };
+            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
 
-            context.fillStyle = "rgba( 0, 0, 168,0.5)";
-            context.fillRect( camera.x - cw * 0.5,_gameWaterLever, cw,  ch* 0.5 );
+            for ( var i = 0; i < level.length; i++) { level[i].draw() };
+
+            for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
+
+            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };
+            
+            if( localPlayer ){
+                context.fillStyle = "rgba( 0, 0, 168,0.5)";
+                context.fillRect( localPlayer.x - cw * 0.5, _gameWaterLever, cw,  ch* 0.5 );
+            };
             
             context.restore();
+            
+            if( localPlayer ) {
+                drawBar(context, 10, 10, "#F33", 100, 15, 3, localPlayer.hp, localPlayer.level * 10 + 100 );
+                drawBar(context, 10, 25, "#FA0", 100, 15, 3, localPlayer.Energy, 100 );
+                drawBar(context, 10, 40, "#0CF", 100, 15, 3, localPlayer.ESP, localPlayer.level * 10 + 100 );
+                drawBar(context, 10, 55, "#0B6", 100, 15, 3, localPlayer.Chaos, localPlayer.level * 10 + 100 );
+                drawBar(context, 0, ch - 15, "#80F", cw, 15, 3, localPlayer.XP, localPlayer.level * 100 );
+                context.font = "12px SonicTitle";
+                context.fillStyle = "#FFF";
+                context.textAlign = "left"
+                context.strokeText("rings: "+localPlayer.Rings,11,85);
+                context.fillText("rings: "+localPlayer.Rings,11,85);
+                context.strokeText("score: "+localPlayer.Score,11,100);
+                context.fillText("score: "+localPlayer.Score,11,100);
+            };
+            
 
-            context.strokeStyle = 'black';
-            context.font = "10px Andale Mono";
-            context.fillStyle = "black";
-            context.fillRect(10, 20,100,10);
-            context.fillStyle = "red";
-            context.fillRect(12, 22,(96*HP)/(PlayerLevel*10+100),6);
-            context.textAlign = "center";
-            context.fillStyle = "#FFF";
-            context.fillText(parseInt(HP), 60, 25);
-            
-            context.fillStyle = "black";
-            context.fillRect(10, 30,100,10);
-            context.fillStyle = "yellow";
-            context.fillRect(12, 32,(96*Energy)/(PlayerLevel*10+100),6);
-            context.fillStyle = "#FFF";
-            context.textAlign = "center"
-            context.fillText(parseInt(Energy), 60, 35);
-            
-            context.font = "18px SonicTitle";
-            context.fillStyle = "#FFF";
-            context.textAlign = "left"
-            context.fillText("rings: "+rings,10,65);
-            context.fillText("score: "+score,10,85);
-            context.fillText("xp: "+exper,10,105);
             //context.drawImage( _spriteRing, 32,0,16,16,mX-8,mY-8,16,16);
         };
         
@@ -151,16 +155,40 @@ function init(){
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 
+const drawBar = function(ctx,x,y,c,w,h,p,v1,v2){
+    // ctx - context to draw on
+    // x, y - x and y location
+    // c - COLOR 
+    // w, h - width (x) and height (y) of a bar
+    // p - PADDING (fatness of borders)
+    // v1 - variable to track
+    // v2 - MAX variable
+    
+    if(ctx){
+        ctx.font = ( h - p ) + "px Andale Mono";
+        ctx.fillStyle = "black";
+        ctx.fillRect( x, y, w, h );
+        ctx.fillStyle = c;
+        ctx.fillRect( x+p, y+p, ((w - (p * 2)) * v1)/v2, h - p * 2);
+        ctx.textAlign = "center";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";        
+        ctx.strokeText( parseInt(v1)+"/"+parseInt(v2), x + w * 0.5, y + h * 0.75 );
+        ctx.fillStyle = "#FFF";
+        ctx.fillText( parseInt(v1)+"/"+parseInt(v2), x + w * 0.5, y + h * 0.75 );
+    };
+};
+
 function updateMouse(e){
     if(e.offsetX) { mX = e.offsetX; mY = e.offsetY } else
     if(e.layerX) { mX = e.layerX; mY = e.layerY };
 };
 
 const netLogin = function(){
-    if(!socket){ netSocket() };
     userName = $("#formName").val().trim();
     userPass = $("#formPass").val().trim();
     var choice = e.options[e.selectedIndex].value;
+    if(!socket){ netSocket() };
     
     document.getElementById("btnConnect").value = "Trying...";
     document.getElementById("btnConnect").disabled = true;
