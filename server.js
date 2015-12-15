@@ -393,6 +393,13 @@ io.on('connection', function(socket){
                                                     case 'D':
                                                         thisPlayer.keyD = true;
                                                         break;
+                                                    case 'F':
+                                                        thisPlayer.useSkill(
+                                                            "chaosControl",
+                                                            data.parameter1,
+                                                            data.parameter2
+                                                        );
+                                                        break;
                                                     case 'SPACE':
                                                         thisPlayer.useSkill("jump");
                                                         break;

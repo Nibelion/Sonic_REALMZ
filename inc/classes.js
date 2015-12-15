@@ -140,7 +140,7 @@ global.player = function(x,y,name,ip){
         };
     };
     
-    this.useSkill = function(skill){
+    this.useSkill = function(skill, parameter1, parameter2){
         switch(skill){
             case "jump":
                 if( this.vY == 0 && this.Energy >= 40 ){
@@ -151,6 +151,13 @@ global.player = function(x,y,name,ip){
                         type: "sound",
                         src: "assets/audio/_sfxJump.ogg"
                     });
+                }; 
+                break;
+            case "chaosControl":
+                if( this.Chaos >= 20 ){
+                    this.x = parameter1;
+                    this.y = parameter2;
+                    this.Chaos -= 20;
                 }; 
                 break;                
         };

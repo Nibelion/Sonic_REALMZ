@@ -58,7 +58,10 @@ function init(){
     
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
     
+    var trigger = 0;
+    
     function update(){
+
         
         $("#userCount").html( p.length ); 
         
@@ -73,11 +76,21 @@ function init(){
             if ( document.activeElement.id == "game" && socket){
                 if ( keys[65] ) { socket.emit('btnPress', { 'key' : 'A' }) };   // left     - 37
                 if ( !keys[65] ) { socket.emit('btnRelease', { 'key' : 'A' }) };   // left     - 37
+                
                 if ( keys[87] ) {  };   // up       - 38
                 if ( keys[68] ) { socket.emit('btnPress', { 'key' : 'D' }) };   // right    - 39
                 if ( !keys[68] ) { socket.emit('btnRelease', { 'key' : 'D' }) };   // right    - 39
                 if ( keys[83] ) {  };   // down     - 40
                 if ( keys[32] ) { socket.emit('btnPress', { 'key' : 'SPACE' }) };   // space    - 32
+                if ( keys[70] ) { trigger = 1 };
+                if ( !keys[70] && trigger == 1 ) {
+                    socket.emit('btnPress', {
+                        'key' : 'F',
+                        'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+                        'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+                    });
+                    trigger = 0
+                };
             }
 
         }
