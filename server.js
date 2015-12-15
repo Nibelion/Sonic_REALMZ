@@ -393,6 +393,9 @@ io.on('connection', function(socket){
                                                     case 'D':
                                                         thisPlayer.keyD = true;
                                                         break;
+                                                    case 'T':
+                                                        thisPlayer.useSkill("dash");
+                                                        break;
                                                     case 'F':
                                                         thisPlayer.useSkill(
                                                             "chaosControl",
@@ -402,6 +405,8 @@ io.on('connection', function(socket){
                                                         break;
                                                     case 'SPACE':
                                                         thisPlayer.useSkill("jump");
+                                                        break;
+                                                    default:
                                                         break;
                                                 }
                                             });

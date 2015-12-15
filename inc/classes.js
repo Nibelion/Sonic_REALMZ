@@ -51,7 +51,7 @@ global.player = function(x,y,name,ip){
     this.rings = 0;
     this.xp = 0;
     this.level = 1;
-    this.maxSpeed = 3.5;
+    this.maxSpeed = 4;
     this.accel = 0.25;
     this.keyA = false;
     this.keyD = false;
@@ -92,15 +92,14 @@ global.player = function(x,y,name,ip){
         };
         
         if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
-        if( this.keyA ){ this.vX -= 0.15 };                             // MOVE LEFT
-        if( this.keyD ){ this.vX += 0.15; };                            // MOVE RIGHT
-        if( this.vX >  this.maxSpeed ) { this.vX =  this.maxSpeed };   // SPEED LIMIT
-        if( this.vX < -this.maxSpeed ) { this.vX = -this.maxSpeed };   // SPEED LIMIT
+        if( this.keyA ){ this.vX -= 0.2 }; // MOVE LEFT
+        if( this.keyD ){ this.vX += 0.2 }; // MOVE LEFT
         
-        if( !this.keyA && !this.keyD ){ this.vX *= 0.9 };
+        //if( ((!this.keyA && this.vX < 0) && (!this.keyD && this.vX > 0)) ){ this.vX *= 0.9 };
+        if( this.vX < -this.accel || this.vX > this.accel ){ this.vX *= 0.9 };
 
-        if (this.vX < this.accel - 0.3 && this.vX > 0) { this.vX = 0 };
-        if (this.vX > -this.accel + 0.3 && this.vX < 0) { this.vX = 0 };
+        if (this.vX < this.accel - 0.25 && this.vX > 0) { this.vX = 0 };
+        if (this.vX > -this.accel + 0.25 && this.vX < 0) { this.vX = 0 };
             
         if (this.y >= 700 + ch * 0.5 ) {
             this.hp = this.maxHP;
@@ -151,6 +150,14 @@ global.player = function(x,y,name,ip){
                         type: "sound",
                         src: "assets/audio/_sfxJump.ogg"
                     });
+                }; 
+                break;
+            case "dash":
+                if( this.Energy >= 20 && this.vX != 0 ){
+                    this.Energy -= 20;
+                    if( this.vX < 0 ){ this.vX = -7 };
+                    if( this.vX > 0 ){ this.vX = 7 };
+                    
                 }; 
                 break;
             case "chaosControl":

@@ -47,6 +47,14 @@ function init(){
     }); 
     document.body.addEventListener("keyup", function(e) {
         keys[e.keyCode] = false;
+        if ( e.keyCode == 84 ) { socket.emit('btnPress', { 'key': 'T' }) };
+        if ( e.keyCode == 70 ) {
+                    socket.emit('btnPress', {
+                        'key' : 'F',
+                        'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+                        'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+                    });
+                };
         if ( e.keyCode == 13 && document.activeElement.id == "formText" ) {
             document.getElementById("game").focus();                
             sendMessage();
@@ -57,9 +65,7 @@ function init(){
     canvas.addEventListener("mousedown", shoot);
     
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-    
-    var trigger = 0;
-    
+        
     function update(){
 
         
@@ -82,15 +88,6 @@ function init(){
                 if ( !keys[68] ) { socket.emit('btnRelease', { 'key' : 'D' }) };   // right    - 39
                 if ( keys[83] ) {  };   // down     - 40
                 if ( keys[32] ) { socket.emit('btnPress', { 'key' : 'SPACE' }) };   // space    - 32
-                if ( keys[70] ) { trigger = 1 };
-                if ( !keys[70] && trigger == 1 ) {
-                    socket.emit('btnPress', {
-                        'key' : 'F',
-                        'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
-                        'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
-                    });
-                    trigger = 0
-                };
             }
 
         }
