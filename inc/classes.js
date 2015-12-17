@@ -51,12 +51,12 @@ global.player = function(x,y,name,ip){
     this.rings = 0;
     this.xp = 0;
     this.level = 1;
-    this.maxSpeed = 3.5;
+    this.maxSpeed = 4;
     this.accel = 0.25;
     this.keyA = false;
     this.keyD = false;
     
-    this.MaxEnergy = this.level * 10 + 100;
+    this.MaxEnergy = 100;
     this.MaxChaos = this.level * 10 + 100;
     this.MaxESP = this.level * 10 + 100;
     this.maxHP = this.level * 10 + 100;
@@ -68,17 +68,21 @@ global.player = function(x,y,name,ip){
     this.update = function(){
         var updateThis = false;
         
-        this.maxHP = this.level * 10 + 100;
-        this.MaxEnergy = this.level * 10 + 100;
+        this.maxHP = this.level * 10 + 100; 
         this.MaxChaos = this.level * 10 + 100;
         this.MaxESP = this.level * 10 + 100; 
         
-        if(this.hp < this.maxHP )                       //Regen HP and SP
+        if( this.hp < this.maxHP )          // HP regen
             { this.hp += 0.01 };
-        if(this.Energy < this.MaxEnergy) 
+        if( this.Energy < this.MaxEnergy)   // EN regen
             { this.Energy += 0.5 };
-        if(this.ESP < this.MaxESP ) 
+        if(this.ESP < this.MaxESP )         // ESP REGEN
             { this.ESP += 0.3 };
+        
+        if( this.hp > this.maxHP ) { this.hp = this.maxHP };
+        if( this.Energy > this.MaxEnergy ) { this.Energy = this.MaxEnergy };
+        if( this.ESP > this.MaxESP ) { this.ESP = this.MaxESP };
+        if( this.Chaos > this.MaxChaos ) { this.Chaos = this.MaxChaos };
         
         if ( this.xp >= 100 * this.level ) {
             this.level = parseInt( this.level ) + 1;
@@ -86,20 +90,18 @@ global.player = function(x,y,name,ip){
             this.hp = this.maxHP;
             updateThis = true;
         };
-        if( this.hp > this.maxHP ) { this.hp = this.maxHP };
-        if ( this.vX >  this.maxSpeed ) { this.vX =  this.maxSpeed };
-        if ( this.vX < -this.maxSpeed ) { this.vX = -this.maxSpeed };
         
-        if (this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
-                
-        if( this.keyA ){ this.vX -= 0.15 };
-        if( this.keyD ){ this.vX += 0.15; };
+        if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
+        if( this.keyA ){ this.vX -= 0.2 }; // MOVE LEFT
+        if( this.keyD ){ this.vX += 0.2 }; // MOVE LEFT
+        if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
         
-        if( !this.keyA && !this.keyD ){ this.vX *= 0.9 };
+        if( this.vX < -this.maxSpeed || this.vX > this.maxSpeed )
+        { this.vX *= 0.9 };
 
-        if (this.vX < this.accel - 0.3 && this.vX > 0) { this.vX = 0 };
-        if (this.vX > -this.accel + 0.3 && this.vX < 0) { this.vX = 0 };
-            
+        if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
+            { this.vX = 0; };
+        
         if (this.y >= 700 + ch * 0.5 ) {
             this.hp = this.maxHP;
             this.x = Math.random() * 1900;
@@ -126,6 +128,7 @@ global.player = function(x,y,name,ip){
         
         this.y += this.vY;
         this.x += this.vX;
+        
         if( this.x != this.lastX ||
             this.y != this.lastY ||
             this.hp != this.lastHP ||
@@ -137,6 +140,38 @@ global.player = function(x,y,name,ip){
             return true;
         };
     };
+    
+    this.useSkill = function(skill, parameter1, parameter2){
+        switch( skill ){
+            case "jump":
+                if( this.vY == 0 && this.Energy >= 40 ){
+                    this.vY = -5;
+                    this.Energy -= 40;
+                    this.sck.emit("event",{
+                        name: "jump",
+                        type: "sound",
+                        src: "assets/audio/_sfxJump.ogg"
+                    });
+                }; 
+                break;
+            case "dash":
+                if( this.Energy >= 20 && this.vX != 0 ){
+                    this.Energy -= 20;
+                    if( this.vX < 0 ){ this.vX = -7 };
+                    if( this.vX > 0 ){ this.vX = 7 };
+                    
+                }; 
+                break;
+            case "chaosControl":
+                if( this.Chaos >= 20 ){
+                    this.x = parameter1;
+                    this.y = parameter2;
+                    this.Chaos -= 20;
+                }; 
+                break;                
+        };
+    };
+    
 };
 
 global.projectile = function(x1,y1,sX,sY,id){

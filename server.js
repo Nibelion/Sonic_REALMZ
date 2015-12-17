@@ -177,8 +177,7 @@ setInterval(function(){
     for( var i = 0; i < players.length; i++) {
         var p = players[i];
         p.sck.emit('this', {
-            x: p.x,
-            y: p.y,
+            id: i,  // Which player in CLIENT's array is THEIR local player. (Must be same as server's)
             score: p.score,
             rings: p.rings,
             exper: p.xp,
@@ -366,9 +365,9 @@ io.on('connection', function(socket){
                                         });
 
                                 socket.on("netNewProjectile", function(data){
-                                                var d = now();                    
-                                                if( thisPlayer.lastShot + 500 < d ){
-                                                    thisPlayer.lastShot = d;
+                                            var d = now();
+                                                if( thisPlayer.lastShot + 500 < d && thisPlayer.Energy >= 10 ){
+                                                    thisPlayer.lastShot = now();
                                                     thisPlayer.Energy -= 10;
                                                     var pj = new projectile(thisPlayer.x, thisPlayer.y-16, data.sX, data.sY, socket.id)
                                                     proj.push(pj);
@@ -387,18 +386,22 @@ io.on('connection', function(socket){
                                                         thisPlayer.keyA = true;
                                                         break;
                                                     case 'D':
-
                                                         thisPlayer.keyD = true;
                                                         break;
+                                                    case 'T':
+                                                        thisPlayer.useSkill("dash");
+                                                        break;
+                                                    case 'F':
+                                                        thisPlayer.useSkill(
+                                                            "chaosControl",
+                                                            data.parameter1,
+                                                            data.parameter2
+                                                        );
+                                                        break;
                                                     case 'SPACE':
-                                                        if(thisPlayer.vY == 0){
-                                                            thisPlayer.vY = -5;
-                                                            thisPlayer.sck.emit("event",{
-                                                                name: "jump",
-                                                                type: "sound",
-                                                                src: "assets/audio/_sfxJump.ogg"
-                                                            });
-                                                        };
+                                                        thisPlayer.useSkill("jump");
+                                                        break;
+                                                    default:
                                                         break;
                                                 }
                                             });

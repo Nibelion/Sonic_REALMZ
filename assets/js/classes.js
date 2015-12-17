@@ -15,6 +15,7 @@ function player(x,y,name,cpic){
     this.Energy;
     this.ESP;
     this.Chaos;
+    this.XP;
     
     this.type = "Normal";
     this.mode = "n";
@@ -76,10 +77,10 @@ function player(x,y,name,cpic){
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
         
-        if( this.vX <= 0.1 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
-        if( this.vX >= -0.1 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
-        if( this.vX > 0.1 ) { this.a = 0 };                       // WALK RIGHT
-        if( this.vX < -0.1 ) { this.a = 1 };                       // WALK LEFT
+        if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
+        if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
+        if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
+        if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
         if( this.vY < 0 ) { this.a = 3 };                       // JUMP
         if( this.vY > 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
@@ -120,15 +121,16 @@ function player(x,y,name,cpic){
         };
         if (this.mode == "f") { context.drawImage(_sprite_Eggmobile,this.face * 64, 0, 64, 46, this.x-32, this.y-25, 64, 46) };
 
-        context.strokeStyle = 'black';
-        context.font = "10px Andale Mono";
-        context.fillStyle = "black";
-        context.fillRect(this.x-25, this.y+3,50,12);
-        context.fillStyle = "red";
-        context.fillRect(this.x-22, this.y+5,(44*this.hp)/(this.level*10+100),8);
-        //44
-        context.fillStyle = "#FFF";
-        context.fillText(this.hp, this.x, this.y + 12);
+        if (localPlayer != this ) {
+            context.strokeStyle = 'black';
+            context.font = "10px Andale Mono";
+            context.fillStyle = "black";
+            context.fillRect(this.x-25, this.y+3,50,12);
+            context.fillStyle = "red";
+            context.fillRect(this.x-22, this.y+5,(44*this.hp)/(this.level*10+100),8);
+            context.fillStyle = "#FFF";
+            context.fillText(this.hp, this.x, this.y + 12);
+        };
     };
 };
 
