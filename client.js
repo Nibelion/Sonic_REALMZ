@@ -37,6 +37,8 @@ function init(){
     cw = (canvas.width = 640);     // 640 default
     ch = (canvas.height = 480);    // 480 default
     
+    {
+        
     document.body.addEventListener("keydown", function(e) {
         keys[e.keyCode] = true;
         if( e.keyCode == 32 &&
@@ -45,24 +47,37 @@ function init(){
             e.preventDefault()
         };
     }); 
+    
     document.body.addEventListener("keyup", function(e) {
+        
         keys[e.keyCode] = false;
-        if ( e.keyCode == 84 ) { socket.emit('btnPress', { 'key': 'T' }) };
+        
+        if ( e.keyCode == 84 ) {
+            socket.emit('btnPress', {
+                'key': 'T'
+            }) };
+        
         if ( e.keyCode == 70 ) {
-                    socket.emit('btnPress', {
-                        'key' : 'F',
-                        'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
-                        'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
-                    });
-                };
+            socket.emit('btnPress', {
+            'key' : 'F',
+            'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+            'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+            });
+        };
+        
         if ( e.keyCode == 13 && document.activeElement.id == "formText" ) {
             document.getElementById("game").focus();                
             sendMessage();
+            
         } else if ( e.keyCode == 13 && document.activeElement.id == "game" ) {
             document.getElementById("formText").focus();
         };     // enter
+        
     });
+        
     canvas.addEventListener("mousedown", shoot);
+        
+    } // CONTROLS
     
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
         

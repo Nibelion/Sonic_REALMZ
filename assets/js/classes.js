@@ -74,10 +74,10 @@ function player(x,y,name,cpic){
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
         
-        if( this.vX <= 0.1 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
-        if( this.vX >= -0.1 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
-        if( this.vX > 0.1 ) { this.a = 0 };                       // WALK RIGHT
-        if( this.vX < -0.1 ) { this.a = 1 };                       // WALK LEFT
+        if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
+        if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
+        if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
+        if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
         if( this.vY < 0 ) { this.a = 3 };                       // JUMP
         if( this.vY > 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT

@@ -94,13 +94,14 @@ global.player = function(x,y,name,ip){
         if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
         if( this.keyA ){ this.vX -= 0.2 }; // MOVE LEFT
         if( this.keyD ){ this.vX += 0.2 }; // MOVE LEFT
+        if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
         
-        //if( ((!this.keyA && this.vX < 0) && (!this.keyD && this.vX > 0)) ){ this.vX *= 0.9 };
-        if( this.vX < -this.accel || this.vX > this.accel ){ this.vX *= 0.9 };
+        if( this.vX < -this.maxSpeed || this.vX > this.maxSpeed )
+        { this.vX *= 0.9 };
 
-        if (this.vX < this.accel - 0.25 && this.vX > 0) { this.vX = 0 };
-        if (this.vX > -this.accel + 0.25 && this.vX < 0) { this.vX = 0 };
-            
+        if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
+            { this.vX = 0; };
+        
         if (this.y >= 700 + ch * 0.5 ) {
             this.hp = this.maxHP;
             this.x = Math.random() * 1900;
@@ -127,6 +128,7 @@ global.player = function(x,y,name,ip){
         
         this.y += this.vY;
         this.x += this.vX;
+        
         if( this.x != this.lastX ||
             this.y != this.lastY ||
             this.hp != this.lastHP ||
@@ -140,7 +142,7 @@ global.player = function(x,y,name,ip){
     };
     
     this.useSkill = function(skill, parameter1, parameter2){
-        switch(skill){
+        switch( skill ){
             case "jump":
                 if( this.vY == 0 && this.Energy >= 40 ){
                     this.vY = -5;
