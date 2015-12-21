@@ -157,13 +157,13 @@ global.player = function(x,y,name,ip){
             case "dash":
                 if( this.Energy >= 20 && this.vX != 0 ){
                     this.Energy -= 20;
-                    if( this.vX < 0 ){ this.vX = -7 };
-                    if( this.vX > 0 ){ this.vX = 7 };
+                    if( this.vX < 0 ){ this.vX = -14 };
+                    if( this.vX > 0 ){ this.vX = 14 };
                     
                 }; 
                 break;
             case "chaosControl":
-                if( this.Chaos >= 20 ){
+                if( this.Chaos >= 20 && distance(this.x, this.y, parameter1, parameter2)  < 360 ){
                     this.x = parameter1;
                     this.y = parameter2;
                     this.Chaos -= 20;
