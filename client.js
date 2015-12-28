@@ -52,26 +52,30 @@ function init(){
         
         keys[e.keyCode] = false;
         
-        if ( e.keyCode == 84 ) {
-            socket.emit('btnPress', {
-                'key': 'T'
-            }) };
-        
-        if ( e.keyCode == 70 ) {
-            socket.emit('btnPress', {
-            'key' : 'F',
-            'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
-            'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
-            });
+        switch(e.keyCode){
+            case 84:
+                socket.emit('btnPress', { 'key': 'T' });
+                break;
+            case 69:
+                socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
+                break;
+            case 70:
+                if( document.activeElement.id != "formText" ){
+                    socket.emit('btnPress', { 'key': 'F',
+                    'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+                    'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+                    });
+                };
+                break;
+            case 13:
+                if ( document.activeElement.id == "formText" ) {
+                    document.getElementById("game").focus();                
+                    sendMessage();
+                } else if ( document.activeElement.id == "game" ) {
+                    document.getElementById("formText").focus();
+                };
+                break;
         };
-        
-        if ( e.keyCode == 13 && document.activeElement.id == "formText" ) {
-            document.getElementById("game").focus();                
-            sendMessage();
-            
-        } else if ( e.keyCode == 13 && document.activeElement.id == "game" ) {
-            document.getElementById("formText").focus();
-        };     // enter
         
     });
         
@@ -99,6 +103,8 @@ function init(){
                 if ( !keys[65] ) { socket.emit('btnRelease', { 'key' : 'A' }) };   // left     - 37
                 
                 if ( keys[87] ) {  };   // up       - 38
+                
+                
                 if ( keys[68] ) { socket.emit('btnPress', { 'key' : 'D' }) };   // right    - 39
                 if ( !keys[68] ) { socket.emit('btnRelease', { 'key' : 'D' }) };   // right    - 39
                 if ( keys[83] ) {  };   // down     - 40
@@ -134,8 +140,29 @@ function init(){
 
             context.globalAlpha = 1;
             context.drawImage(_level_TechnoTower,0,-860);
+            
+            localTarget = null;
 
-            for ( var i = 0; i < badniks.length; i++) { if ( badniks[i] ) { badniks[i].draw() } };
+            {
+            var dist = 200;
+            for ( var i = 0; i < badniks.length; i++) {
+            var b = badniks[i];            
+                if ( b ) {
+                    b.draw();
+                    if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 &&                       
+                       localPlayer && b.a ) {
+                        if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist ) {
+                            dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
+                            localTarget = b;
+                        };
+                    };
+                };
+            };
+            } // HOMING ATTACK ALGORITHM
+            
+            if( localTarget ) {
+                context.fillRect( localTarget.x, localTarget.y, 20,20) ;
+            };
 
             for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
 

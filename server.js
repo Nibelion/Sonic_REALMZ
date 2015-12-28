@@ -84,6 +84,7 @@ setInterval(function(){
                 pla.hp -= parseInt( Math.random() * 4 + 8 );
                 if(prj.x1 > pla.x ) { pla.vX = -5 } else { pla.vX = 5 };
                 pla.vY = -3;
+                pla.Controllable = true;
                 prj.a = false;
                 }
         };
@@ -107,7 +108,7 @@ setInterval(function(){
             a: prj.a
         });
         
-        if(proj[i].a == false) { proj.splice(i,1) };     
+        if( proj[i].a == false ) { proj.splice(i,1) };     
     };
     
     // BADNIKS
@@ -122,12 +123,8 @@ setInterval(function(){
                 b.HP -= parseInt( Math.random() * 4 ) + 8;
                 proj[p].a = false;
                 var w = selectById(players, proj[p].id);
-                var angle1 = Math.atan2( b.y - w.y - 32, b.x - w.x - 32 );
-                var angle2 = Math.atan2( b.y - w.y , b.x - w.x );
-                var angle3 = Math.atan2( b.y - w.y + 32, b.x - w.x + 32 );
-                proj.push( new projectile( b.x, b.y, Math.cos(angle1)*15, Math.sin(angle1)*15, "badnik"));
-                proj.push( new projectile( b.x, b.y, Math.cos(angle2)*15, Math.sin(angle2)*15, "badnik"));
-                proj.push( new projectile( b.x, b.y, Math.cos(angle3)*15, Math.sin(angle3)*15, "badnik"));
+                var angle = Math.atan2( b.y - (w.y - 16) , b.x - w.x );
+                proj.push( new projectile( b.x, b.y, Math.cos(angle)*15, Math.sin(angle)*15, "badnik"));
 
                 };
                 if( b.HP < 1 ) {
@@ -142,11 +139,16 @@ setInterval(function(){
         
     for( var o = 0; o < players.length; o++) {
             var pl = players[o];
-            
+
+            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 200 && b.a == true ){
+                pl.target = b;
+            };
+        
             if( distance( b.x, b.y, pl.x, pl.y-16 ) < 32 && b.a == true ){
                 b.HP -= 10;
                 pl.vY = -5;
                 pl.y = b.y - 32;
+                pl.Controllable = true;
                 
                 if(b.HP < 1){
                     b.a = false;
@@ -187,8 +189,8 @@ setInterval(function(){
             HP: p.hp,
             PlayerLevel: p.level
         });
-        
-        if ( p.mode != "f" ) { p.vY += 0.15 };
+
+        if( p.mode != "f" && p.Controllable ) { p.vY += 0.15 };
         
         for ( var o = 0; o < level.length; o++) {
             var l = level[o];
@@ -199,6 +201,7 @@ setInterval(function(){
                 p.vY > 0)
             {
                 p.vY = 0;
+                p.Controllable = true;
                 p.y = l.y;
                 break;
             };
@@ -384,6 +387,13 @@ io.on('connection', function(socket){
                                                 switch(data.key){
                                                     case 'A':                                                    
                                                         thisPlayer.keyA = true;
+                                                        break;
+                                                    case 'E':
+                                                        thisPlayer.useSkill(
+                                                            "homingAttack",
+                                                            badniks[data.parameter1].x,
+                                                            badniks[data.parameter1].y
+                                                        );
                                                         break;
                                                     case 'D':
                                                         thisPlayer.keyD = true;

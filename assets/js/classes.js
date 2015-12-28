@@ -139,6 +139,7 @@ function badnik(x, y){
     this.y = y;
     this.a = true;
     this.HP = 0;
+    this.id;
         
     this.draw = function(){
         if( this.a ) {
@@ -194,7 +195,7 @@ function platform(x,y,w,h,i){
             } else {
                 context.drawImage(this.i, this.x, this.y);
             };
-            
+
         };
     };
 };
