@@ -432,11 +432,11 @@ io.on('connection', function(socket){
     });
       
     socket.on('netSignup', function(data){
-        if( data.name.length > 2 &&
-            data.name.length < 10 &&
-            data.mail.length != 0 &&
-            data.pass.length > 2 &&
-            data.pass.length < 10 || /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(data.name) )
+        if( data.name.length >= 2 &&
+            data.name.length <= 10 &&
+            data.mail.length >= 3 &&
+            data.pass.length >= 2 &&
+            data.pass.length <= 10 )
         {
             mongodb.connect(urlDB, function(err, db) {
                 if( !db ) {

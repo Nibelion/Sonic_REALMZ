@@ -91,6 +91,10 @@ select {
 #formText { float: left ; width: 80% }
 #btnChat { width: 20% }
 
+#toogleChat{
+    width: 150px;
+}
+
 @font-face {
     font-family: 'SonicTitle';
     src: url('../fonts/_fntTitle.ttf');

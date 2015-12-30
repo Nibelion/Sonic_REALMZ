@@ -230,6 +230,11 @@ const login = function(){
     });
 };
 
+const toggleChat = function(){
+    $("#widgetChat").toggle();
+    $("#game").focus();
+};
+
 function updateMouse(e){
     if(e.offsetX) { mX = e.offsetX; mY = e.offsetY } else
     if(e.layerX) { mX = e.layerX; mY = e.layerY };
@@ -273,15 +278,11 @@ const netSignup = function(){
         if( signUpPass1 != signUpPass2 ) {
             alert( "passwords don't match" );
             error = 1;
-            document.getElementById("btnSignup").value = "Signup";
-            document.getElementById("btnSignup").disabled = false;
         };
         
         if( signUpMail.length <= 3 ){
             alert("enter a valid email address");
             error = 1;
-            document.getElementById("btnSignup").value = "Signup";
-            document.getElementById("btnSignup").disabled = false;
         };
         
         if( error == 0 ) {
@@ -290,6 +291,9 @@ const netSignup = function(){
                 pass: signUpPass2,
                 mail: signUpMail
             });
+        } else {
+            document.getElementById("btnSignup").value = "Signup";
+            document.getElementById("btnSignup").disabled = false;
         };
     } else {
         alert("Minimum 2 characters. Maximum 10 characters.")

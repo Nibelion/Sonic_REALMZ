@@ -20,7 +20,7 @@
                 <input id="formPass" maxlength="10" type="password" placeholder="Password..." class="forms" />
                 <input id="btnConnect" type="button" value="Connect" onclick="netLogin()" class="forms" />
                 <input id="btnRegister" type="button" value="Register" onclick="register()" class="forms" />
-                <input id="btnForgot" type="button" value="Forgot password?" onclick="login()" class="forms" />
+                <input id="btnForgot" type="button" value="Forgot password?" disabled style="opacity: 0.5" class="forms" />
             </form>                
         </div>
         
@@ -59,8 +59,11 @@
             </form>
         </div>
         
-        <span>Players online: </span><span id="userCount">Unknown</span>
-        <span>Sound:</span><input id="optionsSound" type="checkbox" checked></input>
+        <div style="text-align: center">
+            Players online: <span id="userCount"> Unknown </span> |
+            Sound:<input id="optionsSound" type="checkbox" checked></input> |
+            <input type="button" id="toogleChat" value="Toogle chat" onclick="toggleChat()"></input>
+        </div>
         <script> $("#widgetChat").hide() </script>
     
     </div>

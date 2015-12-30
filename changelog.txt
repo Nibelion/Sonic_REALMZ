@@ -1,13 +1,17 @@
-Water v1.7.8 (Public beta) - 13.12.2015
+Water - 30.12.2015
 
 *Back-end:
--
+-Sign up form is supposed to be working correctly now.
+-Badniks shoot back 1 projectiles instead of 3 and only when they have spare health.
 
 *Front-end:
--
+-Forms now positioned over game canvas.
+-Chat widget is slightly changed.
+-Players will no longer use chaos control if they press F button while chating.
+-"Toggle chat" button now toggles chat visible.
+-Canvas size is 1024x600 now.
 
 === === === === === === === === === =
-
 
 Water v1.7.7 (Public beta) - 13.12.2015
 
