@@ -132,8 +132,7 @@ function init(){
         renderer.render( scene, camera );
         
         if( clientState == 0 ) {            
-            context.drawImage(_imgIsland, 0,0,1039,540);
-            context.drawImage(_imglogo, 0,0);
+            context.drawImage(_imglogo, 227, 0);
         } else {
             
 context.save();
