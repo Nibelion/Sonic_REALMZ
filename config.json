@@ -1,7 +1,7 @@
 {
     "port": 80,
     "maxPlayers": 100,
-    "logging": true,
+    "logging": false,
     "version": "1.7.7 - Water",
     "LMA": 30,
     "updateDelay": 25
