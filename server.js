@@ -15,8 +15,8 @@ global.players  = [];
 global.items    = [];
 var proj    = [];
 var chat    = [];
-global.cw = 640;
-global.ch = 480;
+global.cw = 1024;
+global.ch = 600;
 
 require('./inc/classes.js');
 require('./inc/functions.js');
