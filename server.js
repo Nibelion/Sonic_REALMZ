@@ -282,10 +282,8 @@ io.on('connection', function(socket){
                                 thisPlayer.lastShot = now();
                                 thisPlayer.hp = thisPlayer.level * 10 + 100;
 
-                                thisPlayer.cpic = data.cpic;
-                                if( userName == "Metakimi" ) { thisPlayer.cpic = "clic"};
-                                if( userName == "SN1F" ) { thisPlayer.cpic = "snif"};
-                                
+                                thisPlayer.cpic = doc.sprite;
+
                                 players.push(thisPlayer);
                                 sendPlayersOnce();
                                 
@@ -419,6 +417,7 @@ io.on('connection', function(socket){
                                 
                                 break;
                         };
+                        
                         if(db){ db.close() };
                     } else {
                         socket.emit('loginNO', { text: "No such player!"} );
@@ -450,6 +449,10 @@ io.on('connection', function(socket){
                             db.close();
                         } else {
                             if( !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(data.name) ){
+                                var sprite = data.cpic;
+                                if( data.name == "Metakimi" ) { sprite = "clic"};
+                                if( data.name == "SN1F" ) { sprite = "snif"};
+                                
                                 db.collection('players').insertOne( {
                                     "name": data.name,
                                     "pass": data.pass,
@@ -457,6 +460,8 @@ io.on('connection', function(socket){
                                     "score": 0,
                                     "rings": 0,
                                     "level": 1,
+                                    "email": data.mail,
+                                    "sprite": sprite
                                 });
                                 log( 'Player registered: ' + data.name );                             
                                 socket.emit("event",{
