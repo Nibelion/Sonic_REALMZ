@@ -13,7 +13,7 @@ global.badnik = function(x,y){
     this.lastShot = 0;
     this.lastX = 0;
     this.lastY = 0;
-    this.maxHP = 50;
+    this.maxHP = 25;
     this.HP = this.maxHP;
     
     this.update = function(){

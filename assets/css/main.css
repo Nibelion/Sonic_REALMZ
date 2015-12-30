@@ -1,73 +1,81 @@
 * { padding: 0; margin: 0 }
-
-body { 
-    background-color: #CEF;
-}
+html, body { width: 100%; height: 100% }
 
 #wrap {
-    display: inline-block;
-    margin: 5px auto;
+    width: 1024px;
+    min-height: 600px;
 }
 
-#widgetLogin {
-    width: 320px;
-    height: 460px;
-    display: inline-block;
+#widgetLogin, #widgetSignup {
+    width: 240px;
     background: #ACE;
     border-radius: 15px;
-    margin: 5px;
     padding: 10px;
-    float: left;
+    position: absolute;
+    left: 392px;
+    top: 300px;
 }
 
-#widgetLogin #btnConnect, #btnForgot {
-    width: 100%; /* 49% */
-}
-
-#widgetLogin select{
-    margin-bottom: 5px;
+#widgetLogin span{
+    text-align: center;
     width: 100%;
+    display: block;
 }
+
+#btnConnect                 { width: 100%; }
+#btnRegister, #btnSignup    { width: 80px; }
+#btnForgot, #btnLogin       { width: 155px; }
 
 .forms {
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 2px;
-    width: 320px;
-    margin-bottom: 5px;
+    width: 100%;
     box-sizing: border-box;
+    margin-top: 3px;
+    margin-bottom: 2px;
 }
 
-hr { margin: 1px auto 5px; }
+select {
+    margin-bottom: 5px;
+}
 
 #game {
-    width: 640px;
-    height: 480px;
-    margin: 5px;
-    border-radius: 15px;
+    z-index: -1;
+    width: 1024px;
+    height: 600px;
+    border-radius: 10px;
     float: left;
     cursor: crosshair;
 }
 
 #widgetChat {
-    width: 550px;
-    height: 460px;
-    display: inline-block;
+    position: absolute;
+    left: 524px;
+    top: 445px;
+    width: 490px;
+    height: 130px;
     background: #ACE;
-    border-radius: 15px;
-    margin: 5px;
-    padding: 10px;
+    border-radius: 15px 0 0 0;
+    padding: 5px;
+    font-size: 12px;
+}
+
+#widgetChat input{
+    height: 20px;
+    width: 100%;
+    border-radius: 0;
 }
 
 #messages {
     background-color: white;
-    width: 550px;
-    height: 412px;
-    margin-bottom: 5px;
+    width: 100%;
+    height: 110px;
     overflow-y: scroll;
+    border-radius: 8px 8px 0 0;
 }
 
 .chatMessage {
-    padding: 2px;
+    padding: 1px;
 }
 
 .normal:nth-child(odd) {
@@ -82,6 +90,10 @@ hr { margin: 1px auto 5px; }
 
 #formText { float: left ; width: 80% }
 #btnChat { width: 20% }
+
+#toogleChat{
+    width: 150px;
+}
 
 @font-face {
     font-family: 'SonicTitle';

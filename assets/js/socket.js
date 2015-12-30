@@ -8,7 +8,8 @@ function netSocket()
             
         socket.on('loginOK', function(){
             
-            $("#widgetLogin").fadeOut( "slow", function() {});
+            $("#widgetChat").fadeIn(500);
+            $("#widgetLogin").fadeOut(500);
             window.focus();
             
             clientState = 1;
@@ -113,7 +114,9 @@ function netSocket()
                     case "text":
                         alert(data.src);
                         if(data.name == "registered"){
-                            $("#formSignup").fadeOut( "slow", function() {});
+                            $("#widgetSignup").fadeOut( 500, function(){
+                                $("#widgetLogin").fadeIn( 500 );
+                            });                            
                         };
                     case "misc":
                         break;                        

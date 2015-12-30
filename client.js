@@ -34,8 +34,8 @@ function init(){
     region  = canvas.getBoundingClientRect();
     context = canvas.getContext("2d");
     canvas.onmousemove = updateMouse;
-    cw = (canvas.width = 640);     // 640 default
-    ch = (canvas.height = 480);    // 480 default
+    cw = (canvas.width = 1024);     // 640 default
+    ch = (canvas.height = 600);    // 480 default
     
     {
         
@@ -57,7 +57,7 @@ function init(){
                 'key': 'T'
             }) };
         
-        if ( e.keyCode == 70 ) {
+        if ( e.keyCode == 70 && document.activeElement.id != "formText" ) {
             socket.emit('btnPress', {
             'key' : 'F',
             'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
@@ -82,9 +82,14 @@ function init(){
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
         
     function update(){
-
         
-        $("#userCount").html( p.length ); 
+        $("#userCount").html( p.length );
+        
+        if( document.activeElement.id == "formText" || $('#widgetChat').is(":hover") ) {
+            $("#widgetChat").css("opacity","0.9");
+        } else {
+            $("#widgetChat").css("opacity","0.5");
+        };
         
         // CONTROLS
         {
@@ -94,7 +99,7 @@ function init(){
             document.getElementById("game").focus();
         };                              // escape
 
-            if ( document.activeElement.id == "game" && socket){
+            if ( document.activeElement.id == "game" && socket ){
                 if ( keys[65] ) { socket.emit('btnPress', { 'key' : 'A' }) };   // left     - 37
                 if ( !keys[65] ) { socket.emit('btnRelease', { 'key' : 'A' }) };   // left     - 37
                 
@@ -108,7 +113,7 @@ function init(){
         }
         
         // ### RENDER ### //
-        context.drawImage(_image_Sky,0,0);
+        context.drawImage(_image_Sky,0,0,1024,600);
         
         if( clientState == 0 ) {
             context.drawImage(_imgIsland, 0,0,1039,540);
@@ -180,6 +185,14 @@ function init(){
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 
+const rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
+    if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) {
+        return true
+    } else {
+        return false
+    };
+};
+
 const drawBar = function(ctx,x,y,c,w,h,p,v1,v2){
     // ctx - context to draw on
     // x, y - x and y location
@@ -204,6 +217,24 @@ const drawBar = function(ctx,x,y,c,w,h,p,v1,v2){
     };
 };
 
+const register = function(){
+    $("#widgetLogin").slideUp(250, function(){
+        $("#widgetSignup").slideDown(250);
+    });
+    
+};
+
+const login = function(){
+    $("#widgetSignup").slideUp(250, function(){
+        $("#widgetLogin").slideDown(250);
+    });
+};
+
+const toggleChat = function(){
+    $("#widgetChat").toggle();
+    $("#game").focus();
+};
+
 function updateMouse(e){
     if(e.offsetX) { mX = e.offsetX; mY = e.offsetY } else
     if(e.layerX) { mX = e.layerX; mY = e.layerY };
@@ -212,7 +243,7 @@ function updateMouse(e){
 const netLogin = function(){
     userName = $("#formName").val().trim();
     userPass = $("#formPass").val().trim();
-    var choice = e.options[e.selectedIndex].value;
+    //var choice = e.options[e.selectedIndex].value;
     if(!socket){ netSocket() };
     
     document.getElementById("btnConnect").value = "Trying...";
@@ -222,11 +253,13 @@ const netLogin = function(){
         socket.emit("netLogin", {
             name: userName,
             pass: userPass,
-            cpic: choice
+            cpic: 2
         });
         document.getElementById("game").focus();
     } else {
         alert("Minimum 2 characters. Maximum 10 characters.")
+        document.getElementById("btnConnect").value = "Login";
+        document.getElementById("btnConnect").disabled = false;
     };
 };
 
@@ -245,15 +278,11 @@ const netSignup = function(){
         if( signUpPass1 != signUpPass2 ) {
             alert( "passwords don't match" );
             error = 1;
-            document.getElementById("btnSignup").value = "Signup";
-            document.getElementById("btnSignup").disabled = false;
         };
         
         if( signUpMail.length <= 3 ){
             alert("enter a valid email address");
             error = 1;
-            document.getElementById("btnSignup").value = "Signup";
-            document.getElementById("btnSignup").disabled = false;
         };
         
         if( error == 0 ) {
@@ -262,6 +291,9 @@ const netSignup = function(){
                 pass: signUpPass2,
                 mail: signUpMail
             });
+        } else {
+            document.getElementById("btnSignup").value = "Signup";
+            document.getElementById("btnSignup").disabled = false;
         };
     } else {
         alert("Minimum 2 characters. Maximum 10 characters.")

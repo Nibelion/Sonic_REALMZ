@@ -86,6 +86,11 @@ global.updateDB = function(){
     });
 };
 
+global.rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
+    if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) { return true } else { return false };
+};
+
+// shpargalko
 // use players
 // db.players.update( {}, { $set: { score: p.score } }, { multi: true } )
 // db.players.update( { name: "this"}, { $set: { score: p.score } } )
