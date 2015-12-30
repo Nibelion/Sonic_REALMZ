@@ -114,7 +114,9 @@ function netSocket()
                     case "text":
                         alert(data.src);
                         if(data.name == "registered"){
-                            $("#formSignup").fadeOut( "slow", function() {});
+                            $("#widgetSignup").fadeOut( 500, function(){
+                                $("#widgetLogin").fadeIn( 500 );
+                            });                            
                         };
                     case "misc":
                         break;                        
