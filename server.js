@@ -122,12 +122,11 @@ setInterval(function(){
                 b.HP -= parseInt( Math.random() * 4 ) + 8;
                 proj[p].a = false;
                 var w = selectById(players, proj[p].id);
-                var angle1 = Math.atan2( b.y - w.y - 32, b.x - w.x - 32 );
-                var angle2 = Math.atan2( b.y - w.y , b.x - w.x );
-                var angle3 = Math.atan2( b.y - w.y + 32, b.x - w.x + 32 );
-                proj.push( new projectile( b.x, b.y, Math.cos(angle1)*15, Math.sin(angle1)*15, "badnik"));
-                proj.push( new projectile( b.x, b.y, Math.cos(angle2)*15, Math.sin(angle2)*15, "badnik"));
-                proj.push( new projectile( b.x, b.y, Math.cos(angle3)*15, Math.sin(angle3)*15, "badnik"));
+                
+                if( b.HP > 1 ){
+                    var angle = Math.atan2( b.y - w.y , b.x - w.x );
+                    proj.push( new projectile( b.x, b.y, Math.cos(angle)*15, Math.sin(angle)*15, "badnik"));
+                };
 
                 };
                 if( b.HP < 1 ) {
@@ -159,7 +158,8 @@ setInterval(function(){
             
             if( b.a == false) { io.emit("updateBadnik",{ id: i, a: b.a }) };
             
-            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 480 ){
+            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 800 ){
+            //if( rectsOverlap( b.x, b.y, 64, 32, pl.x - 512 - 32, pl.y - 300 - 16, 1024, 600) ){
                 io.emit("updateBadnik",{
                     id: i,
                     x: b.x,

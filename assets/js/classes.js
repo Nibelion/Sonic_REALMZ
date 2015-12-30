@@ -149,7 +149,7 @@ function badnik(x, y){
             context.fillStyle = "black";
             context.fillRect(this.x-25, this.y+16,50,12);
             context.fillStyle = "red";
-            context.fillRect(this.x-22, this.y+18,(44*this.HP)/50,8);
+            context.fillRect(this.x-22, this.y+18,(44*this.HP)/25,8);
             context.fillStyle = "#FFF";
             context.fillText(this.HP, this.x, this.y + 25);
         };

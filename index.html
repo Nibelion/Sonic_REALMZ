@@ -13,10 +13,24 @@
     
 <body onload="init()">
     <div id="wrap">
+        
         <div id="widgetLogin">
             <form id="formLogin" autocomplete="off">
                 <input id="formName" maxlength="10" type="text" placeholder="Login... (Name)" class="forms" />
                 <input id="formPass" maxlength="10" type="password" placeholder="Password..." class="forms" />
+                <input id="btnConnect" type="button" value="Connect" onclick="netLogin()" class="forms" />
+                <input id="btnRegister" type="button" value="Register" onclick="register()" class="forms" />
+                <input id="btnForgot" type="button" value="Forgot password?" onclick="login()" class="forms" />
+            </form>                
+        </div>
+        
+        <div id="widgetSignup">
+            <form id="formSignup" autocomplete="off">
+                <input id="formSignupName" maxlength="10" type="text" placeholder="Login (Name)" class="forms" />
+                <input id="formSignupPass1" maxlength="10" type="password" placeholder="Password" class="forms" />
+                <input id="formSignupPass2" maxlength="10" type="password" placeholder="Password (Repeat)" class="forms" />
+                <input id="formEmail" maxlength="20" type="email" placeholder="E-mail" class="forms" />
+                <b>Character: </b>
                 <select id="char">
                     <option value="1">Sonic</option>
                     <option value="2">Shadow</option>
@@ -30,25 +44,14 @@
                     <option value="10">Tails</option>
                     <option value="11">Amy</option>
                 </select>
-                <select class="forms">
-                    <option>-= Sonic RealmZ =- vm14965.hv8.ru</option>
-                    <option>(Unavailable) Local server - 127.0.0.1</option>
-                    <option>(Unavailable) Lost server - 48.151.6.234:2</option>
-                </select>
-                <br>
-                <input id="btnConnect" type="button" value="Connect" onclick="netLogin()" class="forms" />
-                <!--<input id="btnForgot" type="button" value="Forgot password" onclick="netForgot()" class="forms" />-->
-            </form>
-            <hr>
-            <form id="formSignup" autocomplete="off">
-                <input id="formSignupName" maxlength="10" type="text" placeholder="Login (Name)" class="forms" />
-                <input id="formSignupPass1" maxlength="10" type="password" placeholder="Password" class="forms" />
-                <input id="formSignupPass2" maxlength="10" type="password" placeholder="Password (Repeat)" class="forms" />
-                <input id="formEmail" maxlength="20" type="email" placeholder="E-mail" class="forms" />
                 <input id="btnSignup" type="button" value="Signup" onclick="netSignup()" class="forms" />
+                <input id="btnLogin" type="button" value="Cancel" onclick="login()" class="forms" />
             </form>
-        </div>
-        <canvas id="game" ondragstart="return false" ondrop="return false" tabindex="1"></canvas>
+        </div>        
+        <script> $("#widgetSignup").hide() </script>        
+        
+        <canvas id="game" ondragstart="return false" ondrop="return false" tabindex="1"></canvas>        
+        
         <div id="widgetChat">
             <span>Sound:</span><input id="optionsSound" type="checkbox" checked></input>
             <span>Players online: </span><span id="userCount">Unknown</span>
@@ -57,7 +60,9 @@
                 <input id="formText" maxlength="120" type="text" placeholder="Type your text to chat here..." class="forms" />
                 <input id="btnChat" type="button" value="Send" class="forms" onclick="sendMessage()" />
             </form>
-        </div>
+        </div>    
+        <script> $("#widgetChat").hide() </script>
+    
     </div>
 </body>
 
