@@ -9,69 +9,71 @@
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
         <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script src="assets/js/main.js"></script>
+        <script src="assets/js/three.min.js"></script>
     </head>
     
-<body onload="init()">
-    <div id="wrap">
-        
-        <div id="widgetLogin">
-            <form id="formLogin" autocomplete="off">
-                <input id="formName" maxlength="10" type="text" placeholder="Login... (Name)" class="forms" />
-                <input id="formPass" maxlength="10" type="password" placeholder="Password..." class="forms" />
-                <input id="btnConnect" type="button" value="Connect" onclick="netLogin()" class="forms" />
-                <input id="btnRegister" type="button" value="Register" onclick="register()" class="forms" />
-                <input id="btnForgot" type="button" value="Forgot password?" disabled style="opacity: 0.5" class="forms" />
-            </form>                
-        </div>
-        
-        <div id="widgetSignup">
-            <form id="formSignup" autocomplete="off">
-                <input id="formSignupName" maxlength="10" type="text" placeholder="Login (Name)" class="forms" />
-                <input id="formSignupPass1" maxlength="10" type="password" placeholder="Password" class="forms" />
-                <input id="formSignupPass2" maxlength="10" type="password" placeholder="Password (Repeat)" class="forms" />
-                <input id="formEmail" maxlength="20" type="email" placeholder="E-mail" class="forms" />
-                <b>Character: </b>
-                <select id="char">
-                    <option value="1">Sonic</option>
-                    <option value="2">Shadow</option>
-                    <option value="3">Silver</option>
-                    <option value="4">Espio</option>
-                    <option value="5">Blaze</option>
-                    <option value="6">Fiona</option>
-                    <option value="7">Scourge</option>
-                    <option value="8">Rogue</option>
-                    <option value="9">Knuckles</option>
-                    <option value="10">Tails</option>
-                    <option value="11">Amy</option>
-                </select>
-                <input id="btnSignup" type="button" value="Signup" onclick="netSignup()" class="forms" />
-                <input id="btnLogin" type="button" value="Cancel" onclick="login()" class="forms" />
-            </form>
-        </div>        
-        <script> $("#widgetSignup").hide() </script>        
-        
-        <canvas id="game" ondragstart="return false" ondrop="return false" tabindex="1"></canvas>        
-        
-        <div id="widgetChat">            
-            <div id="messages"></div>
-            <form id="formChat" autocomplete="off">
-                <input id="formText" maxlength="120" type="text" placeholder="Type your text to chat here..." class="forms" />
-            </form>
-        </div>
-        
-        <div style="text-align: center">
-            Players online: <span id="userCount"> Unknown </span> |
-            Sound:<input id="optionsSound" type="checkbox" checked></input> |
-            <input type="button" id="toogleChat" value="Toogle chat" onclick="toggleChat()"></input>
-        </div>
-        <script> $("#widgetChat").hide() </script>
-    
-    </div>
-</body>
+    <body onload="init()">
+        <div id="wrap">      
 
-        <script src="assets/js/assets.js"></script>
-        <script src="assets/js/classes.js"></script>
-        <script src="assets/js/socket.js"></script>
-        <script src="client.js"></script>
+            <div id="game" ondragstart="return false" ondrop="return false"></div>
+            <canvas id="hudCanvas"></canvas>
+            
+            <div id="widgetLogin">
+                <form id="formLogin" autocomplete="off">
+                    <input id="formName" maxlength="10" type="text" placeholder="Login... (Name)" class="forms" />
+                    <input id="formPass" maxlength="10" type="password" placeholder="Password..." class="forms" />
+                    <input id="btnConnect" type="button" value="Connect" onclick="netLogin()" class="forms" />
+                    <input id="btnRegister" type="button" value="Register" onclick="register()" class="forms" />
+                    <input id="btnForgot" type="button" value="Forgot password?" disabled style="opacity: 0.5" class="forms" />
+                </form>                
+            </div>
+
+            <div id="widgetSignup">
+                <form id="formSignup" autocomplete="off">
+                    <input id="formSignupName" maxlength="10" type="text" placeholder="Login (Name)" class="forms" />
+                    <input id="formSignupPass1" maxlength="10" type="password" placeholder="Password" class="forms" />
+                    <input id="formSignupPass2" maxlength="10" type="password" placeholder="Password (Repeat)" class="forms" />
+                    <input id="formEmail" maxlength="20" type="email" placeholder="E-mail" class="forms" />
+                    <b>Character: </b>
+                    <select id="char">
+                        <option value="1">Sonic</option>
+                        <option value="2">Shadow</option>
+                        <option value="3">Silver</option>
+                        <option value="4">Espio</option>
+                        <option value="5">Blaze</option>
+                        <option value="6">Fiona</option>
+                        <option value="7">Scourge</option>
+                        <option value="8">Rogue</option>
+                        <option value="9">Knuckles</option>
+                        <option value="10">Tails</option>
+                        <option value="11">Amy</option>
+                    </select>
+                    <input id="btnSignup" type="button" value="Signup" onclick="netSignup()" class="forms" />
+                    <input id="btnLogin" type="button" value="Cancel" onclick="login()" class="forms" />
+                </form>
+            </div>        
+            <script> $("#widgetSignup").hide() </script>  
+
+            <div id="widgetChat">            
+                <div id="messages"></div>
+                <form id="formChat" autocomplete="off">
+                    <input id="formText" maxlength="120" type="text" placeholder="Type your text to chat here..." class="forms" />
+                </form>
+            </div>
+
+            <div style="text-align: center">
+                Players online: <span id="userCount"> Unknown </span> |
+                Sound:<input id="optionsSound" type="checkbox" checked></input> |
+                <input type="button" id="toogleChat" value="Toogle chat" onclick="toggleChat()"></input>
+            </div>
+            <script> $("#widgetChat").hide() </script>
+
+        </div>
+    </body>
+
+    <script src="assets/js/assets.js"></script>
+    <script src="assets/js/classes.js"></script>
+    <script src="assets/js/socket.js"></script>
+    <script src="client.js"></script>
     
 </html>

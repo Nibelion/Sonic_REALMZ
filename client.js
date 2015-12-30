@@ -18,24 +18,38 @@ $(document).ready(function() {
     window.requestAnimationFrame = requestAnimationFrame;
 })();
 
+//  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+
 // MAIN CODE:
 function init(){
     
-    $('#game').click(function(e){
-        $(this).focus();
-    });
-    $('#game').click(function(e) {
-        $('#field').trigger('click');
-    });
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, 1024 / 600, 0.1, 1000 );
+    var renderer = new THREE.WebGLRenderer();
+    var canvas3D  = document.getElementById("game");
+    
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    var cube = new THREE.Mesh( geometry, material );
+    scene.add( cube );
+
+    camera.position.z = 4;
+    
+    renderer.setSize( 1024, 600 );
+    canvas3D.appendChild( renderer.domElement );
     
     var _gameWaterLever = 700;
     
-    var canvas  = document.getElementById("game");
+    canvas = document.getElementById('hudCanvas');
+    canvas.width = 1024;
+    canvas.height = 600;
+    context = canvas.getContext('2d');
+    
+
     region  = canvas.getBoundingClientRect();
-    context = canvas.getContext("2d");
     canvas.onmousemove = updateMouse;
-    cw = (canvas.width = 1024);     // 640 default
-    ch = (canvas.height = 600);    // 480 default
+    cw = 1024;
+    ch = 600;
     
     {
         
@@ -66,11 +80,10 @@ function init(){
         };
         
         if ( e.keyCode == 13 && document.activeElement.id == "formText" ) {
-            document.getElementById("game").focus();                
-            sendMessage();
-            
-        } else if ( e.keyCode == 13 && document.activeElement.id == "game" ) {
-            document.getElementById("formText").focus();
+            $("#formText").blur();
+            sendMessage();            
+        } else if ( e.keyCode == 13 && document.activeElement.id != "formText" ) {
+            $("#formText").focus();
         };     // enter
         
     });
@@ -91,36 +104,39 @@ function init(){
             $("#widgetChat").css("opacity","0.5");
         };
         
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        
         // CONTROLS
         {
 
         if ( keys[27] && document.activeElement.id == "formText" ) {
             $("#formText").val('');
-            document.getElementById("game").focus();
+            $("#formText").blur();
         };                              // escape
 
-            if ( document.activeElement.id == "game" && socket ){
+            if ( document.activeElement.id != "formText" && socket ){
                 if ( keys[65] ) { socket.emit('btnPress', { 'key' : 'A' }) };   // left     - 37
                 if ( !keys[65] ) { socket.emit('btnRelease', { 'key' : 'A' }) };   // left     - 37
-                
-                if ( keys[87] ) {  };   // up       - 38
+                if ( keys[87] ) {  };   // w. up       - 38
                 if ( keys[68] ) { socket.emit('btnPress', { 'key' : 'D' }) };   // right    - 39
                 if ( !keys[68] ) { socket.emit('btnRelease', { 'key' : 'D' }) };   // right    - 39
-                if ( keys[83] ) {  };   // down     - 40
+                if ( keys[83] ) {  };   // s. down     - 40
                 if ( keys[32] ) { socket.emit('btnPress', { 'key' : 'SPACE' }) };   // space    - 32
             }
 
         }
         
         // ### RENDER ### //
-        context.drawImage(_image_Sky,0,0,1024,600);
+        context.clearRect(0,0,1024,600);
+        renderer.render( scene, camera );
         
-        if( clientState == 0 ) {
+        if( clientState == 0 ) {            
             context.drawImage(_imgIsland, 0,0,1039,540);
             context.drawImage(_imglogo, 0,0);
         } else {
-
-            context.save();
+            
+context.save();
             
             if( localPlayer ){     // IF WE HAVE OUR LOCAL PLAYER
                 context.translate(
@@ -171,9 +187,6 @@ function init(){
                 context.strokeText("score: "+localPlayer.Score,11,100);
                 context.fillText("score: "+localPlayer.Score,11,100);
             };
-            
-
-            //context.drawImage( _spriteRing, 32,0,16,16,mX-8,mY-8,16,16);
         };
         
         requestAnimationFrame(update);
@@ -184,14 +197,6 @@ function init(){
 };
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
-
-const rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
-    if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) {
-        return true
-    } else {
-        return false
-    };
-};
 
 const drawBar = function(ctx,x,y,c,w,h,p,v1,v2){
     // ctx - context to draw on
@@ -232,7 +237,7 @@ const login = function(){
 
 const toggleChat = function(){
     $("#widgetChat").toggle();
-    $("#game").focus();
+    $("#hudCanvas").focus();
 };
 
 function updateMouse(e){
@@ -255,7 +260,7 @@ const netLogin = function(){
             pass: userPass,
             cpic: 2
         });
-        document.getElementById("game").focus();
+        document.getElementById("hudCanvas").focus();
     } else {
         alert("Minimum 2 characters. Maximum 10 characters.")
         document.getElementById("btnConnect").value = "Login";
@@ -308,17 +313,7 @@ function sendMessage(){
         socket.emit("netChatMsg",{ text: textChat });
     };
     textChat = $("#formText").val("");
-    $("#game").focus();
-};
-
-function checkCollisionBlock(o1, o2){
-    o2.c = false;
-    o2.x += o2.vX;
-    o2.y += o2.vY;
-    if( o1.x >= o2.x && o1.x <= o2.x + o2.w && o1.vY > 0 && o1.y +o1.vY >= o2.y && o1.y <= o2.y + o2.h + o1.vY ) {
-        o1.vY = 0; o1.y = o2.y; p.mode = "n"; o2.c = true;
-    };
-    if( o2.c ) { o1.x += o2.vX; o1.y += o2.vY };
+    $("#hudCanvas").focus();
 };
 
 function shoot(){

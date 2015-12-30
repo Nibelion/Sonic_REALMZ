@@ -43,9 +43,7 @@ select {
     z-index: -1;
     width: 1024px;
     height: 600px;
-    border-radius: 10px;
     float: left;
-    cursor: crosshair;
 }
 
 #widgetChat {
@@ -93,6 +91,12 @@ select {
 
 #toogleChat{
     width: 150px;
+}
+
+#hudCanvas {
+    position: absolute;
+    left: 0;
+    cursor: crosshair;
 }
 
 @font-face {
