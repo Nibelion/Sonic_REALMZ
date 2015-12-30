@@ -51,7 +51,7 @@ function init(){
     document.body.addEventListener("keyup", function(e) {
         
         keys[e.keyCode] = false;
-        
+
         if ( e.keyCode == 84 ) {
             socket.emit('btnPress', {
                 'key': 'T'
@@ -64,20 +64,36 @@ function init(){
             'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
             });
         };
-        
-        if ( e.keyCode == 13 && document.activeElement.id == "formText" ) {
-            document.getElementById("game").focus();                
-            sendMessage();
-            
-        } else if ( e.keyCode == 13 && document.activeElement.id == "game" ) {
-            document.getElementById("formText").focus();
-        };     // enter
-        
-    });
+
+        switch(e.keyCode){
+            case 84:
+                socket.emit('btnPress', { 'key': 'T' });
+                break;
+            case 69:
+                socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
+                break;
+            case 70:
+                if( document.activeElement.id != "formText" ){
+                    socket.emit('btnPress', { 'key': 'F',
+                    'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+                    'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+                    });
+                };
+                break;
+            case 13:
+                if ( document.activeElement.id == "formText" ) {
+                    document.getElementById("game").focus();                
+                    sendMessage();
+                } else if ( document.activeElement.id == "game" ) {
+                    document.getElementById("formText").focus();
+                };
+                break;
+            };
+        });
         
     canvas.addEventListener("mousedown", shoot);
         
-    } // CONTROLS
+    }; // CONTROLS
     
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
         
@@ -104,6 +120,7 @@ function init(){
                 if ( !keys[65] ) { socket.emit('btnRelease', { 'key' : 'A' }) };   // left     - 37
                 
                 if ( keys[87] ) {  };   // up       - 38
+                                
                 if ( keys[68] ) { socket.emit('btnPress', { 'key' : 'D' }) };   // right    - 39
                 if ( !keys[68] ) { socket.emit('btnRelease', { 'key' : 'D' }) };   // right    - 39
                 if ( keys[83] ) {  };   // down     - 40
@@ -139,8 +156,35 @@ function init(){
 
             context.globalAlpha = 1;
             context.drawImage(_level_TechnoTower,0,-860);
+            
+            localTarget = null;
 
-            for ( var i = 0; i < badniks.length; i++) { if ( badniks[i] ) { badniks[i].draw() } };
+            {
+            var dist = 200;
+            for ( var i = 0; i < badniks.length; i++) {
+            var b = badniks[i];            
+                if ( b ) {
+                    b.draw();
+                    if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 &&                       
+                       localPlayer && b.a ) {
+                        if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist ) {
+                            dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
+                            localTarget = b;
+                        };
+                    };
+                };
+            };
+            } // HOMING ATTACK ALGORITHM
+            
+            if( localTarget ) {
+                context.strokeStyle = "red";
+                context.lineWidth = 5;
+                context.beginPath();
+                context.arc( localTarget.x, localTarget.y, 15, 0, 2 * Math.PI );
+                context.stroke();
+            };
+            
+            context.lineWidth = 1;
 
             for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
 
@@ -171,9 +215,7 @@ function init(){
                 context.strokeText("score: "+localPlayer.Score,11,100);
                 context.fillText("score: "+localPlayer.Score,11,100);
             };
-            
 
-            //context.drawImage( _spriteRing, 32,0,16,16,mX-8,mY-8,16,16);
         };
         
         requestAnimationFrame(update);

@@ -1,5 +1,6 @@
 // ### VARIABLES ### //
 var localPlayer;
+var localTarget;
 var clientState = 0;
 var keys = [];
 var level = [];

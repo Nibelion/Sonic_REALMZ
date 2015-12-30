@@ -52,6 +52,7 @@ function netSocket()
                     badniks[data.id] = new badnik( data.x, data.y);
                     badniks[data.id].i = _sprite_Badnik_Cloud;
                     badniks[data.id].HP = data.HP;
+                    badniks[data.id].id = data.id;
                 } else {
                     badniks[data.id].x = data.x;
                     badniks[data.id].y = data.y;
