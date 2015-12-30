@@ -52,15 +52,15 @@
         
         <canvas id="game" ondragstart="return false" ondrop="return false" tabindex="1"></canvas>        
         
-        <div id="widgetChat">
-            <span>Sound:</span><input id="optionsSound" type="checkbox" checked></input>
-            <span>Players online: </span><span id="userCount">Unknown</span>
+        <div id="widgetChat">            
             <div id="messages"></div>
             <form id="formChat" autocomplete="off">
                 <input id="formText" maxlength="120" type="text" placeholder="Type your text to chat here..." class="forms" />
-                <input id="btnChat" type="button" value="Send" class="forms" onclick="sendMessage()" />
             </form>
-        </div>    
+        </div>
+        
+        <span>Players online: </span><span id="userCount">Unknown</span>
+        <span>Sound:</span><input id="optionsSound" type="checkbox" checked></input>
         <script> $("#widgetChat").hide() </script>
     
     </div>

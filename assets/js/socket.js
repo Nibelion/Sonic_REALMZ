@@ -8,7 +8,8 @@ function netSocket()
             
         socket.on('loginOK', function(){
             
-            $("#widgetLogin").fadeOut( "slow", function() {});
+            $("#widgetChat").fadeIn(500);
+            $("#widgetLogin").fadeOut(500);
             window.focus();
             
             clientState = 1;

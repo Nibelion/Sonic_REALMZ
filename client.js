@@ -57,7 +57,7 @@ function init(){
                 'key': 'T'
             }) };
         
-        if ( e.keyCode == 70 ) {
+        if ( e.keyCode == 70 && document.activeElement.id != "formText" ) {
             socket.emit('btnPress', {
             'key' : 'F',
             'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
