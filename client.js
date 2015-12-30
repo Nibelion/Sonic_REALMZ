@@ -83,7 +83,13 @@ function init(){
         
     function update(){
         
-        $("#userCount").html( p.length ); 
+        $("#userCount").html( p.length );
+        
+        if( document.activeElement.id == "formText" || $('#widgetChat').is(":hover") ) {
+            $("#widgetChat").css("opacity","0.9");
+        } else {
+            $("#widgetChat").css("opacity","0.5");
+        };
         
         // CONTROLS
         {
