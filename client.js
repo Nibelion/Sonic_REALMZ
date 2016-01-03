@@ -243,17 +243,14 @@ function updateMouse(e){
 const netLogin = function(){
     userName = $("#formName").val().trim();
     userPass = $("#formPass").val().trim();
-    //var choice = e.options[e.selectedIndex].value;
-    if(!socket){ netSocket() };
-    
+    if(!socket){ netSocket() };    
     document.getElementById("btnConnect").value = "Trying...";
     document.getElementById("btnConnect").disabled = true;
     
     if(userName.length >= 2 && userName.length <= 10) {
         socket.emit("netLogin", {
             name: userName,
-            pass: userPass,
-            cpic: 2
+            pass: userPass
         });
         document.getElementById("game").focus();
     } else {
@@ -269,6 +266,7 @@ const netSignup = function(){
     var signUpPass1 = $("#formSignupPass1").val().trim();
     var signUpPass2 = $("#formSignupPass2").val().trim();
     var signUpMail = $("#formEmail").val().trim();
+    var choice = e.options[e.selectedIndex].value;
     
     document.getElementById("btnSignup").value = "Trying...";
     document.getElementById("btnSignup").disabled = true;
@@ -289,7 +287,8 @@ const netSignup = function(){
             socket.emit("netSignup", {
                 name: signUpName,
                 pass: signUpPass2,
-                mail: signUpMail
+                mail: signUpMail,
+                cpic: choice
             });
         } else {
             document.getElementById("btnSignup").value = "Signup";
