@@ -84,6 +84,7 @@ setInterval(function(){
                 pla.hp -= parseInt( Math.random() * 4 + 8 );
                 if(prj.x1 > pla.x ) { pla.vX = -5 } else { pla.vX = 5 };
                 pla.vY = -3;
+                pla.Controllable = true;
                 prj.a = false;
                 }
         };
@@ -107,7 +108,7 @@ setInterval(function(){
             a: prj.a
         });
         
-        if(proj[i].a == false) { proj.splice(i,1) };     
+        if( proj[i].a == false ) { proj.splice(i,1) };     
     };
     
     // BADNIKS
@@ -141,11 +142,16 @@ setInterval(function(){
         
     for( var o = 0; o < players.length; o++) {
             var pl = players[o];
-            
+
+            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 200 && b.a == true ){
+                pl.target = b;
+            };
+        
             if( distance( b.x, b.y, pl.x, pl.y-16 ) < 32 && b.a == true ){
                 b.HP -= 10;
                 pl.vY = -5;
                 pl.y = b.y - 32;
+                pl.Controllable = true;
                 
                 if(b.HP < 1){
                     b.a = false;
@@ -187,8 +193,8 @@ setInterval(function(){
             HP: p.hp,
             PlayerLevel: p.level
         });
-        
-        if ( p.mode != "f" ) { p.vY += 0.15 };
+
+        if( p.mode != "f" && p.Controllable ) { p.vY += 0.15 };
         
         for ( var o = 0; o < level.length; o++) {
             var l = level[o];
@@ -199,6 +205,7 @@ setInterval(function(){
                 p.vY > 0)
             {
                 p.vY = 0;
+                p.Controllable = true;
                 p.y = l.y;
                 break;
             };
@@ -382,6 +389,13 @@ io.on('connection', function(socket){
                                                 switch(data.key){
                                                     case 'A':                                                    
                                                         thisPlayer.keyA = true;
+                                                        break;
+                                                    case 'E':
+                                                        thisPlayer.useSkill(
+                                                            "homingAttack",
+                                                            badniks[data.parameter1].x,
+                                                            badniks[data.parameter1].y
+                                                        );
                                                         break;
                                                     case 'D':
                                                         thisPlayer.keyD = true;

@@ -42,11 +42,11 @@ global.player = function(x,y,name,ip){
     this.ip;
     var id;
     this.f = 0, this.a = 0;
-    this.fW = 64, this.fH = 64;    
+    this.fW = 64, this.fH = 64;
     this.lastX = 0;
     this.lastY = 0;
     this.lastHP = 100;
-    
+
     this.score = 0;
     this.rings = 0;
     this.xp = 0;
@@ -55,7 +55,7 @@ global.player = function(x,y,name,ip){
     this.accel = 0.25;
     this.keyA = false;
     this.keyD = false;
-    
+
     this.MaxEnergy = 100;
     this.MaxChaos = this.level * 10 + 100;
     this.MaxESP = this.level * 10 + 100;
@@ -64,26 +64,29 @@ global.player = function(x,y,name,ip){
     this.Energy = this.MaxEnergy;
     this.ESP = this.MaxESP;
     this.Chaos = this.MaxChaos;
-    
+    this.Controllable = true;
+    this.target = null;
+    this.cTimer = 0;
+
     this.update = function(){
         var updateThis = false;
-        
-        this.maxHP = this.level * 10 + 100; 
+
+        this.maxHP = this.level * 10 + 100;
         this.MaxChaos = this.level * 10 + 100;
-        this.MaxESP = this.level * 10 + 100; 
-        
+        this.MaxESP = this.level * 10 + 100;
+
         if( this.hp < this.maxHP )          // HP regen
             { this.hp += 0.01 };
         if( this.Energy < this.MaxEnergy)   // EN regen
             { this.Energy += 0.5 };
         if(this.ESP < this.MaxESP )         // ESP REGEN
             { this.ESP += 0.3 };
-        
+
         if( this.hp > this.maxHP ) { this.hp = this.maxHP };
         if( this.Energy > this.MaxEnergy ) { this.Energy = this.MaxEnergy };
         if( this.ESP > this.MaxESP ) { this.ESP = this.MaxESP };
         if( this.Chaos > this.MaxChaos ) { this.Chaos = this.MaxChaos };
-        
+
         if ( this.xp >= 100 * this.level ) {
             this.level = parseInt( this.level ) + 1;
             this.xp = 0;
@@ -91,31 +94,24 @@ global.player = function(x,y,name,ip){
             updateThis = true;
         };
         
-        if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
-        if( this.keyA ){ this.vX -= 0.2 }; // MOVE LEFT
-        if( this.keyD ){ this.vX += 0.2 }; // MOVE LEFT
-        if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
+        if( !this.Controllable ) { this.cTimer += 1 };
+        if( this.cTimer == 30 ) { this.Controllable = true; this.cTimer = 0 };
         
-        if( this.vX < -this.maxSpeed || this.vX > this.maxSpeed )
-        { this.vX *= 0.9 };
+        if( this.Controllable ){
+            if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
+            if( this.keyA ){ this.vX -= 0.2 }; // MOVE LEFT
+            if( this.keyD ){ this.vX += 0.2 }; // MOVE LEFT
+            if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
 
-        if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
-            { this.vX = 0; };
-        
-        if (this.y >= 700 + ch * 0.5 ) {
-            this.hp = this.maxHP;
-            this.x = Math.random() * 1900;
-            this.y = 300;
-            this.vY = 1;
-            this.sck.emit("event",{
-                name: "jump",
-                type: "sound",
-                src: "assets/audio/_sfxBlackout.ogg"
-            });
-        };  // death by sea
-        
-        if(this.hp <= 0) {
-            this.hp = this.maxHP,
+            if( this.vX < -this.maxSpeed || this.vX > this.maxSpeed )
+            { this.vX *= 0.9 };
+
+            if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
+                { this.vX = 0; };
+        };
+
+            if (this.y >= 700 + ch * 0.5 ) {
+                this.hp = this.maxHP;
                 this.x = Math.random() * 1900;
                 this.y = 300;
                 this.vY = 1;
@@ -124,7 +120,21 @@ global.player = function(x,y,name,ip){
                     type: "sound",
                     src: "assets/audio/_sfxBlackout.ogg"
                 });
-        };  // death by no hp
+            };  // death by sea
+
+            if(this.hp <= 0) {
+                this.hp = this.maxHP,
+                    this.x = Math.random() * 1900;
+                    this.y = 300;
+                    this.vY = 1;
+                    this.sck.emit("event",{
+                        name: "jump",
+                        type: "sound",
+                        src: "assets/audio/_sfxBlackout.ogg"
+                    });
+            };  // death by no hp
+
+
         
         this.y += this.vY;
         this.x += this.vX;
@@ -140,7 +150,7 @@ global.player = function(x,y,name,ip){
             return true;
         };
     };
-    
+
     this.useSkill = function(skill, parameter1, parameter2){
         switch( skill ){
             case "jump":
@@ -152,26 +162,36 @@ global.player = function(x,y,name,ip){
                         type: "sound",
                         src: "assets/audio/_sfxJump.ogg"
                     });
-                }; 
+                };
                 break;
             case "dash":
                 if( this.Energy >= 20 && this.vX != 0 ){
                     this.Energy -= 20;
-                    if( this.vX < 0 ){ this.vX = -7 };
-                    if( this.vX > 0 ){ this.vX = 7 };
-                    
-                }; 
+                    if( this.vX < 0 ){ this.vX = -14 };
+                    if( this.vX > 0 ){ this.vX = 14 };
+                };
+                break;
+            case "homingAttack":
+                if( this.Energy >= 30 &&
+                   this.vY != 0 &&
+                   distance(this.x, this.y, parameter1, parameter2) < 200 ){
+
+                    this.Controllable = false;
+                    this.Energy -= 30;
+                    var angle = Math.atan2( parameter2 - this.y + 16, parameter1 - this.x );
+                    this.vX = Math.cos(angle) * 15;
+                    this.vY = Math.sin(angle) * 15;
+                };
                 break;
             case "chaosControl":
-                if( this.Chaos >= 20 ){
+                if( this.Chaos >= 20 && distance(this.x, this.y, parameter1, parameter2)  < 360 ){
                     this.x = parameter1;
                     this.y = parameter2;
                     this.Chaos -= 20;
-                }; 
-                break;                
+                };
+                break;
         };
     };
-    
 };
 
 global.projectile = function(x1,y1,sX,sY,id){
