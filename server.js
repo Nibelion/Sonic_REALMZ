@@ -1,5 +1,7 @@
 var app         = require('express')();
 var http        = require('http').Server(app);
+var mail        = require('nodemailer');
+
 global.io       = require('socket.io')(http);
 global.fs       = require('fs');
 global.mongodb  = require('mongodb').MongoClient;
@@ -17,6 +19,24 @@ var proj    = [];
 var chat    = [];
 global.cw = 1024;
 global.ch = 600;
+
+var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:z1337bara@smtp.1and1.com');
+
+var mailOptions = {
+    from: 'Mickey Grant ✔ <admin@sonic-realmz.com>', // sender address
+    to: 'xyngraph@gmail.com', // list of receivers
+    subject: 'Hello ✔', // Subject line
+    text: 'Hello world ✔', // plaintext body
+    html: '<b>Hello world ✔</b>' // html body
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        return console.log(error);
+    }
+    console.log('Message sent: ' + info.response);
+
+});
 
 require('./inc/classes.js');
 require('./inc/functions.js');
