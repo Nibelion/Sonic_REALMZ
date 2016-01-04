@@ -102,6 +102,7 @@ function netSocket()
         
         socket.on('event',          function(data){
                 switch( data.type ) {
+                        
                     case "sound":
                         if( optionsSound.checked ) {
                             var audio = document.createElement("audio");
@@ -112,6 +113,7 @@ function netSocket()
                             audio.play();
                         };
                         break;
+                        
                     case "text":
                         alert(data.src);
                         if(data.name == "registered"){
@@ -119,8 +121,24 @@ function netSocket()
                                 $("#widgetLogin").fadeIn( 500 );
                             });                            
                         };
+                        
                     case "misc":
-                        break;                        
+                        break;
+                        
+                    case "system":
+                        switch( data.code ){
+                            case 101:
+                                document.getElementById("btnForgot").value = "Forgot password?";
+                                document.getElementById("btnForgot").disabled = false;
+                                break;
+                            default:
+                                break;
+                        };
+                        
+                        break;
+                        
+                    default:
+                        break;
                 };
 
         });
