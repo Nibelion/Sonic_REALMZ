@@ -20,6 +20,7 @@ var chat    = [];
 global.cw = 1024;
 global.ch = 600;
 
+var forgotTimer = 0;
 var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:Peauty69@smtp.1and1.com');
 
 var recoveryText = "Dear user. Here is your password for your character: ";
@@ -374,7 +375,8 @@ io.on('connection', function(socket){
                                         msgText = data.text
                                             .substring(0,120)
                                             .replace(/</g,"&lt;")
-                                            .replace(/>/g,"&gt;");
+                                            .replace(/>/g,"&gt;")
+                                            .trim();
                                         tx = msgText.toUpperCase();
                                         if( msgText.indexOf("<SCRIPT>") != -1) {
                                             socket.disconnect();
@@ -529,6 +531,9 @@ io.on('connection', function(socket){
     });
     
     socket.on('netForgot', function(data){
+        if ( forgotTimer + 60000 < now()  ){
+        forgotTimer = now();
+        socket.emit('event', { type: 'text', src: "Processing." } );
         mongodb.connect(urlDB, function(err, db) {
             db.collection('players').findOne( { "name" : data.who }, function(e, doc) {
                 if(doc){
@@ -553,13 +558,18 @@ io.on('connection', function(socket){
                     log(data.who + " not found or other internal error");
                     socket.emit('event', { type: 'text', src: "That character does not exist." } );
                 }
-                socket.emit('event', { type: 'text', src: "Processing." } );
+                
                 socket.emit('event', { type: 'system', code: 101 } );
                 db.close();
             });            
-        });        
+        });
+        } else {
+            socket.emit('event', {
+                type: 'text',
+                src: "Password recovery system is on cooldown. Try again in "+ (forgotTimer + 60000 - now()).toString().substring(0,2) +" seconds." }
+                       );
+        };
     });
-
 });
     
 // ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### //

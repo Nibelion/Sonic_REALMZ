@@ -52,33 +52,33 @@ function init(){
         
         keys[e.keyCode] = false;        
 
-        switch(e.keyCode){
-            case 84:
-                if(socket){ socket.emit('btnPress', { 'key': 'T' }) };
-                break;
-            case 69:
-                if( localTarget ) {
-                    if(socket){ socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id }) };
-                };                
-                break;
-            case 70:
-                if( document.activeElement.id != "formText" && socket ){
-                    socket.emit('btnPress', { 'key': 'F',
-                    'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
-                    'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
-                    });
-                };
-                break;
-            case 13:
-                if ( document.activeElement.id == "formText" ) {
-                    document.getElementById("game").focus();                
-                    sendMessage();
-                } else if ( document.activeElement.id == "game" ) {
-                    document.getElementById("formText").focus();
-                };
-                break;
+            switch(e.keyCode){
+                case 84:
+                    if( document.activeElement.id != "formText" && socket){ socket.emit('btnPress', { 'key': 'T' }) };
+                    break;
+                case 69:
+                    if( document.activeElement.id != "formText" && localTarget&& socket ) {
+                        socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
+                    };                
+                    break;
+                case 70:
+                    if( document.activeElement.id != "formText" && socket ){
+                        socket.emit('btnPress', { 'key': 'F',
+                        'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+                        'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+                        });
+                    };
+                    break;
+                case 13:
+                    if ( document.activeElement.id == "formText" ) {
+                        document.getElementById("game").focus();                
+                        sendMessage();
+                    } else if ( document.activeElement.id == "game" ) {
+                        document.getElementById("formText").focus();
+                    };
+                    break;
             };
-        });
+    });
         
     canvas.addEventListener("mousedown", shoot);
         
@@ -154,11 +154,12 @@ function init(){
             var b = badniks[i];            
                 if ( b ) {
                     b.draw();
-                    if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 &&                       
-                       localPlayer && b.a ) {
-                        if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist ) {
-                            dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
-                            localTarget = b;
+                    if ( localPlayer ) {
+                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 && b.a ) {
+                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist ) {
+                                dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
+                                localTarget = b;
+                            };
                         };
                     };
                 };
