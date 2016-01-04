@@ -343,9 +343,7 @@ io.on('connection', function(socket){
                                         id: i
                                     });
                                 };  // SEND ITEM INFO
-                                                                
-                                var d = new Date();
-                                
+
                                 for( var i = Math.max(chat.length - config.LMA, 0); i < chat.length; i++ )
                                 { socket.emit("netChatMsg", {
                                     name: chat[i].name,
@@ -354,17 +352,23 @@ io.on('connection', function(socket){
                                     }) 
                                 }; // LAST CHAT MESSAGES
                                 
+                                var d = new Date();
+                                var dH, dM, dS;
+                                if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
+                                if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
+                                if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
+                                
                                 socket.emit("netChatMsg", {
                                     name: "",
                                     type: "system",
                                     text: "Welcome to Sonic RealmZ v"+config.version+" (Public Beta)",
-                                    time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
+                                    time: dH + ":" + dM + ":" + dS
                                 }); // Welcome to Sonic RalmZ
                                 socket.emit("netChatMsg", {
                                     name: "",
                                     type: "system",
                                     text: "Use AD to move, SPACE to jump and MOUSE to shoot.",
-                                    time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
+                                    time: dH + ":" + dM + ":" + dS
                                 }); // Use theese controls
 
 
@@ -565,8 +569,8 @@ io.on('connection', function(socket){
         });
         } else {
             socket.emit('event', {
-                type: 'text',
-                src: "Password recovery system is on cooldown. Try again in "+ (forgotTimer + 60000 - now()).toString().substring(0,2) +" seconds." }
+                type: 'text',d
+                src: "Password recovery system is on cooldown. Try again in " + (forgotTimer + 60000 - now()).toString().substring(0,2) +" seconds." }
                        );
         };
     });
