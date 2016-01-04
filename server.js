@@ -383,18 +383,23 @@ io.on('connection', function(socket){
                                     };
                                     
                                     var d = new Date();
-                                        chat.push({
-                                            name: thisPlayer.name,
-                                            text: msgText,
-                                            time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
-                                        });
-                                        io.emit("netChatMsg",{
-                                            name: thisPlayer.name,
-                                            text: msgText,
-                                            time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
-                                        });
-                                            log('['+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+'] '+data.name+": "+data.text);
-                                        });
+                                    var dH, dM, dS;
+                                    if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
+                                    if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
+                                    if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
+
+                                    chat.push({
+                                        name: thisPlayer.name,
+                                        text: msgText,
+                                        time: dH + ":" + dM + ":" + dS
+                                    });
+                                    io.emit("netChatMsg",{
+                                        name: thisPlayer.name,
+                                        text: msgText,
+                                        time: dH + ":" + dM + ":" + dS
+                                    });
+                                    log('['+dH + ":" + dM + ":" + dS+'] '+data.name+": "+data.text);
+                                    });
 
                                 socket.on("netNewProjectile", function(data){
                                             var d = now();

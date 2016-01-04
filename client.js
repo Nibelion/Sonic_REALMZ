@@ -50,8 +50,7 @@ function init(){
     
     document.body.addEventListener("keyup", function(e) {
         
-        keys[e.keyCode] = false;
-        
+        keys[e.keyCode] = false;        
 
         switch(e.keyCode){
             case 84:
