@@ -157,7 +157,7 @@ setInterval(function(){
         
             if( distance( b.x, b.y, pl.x, pl.y-16 ) < 32 && b.a == true ){
                 b.HP -= 10;
-                pl.vY = -5;
+                pl.vY = -2;
                 pl.y = b.y - 32;
                 pl.Controllable = true;
                 
