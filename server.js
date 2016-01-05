@@ -26,26 +26,6 @@ var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:Peauty6
 var recoveryText = "Dear user. Here is your password for your character: ";
 var recoveryHtml = "<b>Dear user</b><p>Here is your password for your character: </p>";
 
-/*
-
-var email = {
-    from: 'Mickey Grant <admin@sonic-realmz.com>', // sender address
-    to: 'xyngraph@gmail.com', // list of receivers
-    subject: 'Sever started ✔', // Subject line
-    text: 'Server successfuly launched on ' + date + ' ✔', // plaintext body
-    html: '<b>Server successfuly launched on ' + date + ' ✔</b>' // html body
-};
-
-transporter.sendMail(email, function(error, info){
-    if(error){
-        return console.log(error);
-    }
-    console.log('Message sent: ' + info.response);
-
-});
-
-*/
-
 require('./inc/classes.js');
 require('./inc/functions.js');
 require('./inc/level.js');
@@ -295,7 +275,7 @@ io.on('connection', function(socket){
                         login = doc.name;
                         paswd = doc.pass;
                         if( paswd != userPass ) { status = 1 };
-                        if( players.indexOf(selectByName(players, userName)) != -1 ){ status = 2 };
+                        if( players.indexOf( selectByName(players, userName)) != -1 ){ status = 2 };
                         switch( status ){
                             case 1:
                                 socket.emit('loginNO', { text: "Wrong password." } );
@@ -344,13 +324,14 @@ io.on('connection', function(socket){
                                     });
                                 };  // SEND ITEM INFO
 
-                                for( var i = Math.max(chat.length - config.LMA, 0); i < chat.length; i++ )
-                                { socket.emit("netChatMsg", {
+                                for( var i = Math.max(chat.length - config.LMA, 0); i < chat.length; i++ ) {
+                                    socket.emit("netChatMsg", {
                                     name: chat[i].name,
                                     text: chat[i].text,
                                     time: chat[i].time
                                     }) 
-                                }; // LAST CHAT MESSAGES
+                                };
+                                // LAST CHAT MESSAGES
                                 
                                 var d = new Date();
                                 var dH, dM, dS;
@@ -569,7 +550,7 @@ io.on('connection', function(socket){
         });
         } else {
             socket.emit('event', {
-                type: 'text',d
+                type: 'text',
                 src: "Password recovery system is on cooldown. Try again in " + (forgotTimer + 60000 - now()).toString().substring(0,2) +" seconds." }
                        );
         };
