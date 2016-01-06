@@ -1,5 +1,7 @@
 var app         = require('express')();
 var http        = require('http').Server(app);
+var mail        = require('nodemailer');
+
 global.io       = require('socket.io')(http);
 global.fs       = require('fs');
 global.mongodb  = require('mongodb').MongoClient;
@@ -17,6 +19,12 @@ var proj    = [];
 var chat    = [];
 global.cw = 1024;
 global.ch = 600;
+
+var forgotTimer = 0;
+var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:Peauty69@smtp.1and1.com');
+
+var recoveryText = "Dear user. Here is your password for your character: ";
+var recoveryHtml = "<b>Dear user</b><p>Here is your password for your character: </p>";
 
 require('./inc/classes.js');
 require('./inc/functions.js');
@@ -267,7 +275,7 @@ io.on('connection', function(socket){
                         login = doc.name;
                         paswd = doc.pass;
                         if( paswd != userPass ) { status = 1 };
-                        if( players.indexOf(selectByName(players, userName)) != -1 ){ status = 2 };
+                        if( players.indexOf( selectByName(players, userName)) != -1 ){ status = 2 };
                         switch( status ){
                             case 1:
                                 socket.emit('loginNO', { text: "Wrong password." } );
@@ -315,28 +323,33 @@ io.on('connection', function(socket){
                                         id: i
                                     });
                                 };  // SEND ITEM INFO
-                                                                
-                                var d = new Date();
-                                
-                                for( var i = Math.max(chat.length - config.LMA, 0); i < chat.length; i++ )
-                                { socket.emit("netChatMsg", {
+
+                                for( var i = Math.max(chat.length - config.LMA, 0); i < chat.length; i++ ) {
+                                    socket.emit("netChatMsg", {
                                     name: chat[i].name,
                                     text: chat[i].text,
                                     time: chat[i].time
                                     }) 
-                                }; // LAST CHAT MESSAGES
+                                };
+                                // LAST CHAT MESSAGES
+                                
+                                var d = new Date();
+                                var dH, dM, dS;
+                                if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
+                                if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
+                                if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
                                 
                                 socket.emit("netChatMsg", {
                                     name: "",
                                     type: "system",
                                     text: "Welcome to Sonic RealmZ v"+config.version+" (Public Beta)",
-                                    time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
+                                    time: dH + ":" + dM + ":" + dS
                                 }); // Welcome to Sonic RalmZ
                                 socket.emit("netChatMsg", {
                                     name: "",
                                     type: "system",
                                     text: "Use AD to move, SPACE to jump and MOUSE to shoot.",
-                                    time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
+                                    time: dH + ":" + dM + ":" + dS
                                 }); // Use theese controls
 
 
@@ -347,7 +360,8 @@ io.on('connection', function(socket){
                                         msgText = data.text
                                             .substring(0,120)
                                             .replace(/</g,"&lt;")
-                                            .replace(/>/g,"&gt;");
+                                            .replace(/>/g,"&gt;")
+                                            .trim();
                                         tx = msgText.toUpperCase();
                                         if( msgText.indexOf("<SCRIPT>") != -1) {
                                             socket.disconnect();
@@ -356,18 +370,23 @@ io.on('connection', function(socket){
                                     };
                                     
                                     var d = new Date();
-                                        chat.push({
-                                            name: thisPlayer.name,
-                                            text: msgText,
-                                            time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
-                                        });
-                                        io.emit("netChatMsg",{
-                                            name: thisPlayer.name,
-                                            text: msgText,
-                                            time: d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
-                                        });
-                                            log('['+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+'] '+data.name+": "+data.text);
-                                        });
+                                    var dH, dM, dS;
+                                    if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
+                                    if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
+                                    if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
+
+                                    chat.push({
+                                        name: thisPlayer.name,
+                                        text: msgText,
+                                        time: dH + ":" + dM + ":" + dS
+                                    });
+                                    io.emit("netChatMsg",{
+                                        name: thisPlayer.name,
+                                        text: msgText,
+                                        time: dH + ":" + dM + ":" + dS
+                                    });
+                                    log('['+dH + ":" + dM + ":" + dS+'] '+data.name+": "+data.text);
+                                    });
 
                                 socket.on("netNewProjectile", function(data){
                                             var d = now();
@@ -495,7 +514,47 @@ io.on('connection', function(socket){
             });
         };            
     });
-
+    
+    socket.on('netForgot', function(data){
+        if ( forgotTimer + 60000 < now()  ){
+        forgotTimer = now();
+        socket.emit('event', { type: 'text', src: "Processing." } );
+        mongodb.connect(urlDB, function(err, db) {
+            db.collection('players').findOne( { "name" : data.who }, function(e, doc) {
+                if(doc){
+                    var email = {
+                        from: 'Sonic RealmZ admin <admin@sonic-realmz.com>',
+                        to: doc.email,
+                        subject: 'Password recovery',
+                        text: recoveryText+doc.pass,
+                        html: recoveryHtml+doc.pass
+                    };
+                    transporter.sendMail(email, function(error, info){
+                        if(error){
+                            socket.emit('event', {type: 'text', src: "Something went wrong. Please contact admin."} );
+                            return console.log(error);
+                        }
+                        console.log('Message sent: ' + info.response);
+                        socket.emit('event', { type: 'text', src: "Your password has been sent to your email." } );
+                    });
+                    log(data.who + " - password reminded.");
+                    
+                } else {
+                    log(data.who + " not found or other internal error");
+                    socket.emit('event', { type: 'text', src: "That character does not exist." } );
+                }
+                
+                socket.emit('event', { type: 'system', code: 101 } );
+                db.close();
+            });            
+        });
+        } else {
+            socket.emit('event', {
+                type: 'text',
+                src: "Password recovery system is on cooldown. Try again in " + (forgotTimer + 60000 - now()).toString().substring(0,2) +" seconds." }
+                       );
+        };
+    });
 });
     
 // ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### //
@@ -503,6 +562,3 @@ io.on('connection', function(socket){
 http.listen(config.port, function(){
           log('-= Sonic RealmZ Server v.'+config.version+' =- PORT: ' + config.port);
     });
-
-
-// Generated by CoffeeScript 1.10.0 (function() { var autoshoot, ch, cw, f_i, f_update, mXold, mYold, r_shut, username, usersignore, indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; }; username = 'Legix'; usersignore = ['Aeela']; r_shut = 300; f_i = 0; f_update = 10; cw = 640; ch = 480; mXold = 0; mYold = 0; autoshoot = (function(_this) { return function() { var angle, dX, dY, dm, i, j, len, len1, mX, mY, name, pp, r, r_name, ref, sX, sY, uX, uY; dm = 100000; name = ''; sX = 1; sY = 1; for (i = 0, len = p.length; i < len; i++) { pp = p[i]; if (pp.name === username) { uX = pp.x; uY = pp.y; } } for (j = 0, len1 = p.length; j < len1; j++) { pp = p[j]; if (pp.name === username) { continue; } if ((ref = pp.name, indexOf.call(usersignore, ref) >= 0)) { continue; } r = distance(uX, uY, pp.x, pp.y); if (r < dm) { dm = r; r_name = pp.name; mX = pp.x; mY = pp.y; dX = mX - mXold; dY = mY - mYold; mXold = mX; mYold = mY; } } angle = Math.atan2(uY - mY - dY * 4, uX - mX - dY * 4); sX = Math.cos(angle) * 15; sY = Math.sin(angle) * 15; if (dm <= r_shut) { socket.emit('netNewProjectile', { sX: sX, sY: sY }); } f_i = f_i + 1; if (f_i >= f_update) { f_i = 0; return console.log(dm, name); } }; })(this); window.setInterval((function(_this) { return function() { return autoshoot(); }; })(this), 21); }).call(this);

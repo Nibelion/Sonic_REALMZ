@@ -134,8 +134,6 @@ global.player = function(x,y,name,ip){
                     });
             };  // death by no hp
 
-
-        
         this.y += this.vY;
         this.x += this.vX;
         
@@ -188,6 +186,7 @@ global.player = function(x,y,name,ip){
                     this.x = parameter1;
                     this.y = parameter2;
                     this.Chaos -= 20;
+                    this.vY = 0;
                 };
                 break;
         };
