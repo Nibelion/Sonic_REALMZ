@@ -40,35 +40,22 @@ function init(){
     {
         
     document.body.addEventListener("keydown", function(e) {
-        keys[e.keyCode] = true;
-        if( e.keyCode == 32 &&
-           document.activeElement.id != "formText" &&
-           document.activeElement.id != "widgetLogin" ){
-            e.preventDefault()
-        };
-    }); 
-    
-    document.body.addEventListener("keyup", function(e) {
         
-        keys[e.keyCode] = false;        
+        
+        
+        if( document.activeElement.id != "formText" &&
+           document.activeElement.id != "widgetLogin" &&
+           e.keyCode == 32 )
+        {
+            e.preventDefault();
+        };  // PREVENT SPACEBAR FROM SCROLLING THE PAGE DOWN
+        
+        
+        
+        if ( socket ){
+            
+            switch( e.keyCode ){
 
-            switch(e.keyCode){
-                case 84:
-                    if( document.activeElement.id != "formText" && socket){ socket.emit('btnPress', { 'key': 'T' }) };
-                    break;
-                case 69:
-                    if( document.activeElement.id != "formText" && localTarget&& socket ) {
-                        socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
-                    };                
-                    break;
-                case 70:
-                    if( document.activeElement.id != "formText" && socket ){
-                        socket.emit('btnPress', { 'key': 'F',
-                        'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
-                        'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
-                        });
-                    };
-                    break;
                 case 13:
                     if ( document.activeElement.id == "formText" ) {
                         document.getElementById("game").focus();                
@@ -77,9 +64,78 @@ function init(){
                         document.getElementById("formText").focus();
                     };
                     break;
+                    
+                case 27:    // ESCAPE
+                    if( document.activeElement.id == "formText" ) {
+                        $("#formText").val('');
+                        document.getElementById("game").focus();
+                    };
+                    break;
+                    
+                case 65:
+                    if( document.activeElement.id != "formText" ){
+                        socket.emit('btnPress', { 'key' : 'A' });
+                    };                    
+                    break;
+                    
+                case 68:
+                    if( document.activeElement.id != "formText" ){
+                        socket.emit('btnPress', { 'key' : 'D' });
+                    };
+                    break;
+                    
+                default:
+                    break;                
             };
+
+        };
     });
+    
+    document.body.addEventListener("keyup", function(e) {
         
+        if ( document.activeElement.id != "formText" && socket ){
+            
+            switch( e.keyCode ){
+                case 65:
+                    socket.emit('btnRelease', { 'key' : 'A' });
+                    break;
+                    
+                case 68:
+                    socket.emit('btnRelease', { 'key' : 'D' });
+                    break;
+                    
+                case 32:
+                    if( document.activeElement.id != "formText" ){                    
+                        socket.emit('btnPress', { 'key' : 'SPACE' });
+                    };
+                    break;
+                    
+                case 84:
+                    if( document.activeElement.id != "formText" ){
+                        socket.emit('btnPress', { 'key' : 'T' });
+                    };
+                    break;
+                    
+                case 69:
+                    if( localTarget && document.activeElement.id != "formText" ) {
+                        socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
+                    };
+                    break;
+                    
+                case 70:
+                    if ( localPlayer && document.activeElement.id != "formText" ) {
+                        socket.emit('btnPress', { 'key': 'F',
+                            'parameter1': localPlayer.x - ( cw * 0.5 - mX ),
+                            'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
+                        });
+                    };
+                    break;
+
+            };
+
+        };
+    });
+
     canvas.addEventListener("mousedown", shoot);
         
     }; // CONTROLS
@@ -89,34 +145,12 @@ function init(){
     function update(){
         
         $("#userCount").html( p.length );
-        
+
         if( document.activeElement.id == "formText" || $('#widgetChat').is(":hover") ) {
             $("#widgetChat").css("opacity","0.9");
         } else {
             $("#widgetChat").css("opacity","0.5");
         };
-        
-        // CONTROLS
-        {
-
-        if ( keys[27] && document.activeElement.id == "formText" ) {
-            $("#formText").val('');
-            document.getElementById("game").focus();
-        };                              // escape
-
-            if ( document.activeElement.id == "game" && socket ){
-                if ( keys[65] ) { socket.emit('btnPress', { 'key' : 'A' }) };   // left     - 37
-                if ( !keys[65] ) { socket.emit('btnRelease', { 'key' : 'A' }) };   // left     - 37
-                
-                if ( keys[87] ) {  };   // up       - 38
-                                
-                if ( keys[68] ) { socket.emit('btnPress', { 'key' : 'D' }) };   // right    - 39
-                if ( !keys[68] ) { socket.emit('btnRelease', { 'key' : 'D' }) };   // right    - 39
-                if ( keys[83] ) {  };   // down     - 40
-                if ( keys[32] ) { socket.emit('btnPress', { 'key' : 'SPACE' }) };   // space    - 32
-            }
-
-        }
         
         // ### RENDER ### //
         context.drawImage(_image_Sky,0,0,1024,600);

@@ -26,31 +26,31 @@ function player(x,y,name,cpic){
     
     switch( this.cpic ){
         case "1":
-            this.i = _spriteSonic;
+            this.i = _SpriteSonic;
             this.anim = [8,8,8,4,2,2,8,8,8,1,1,7,7];
             break;
         case "2":
-            this.i = _spriteShadow;
+            this.i = _SpriteShadow;
             this.anim = [8,8,8,4,2,2,8,8,8,1,1,7,7];
             break;
         case "3":
-            this.i = _spriteSilver;
+            this.i = _SpriteSilver;
             this.anim = [8,8,8,4,8,8,8,8,8,1,1,5,5];
             break;
         case "4":
-            this.i = _spriteEspio;
+            this.i = _SpriteEspio;
             this.anim = [8,8,8,4,2,2,8,8,8,1,1,6,6];
             break;
         case "5":
-            this.i = _spriteBlaze;
+            this.i = _SpriteBlaze;
             this.anim = [8,8,6,8,2,2,6,6,6,1,1,8,8];
             break;
         case "6":
-            this.i = _spriteFiona;
+            this.i = _SpriteFiona;
             this.anim = [8,8,8,8,2,2,8,8,8,1,1,8,8];
             break;
         case "7":
-            this.i = _spriteScourge;
+            this.i = _SpriteScourge;
             this.anim = [8,8,1,8,2,2,1,8,8,1,1,8,8];
             break;
         case "8":
@@ -62,15 +62,15 @@ function player(x,y,name,cpic){
             this.anim = [8,8,8,8,4,4,8,8,8,1,1,8,8];
             break;
         case "10":
-            this.i = _spriteTails;
+            this.i = _SpriteTails;
             this.anim = [8,8,8,8,2,2,8,6,6,1,1,7,7];
             break;
         case "11":
-            this.i = _spriteAmy;
+            this.i = _SpriteAmy;
             this.anim = [8,8,8,4,4,4,8,6,6,1,1,8,8];
             break;
         case "12":
-            this.i = _spriteMetalSonic;
+            this.i = _SpriteMetalSonic;
             this.anim = [4,4,6,4,1,1,6,4,4,1,1,6,6];
             break;
         case "13":
@@ -85,16 +85,41 @@ function player(x,y,name,cpic){
             this.i = _SpriteMarine;
             this.anim = [8,8,8,5,1,1,8,8,8,1,1,3,3];
             break;
+        case "16":
+            this.i = _SpriteMighty;
+            this.anim = [8,8,1,4,1,1,1,8,8,1,1,8,8];
+            break;
+        case "17":
+            this.i = _SpriteRay;
+            this.anim = [8,8,4,8,1,1,4,8,8,1,1,8,8];
+            break;
+        case "18":
+            this.i = _SpriteHoney;
+            this.anim = [8,8,1,4,4,4,1,6,6,1,1,5,5];
+            break;
+        case "19":
+            this.i = _SpriteSally;
+            this.anim = [8,8,6,8,4,4,6,8,8,1,1,7,7];
+            break;
+        case "20":
+            this.i = _SpriteTikal;
+            this.anim = [8,8,6,4,1,1,6,8,8,1,1,8,8];
+            break;
+        case "21":
+            this.i = _SpriteMetalKnux;
+            this.anim = [8,8,6,4,2,2,6,4,4,1,1,8,8];            
+            break;
+            
         case "clic":
-            this.i = _spriteClic;
+            this.i = _SpriteClic;
             this.anim = [8,8,8,8,8,8,8,8,8,8,8,8,8];
             break;
         case "snif":
-            this.i = _spriteSNIF;
+            this.i = _SpriteSNIF;
             this.anim = [8,8,8,8,8,8,8,8,8,8,8,8,8];
             break;
         default:
-            this.i = _spriteSonic;
+            this.i = _SpriteSonic;
             this.anim = [8,8,8,4,2,2,8,8,8,1,1,7,7];
             break;
         };
@@ -118,6 +143,11 @@ function player(x,y,name,cpic){
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
         if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
         if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
+        
+        if( this.vX == -1.5 && this.vY == -1.5 ) { this.a = 9 };
+        if( this.vX == 1.5 && this.vY == -1.5 ) { this.a = 10 };
+        
+        
         this.f += Math.max(0.15, Math.abs(this.vX * 0.075) );
         if( this.f > this.anim[this.a] - 1 ) { this.f = 0 };
     };

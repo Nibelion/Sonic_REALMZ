@@ -1,25 +1,34 @@
 {
-  "name": "Sonic-RealmZ.com",
-  "version": "1.7.2",
-  "description": "Sonic RealmZ web-server",
+  "name": "sonicrealmz",
+  "version": "1.8.0",
+  "description": "Sonic RealmZ - MMO Action RPG for Sonic fans and more.",
   "main": "server.js",
-  "dependencies": {},
-  "devDependencies": {},
   "scripts": {
-    "test": "&",
-    "start": "nodejs server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "null"
+    "url": "git+https://github.com/Nibelion/Sonic_REALMZ.git"
   },
   "keywords": [
     "Sonic",
     "RealmZ",
-    "Hedgehog",
     "MMORPG",
-    "SEGA"
+    "Action",
+    "freeshard",
+    "Knuckles"
   ],
   "author": "Mikhail Galich",
-  "license": "None"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nibelion/Sonic_REALMZ/issues"
+  },
+  "homepage": "http://sonic-realmz.com",
+  "dependencies": {
+    "express": "^4.13.3",
+    "mongodb": "^2.1.3",
+    "nodemailer": "^1.11.0",
+    "socket.io": "^1.4.0"
+  }
 }

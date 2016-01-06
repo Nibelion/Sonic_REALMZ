@@ -60,7 +60,7 @@ setInterval(function(){
                 p.ESP += item.award/10;
                 p.Chaos += item.award;
                 if( item.type == "ringBig" ){ p.hp = p.maxHP };
-                p.sck.emit("event",{
+                p.socket.emit("event",{
                     name: "jump",
                     type: "sound",
                     src: "assets/audio/_sfxRing.ogg"
@@ -87,14 +87,20 @@ setInterval(function(){
         
         for(var o = 0; o < players.length; o++) {
             var pla = players[o];
-            if( distance( prj.x1, prj.y1, pla.x, pla.y - 16 ) < 18
-                && prj.id != pla.id ) {
+            if( distance( prj.x1, prj.y1, pla.x, pla.y - 16 ) < 18 && prj.id != pla.id ) {
                 pla.hp -= parseInt( Math.random() * 4 + 8 );
-                if(prj.x1 > pla.x ) { pla.vX = -5 } else { pla.vX = 5 };
-                pla.vY = -3;
-                pla.Controllable = true;
+
+                if( prj.x1 > pla.x ) {
+                    pla.vX = -1.5
+                } else {
+                    pla.vX = 1.5
+                };
+
+                pla.vY = -1.5;
+                pla.Controllable = false;
+                pla.cTimer = 15;
                 prj.a = false;
-                }
+            }
         };
         
         for ( var o = 0; o < level.length; o++) {
@@ -150,10 +156,6 @@ setInterval(function(){
         
     for( var o = 0; o < players.length; o++) {
             var pl = players[o];
-
-            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 200 && b.a == true ){
-                pl.target = b;
-            };
         
             if( distance( b.x, b.y, pl.x, pl.y-16 ) < 32 && b.a == true ){
                 b.HP -= 10;
@@ -168,29 +170,32 @@ setInterval(function(){
                     pl.score = parseInt(pl.score) + 100;
                     pl.xp = parseInt(pl.xp) + 10;
                 };                
-            };
+            };  // COLLISION WITH PLAYERS
             
             if( b.a == false) { io.emit("updateBadnik",{ id: i, a: b.a }) };
             
-            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 800 ){
-            //if( rectsOverlap( b.x, b.y, 64, 32, pl.x - 512 - 32, pl.y - 300 - 16, 1024, 600) ){
-                io.emit("updateBadnik",{
-                    id: i,
-                    x: b.x,
-                    y: b.y,
-                    i: b.i,
-                    HP: parseInt(b.HP),
-                    a: b.a
-                });
-            };
-        };  // COLLISION WITH PLAYERS       
+            if ( distance( b.x, b.y, pl.x, pl.y - 16 ) < 800 ){
+                if ( b.a == false ) {
+                    pl.socket.emit("updateBadnik",{ id: i, a: b.a }) 
+                } else {
+                    pl.socket.emit("updateBadnik",{
+                        id: i,
+                        x: b.x,
+                        y: b.y,
+                        i: b.i,
+                        HP: parseInt(b.HP),
+                        a: b.a
+                    });
+                };
+            };  // IS BADNIK ON THE SCREEN?
+        };
   
     };
     
     //PLAYERS
     for( var i = 0; i < players.length; i++) {
         var p = players[i];
-        p.sck.emit('this', {
+        p.socket.emit('this', {
             id: i,  // Which player in CLIENT's array is THEIR local player. (Must be same as server's)
             score: p.score,
             rings: p.rings,
@@ -291,9 +296,8 @@ io.on('connection', function(socket){
                                 thisPlayer.score = doc.score;
                                 thisPlayer.rings = doc.rings;
                                 thisPlayer.level = doc.level;
-                                thisPlayer.xp = doc.experience;                                
-                                
-                                thisPlayer.sck = socket;
+                                thisPlayer.xp = doc.experience;        
+                                thisPlayer.socket = socket;
                                 thisPlayer.lastShot = now();
                                 thisPlayer.hp = thisPlayer.level * 10 + 100;
 
@@ -395,7 +399,7 @@ io.on('connection', function(socket){
                                                     thisPlayer.Energy -= 10;
                                                     var pj = new projectile(thisPlayer.x, thisPlayer.y-16, data.sX, data.sY, socket.id)
                                                     proj.push(pj);
-                                                    thisPlayer.sck.emit("event",{
+                                                    thisPlayer.socket.emit("event",{
                                                         name: "laser",
                                                         type: "sound",
                                                         src: "assets/audio/_sfxLaser.ogg"

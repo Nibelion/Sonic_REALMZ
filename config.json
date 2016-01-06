@@ -2,7 +2,7 @@
     "port": 80,
     "maxPlayers": 100,
     "logging": false,
-    "version": "1.7.7 - Water",
-    "LMA": 30,
+    "version": "1.8.0 - Water",
+    "LMA": 50,
     "updateDelay": 25
 }
