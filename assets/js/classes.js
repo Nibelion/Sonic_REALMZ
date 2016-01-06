@@ -267,7 +267,7 @@ function projectile(x,y){
     this.y = y;
         
     this.draw = function(){
-        if( context ){ context.drawImage( _sprite_prj001, this.x, this.y) };
+        if( context ){ context.drawImage( _sprite_prj001, this.x-3, this.y-3) };
     };
 };
 
