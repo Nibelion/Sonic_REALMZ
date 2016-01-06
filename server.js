@@ -218,7 +218,7 @@ setInterval(function(){
                 p.vY = 0;
                 p.Controllable = true;
                 p.y = l.y;
-                break;
+                if ( p.doubleJump == false ) { p.doubleJump = true };
             };
         };
         
