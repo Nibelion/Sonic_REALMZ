@@ -42,7 +42,7 @@ var _SpriteMarine = new Image();        _SpriteMarine.src       = "../assets/i/p
 var _SpriteMighty = new Image();        _SpriteMighty.src       = "../assets/i/player/_SpriteMighty.png";
 var _SpriteRay = new Image();           _SpriteRay.src          = "../assets/i/player/_SpriteRay.png";
 var _SpriteHoney = new Image();         _SpriteHoney.src        = "../assets/i/player/_SpriteHoney.png";
-var _SpriteSallly = new Image();        _SpriteSallly.src       = "../assets/i/player/_SpriteSallly.png";
+var _SpriteSally = new Image();         _SpriteSally.src       = "../assets/i/player/_SpriteSally.png";
 var _SpriteTikal = new Image();         _SpriteTikal.src        = "../assets/i/player/_SpriteTikal.png";
 var _SpriteMetalKnux = new Image();     _SpriteMetalKnux.src    = "../assets/i/player/_SpriteMetalKnux.png";
 
