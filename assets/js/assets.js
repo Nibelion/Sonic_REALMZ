@@ -24,17 +24,22 @@ var _imgIsland = new Image();           _imgIsland.src = "../assets/i/angelIslan
 var _spriteRing = new Image();          _spriteRing.src = "../assets/i/sprites/_spriteRing.png";
 var _spriteBigRing = new Image();       _spriteBigRing.src = "../assets/i/sprites/_spriteBigRing.png";
 
-var _spriteSonic = new Image();         _spriteSonic.src    = "../assets/i/player/_spriteSonic.png";
+var _spriteSonic = new Image();         _spriteSonic.src    = "../assets/i/player/_SpriteSonic.png";
 var _spriteShadow = new Image();        _spriteShadow.src   = "../assets/i/player/_spriteShadow.png";
 var _spriteSilver = new Image();        _spriteSilver.src   = "../assets/i/player/_spriteSilver.png";
 var _spriteEspio = new Image();         _spriteEspio.src    = "../assets/i/player/_spriteEspio.png";
 var _spriteBlaze = new Image();         _spriteBlaze.src    = "../assets/i/player/_spriteBlaze.png";
 var _spriteFiona = new Image();         _spriteFiona.src    = "../assets/i/player/_spriteFiona.png";
 var _spriteScourge = new Image();       _spriteScourge.src  = "../assets/i/player/_spriteScourge.png";
-var _spriteRogue = new Image();         _spriteRogue.src    = "../assets/i/player/_spriteRogue.png";
-var _spriteKnuckles = new Image();      _spriteKnuckles.src = "../assets/i/player/_spriteKnuckles.png";
+var _SpriteRouge = new Image();         _SpriteRouge.src    = "../assets/i/player/_SpriteRouge.png";
+var _SpriteKnux = new Image();          _SpriteKnux.src = "../assets/i/player/_SpriteKnux.png";
 var _spriteTails = new Image();         _spriteTails.src = "../assets/i/player/_spriteTails.png";
 var _spriteAmy = new Image();           _spriteAmy.src = "../assets/i/player/_spriteAmy.png";
+var _spriteMetalSonic = new Image();    _spriteMetalSonic.src = "../assets/i/player/_MetalSonic.png";
+var _SpriteEmerl = new Image();         _SpriteEmerl.src = "../assets/i/player/_SpriteEmerl.png";
+var _SpriteGemerl = new Image();        _SpriteGemerl.src = "../assets/i/player/_SpriteGemerl.png";
+var _SpriteMarine = new Image();        _SpriteMarine.src = "../assets/i/player/_SpriteMarine.png";
+
 var _spriteClic = new Image();          _spriteClic.src     = "../assets/i/player/_spriteClic.png";
 var _spriteSNIF = new Image();          _spriteSNIF.src     = "../assets/i/player/_spriteSNIF.png";
 

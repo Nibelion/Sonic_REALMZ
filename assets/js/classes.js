@@ -9,7 +9,7 @@ function player(x,y,name,cpic){
     this.ip;
     var id;
     this.f = 0, this.a = 0;
-    this.fW = 64, this.fH = 64;    
+    this.fW = 64, this.fH = 64;
     this.face = 1;
     
     this.Energy;
@@ -27,45 +27,75 @@ function player(x,y,name,cpic){
     switch( this.cpic ){
         case "1":
             this.i = _spriteSonic;
+            this.anim = [8,8,8,4,2,2,8,8,8,1,1,7,7];
             break;
         case "2":
             this.i = _spriteShadow;
+            this.anim = [8,8,8,4,2,2,8,8,8,1,1,7,7];
             break;
         case "3":
             this.i = _spriteSilver;
+            this.anim = [8,8,8,4,8,8,8,8,8,1,1,5,5];
             break;
         case "4":
             this.i = _spriteEspio;
+            this.anim = [8,8,8,4,2,2,8,8,8,1,1,6,6];
             break;
         case "5":
             this.i = _spriteBlaze;
+            this.anim = [8,8,6,8,2,2,6,6,6,1,1,8,8];
             break;
         case "6":
             this.i = _spriteFiona;
+            this.anim = [8,8,8,8,2,2,8,8,8,1,1,8,8];
             break;
         case "7":
             this.i = _spriteScourge;
+            this.anim = [8,8,1,8,2,2,1,8,8,1,1,8,8];
             break;
         case "8":
-            this.i = _spriteRogue;
+            this.i = _SpriteRouge;
+            this.anim = [8,8,8,8,4,4,8,8,8,1,1,8,8];
+            break;
+        case "9":
+            this.i = _SpriteKnux;
+            this.anim = [8,8,8,8,4,4,8,8,8,1,1,8,8];
             break;
         case "10":
             this.i = _spriteTails;
+            this.anim = [8,8,8,8,2,2,8,6,6,1,1,7,7];
             break;
         case "11":
             this.i = _spriteAmy;
+            this.anim = [8,8,8,4,4,4,8,6,6,1,1,8,8];
             break;
-        case "9":
-            this.i = _spriteKnuckles;
+        case "12":
+            this.i = _spriteMetalSonic;
+            this.anim = [4,4,6,4,1,1,6,4,4,1,1,6,6];
+            break;
+        case "13":
+            this.i = _SpriteEmerl;
+            this.anim = [8,8,8,4,1,1,8,6,6,1,1,8,8];
+            break;
+        case "14":
+            this.i = _SpriteGemerl;
+            this.anim = [8,8,6,6,1,1,6,4,4,1,1,5,5];
+            break;
+        case "15":
+            this.i = _SpriteMarine;
+            this.anim = [8,8,8,5,1,1,8,8,8,1,1,3,3];
             break;
         case "clic":
             this.i = _spriteClic;
+            this.anim = [8,8,8,8,8,8,8,8,8,8,8,8,8];
             break;
         case "snif":
             this.i = _spriteSNIF;
+            this.anim = [8,8,8,8,8,8,8,8,8,8,8,8,8];
             break;
         default:
             this.i = _spriteSonic;
+            this.anim = [8,8,8,4,2,2,8,8,8,1,1,7,7];
             break;
         };
         
@@ -81,13 +111,15 @@ function player(x,y,name,cpic){
         if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
         if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
         if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
+        if( this.vX < -4.6 ) { this.a = 8 };                       // RUN RIGHT
+        if( this.vX > 4.6 ) { this.a = 7 };                       // WALK LEFT
         if( this.vY < 0 ) { this.a = 3 };                       // JUMP
         if( this.vY > 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
         if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
         if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
         this.f += Math.max(0.15, Math.abs(this.vX * 0.075) );
-        if( this.f > 7 ) { this.f = 0 };
+        if( this.f > this.anim[this.a] - 1 ) { this.f = 0 };
     };
     
     this.drawPlayer = function(){
@@ -121,7 +153,7 @@ function player(x,y,name,cpic){
         };
         if (this.mode == "f") { context.drawImage(_sprite_Eggmobile,this.face * 64, 0, 64, 46, this.x-32, this.y-25, 64, 46) };
 
-        if (localPlayer != this ) {
+        if ( localPlayer != this ) {
             context.strokeStyle = 'black';
             context.font = "10px Andale Mono";
             context.fillStyle = "black";

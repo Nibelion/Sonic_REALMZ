@@ -51,8 +51,8 @@ global.player = function(x,y,name,ip){
     this.rings = 0;
     this.xp = 0;
     this.level = 1;
-    this.maxSpeed = 4;
-    this.accel = 0.25;
+    this.maxSpeed = 5;
+    this.accel = 0.20;
     this.keyA = false;
     this.keyD = false;
 
@@ -99,15 +99,15 @@ global.player = function(x,y,name,ip){
         
         if( this.Controllable ){
             if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
-            if( this.keyA ){ this.vX -= 0.2 }; // MOVE LEFT
-            if( this.keyD ){ this.vX += 0.2 }; // MOVE LEFT
+            if( this.keyA && this.vX > -this.maxSpeed ){ this.vX -= this.accel }; // MOVE LEFT
+            if( this.keyD && this.vX < this.maxSpeed ){ this.vX += this.accel }; // MOVE LEFT
             if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
-
-            if( this.vX < -this.maxSpeed || this.vX > this.maxSpeed )
-            { this.vX *= 0.9 };
 
             if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
                 { this.vX = 0; };
+            
+            if( this.vX < -this.maxSpeed ){ this.vX = -this.maxSpeed };
+            if( this.vX > this.maxSpeed ){ this.vX = this.maxSpeed };
         };
 
             if (this.y >= 700 + ch * 0.5 ) {
