@@ -53,7 +53,7 @@ global.player = function(x,y,name,ip){
     this.xp = 0;
     this.level = 1;
     this.maxSpeed = 5;
-    this.accel = 0.20;
+    this.accel = 0.12;
     this.keyA = false;
     this.keyD = false;
 
@@ -99,6 +99,7 @@ global.player = function(x,y,name,ip){
         if( this.cTimer == 30 ) { this.Controllable = true; this.cTimer = 0 };
         
         if( this.Controllable ){
+            this.cTimer = 0;
             if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
             if( this.keyA && this.vX > -this.maxSpeed ){ this.vX -= this.accel }; // MOVE LEFT
             if( this.keyD && this.vX < this.maxSpeed ){ this.vX += this.accel }; // MOVE LEFT

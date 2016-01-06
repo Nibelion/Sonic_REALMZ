@@ -118,6 +118,11 @@ function player(x,y,name,cpic){
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
         if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
         if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
+        
+        if( this.vX == -1.5 && this.vY == -1.5 ) { this.a = 9 };
+        if( this.vX == 1.5 && this.vY == -1.5 ) { this.a = 10 };
+        
+        
         this.f += Math.max(0.15, Math.abs(this.vX * 0.075) );
         if( this.f > this.anim[this.a] - 1 ) { this.f = 0 };
     };
