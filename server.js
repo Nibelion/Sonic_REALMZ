@@ -172,8 +172,6 @@ setInterval(function(){
                 };                
             };  // COLLISION WITH PLAYERS
             
-            if( b.a == false) { io.emit("updateBadnik",{ id: i, a: b.a }) };
-            
             if ( distance( b.x, b.y, pl.x, pl.y - 16 ) < 800 ){
                 if ( b.a == false ) {
                     pl.socket.emit("updateBadnik",{ id: i, a: b.a }) 
