@@ -46,6 +46,7 @@ global.player = function(x,y,name,ip){
     this.lastX = 0;
     this.lastY = 0;
     this.lastHP = 100;
+    this.socket;
 
     this.score = 0;
     this.rings = 0;
@@ -115,7 +116,7 @@ global.player = function(x,y,name,ip){
                 this.x = Math.random() * 1900;
                 this.y = 300;
                 this.vY = 1;
-                this.sck.emit("event",{
+                this.socket.emit("event",{
                     name: "jump",
                     type: "sound",
                     src: "assets/audio/_sfxBlackout.ogg"
@@ -127,7 +128,7 @@ global.player = function(x,y,name,ip){
                     this.x = Math.random() * 1900;
                     this.y = 300;
                     this.vY = 1;
-                    this.sck.emit("event",{
+                    this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
                         src: "assets/audio/_sfxBlackout.ogg"
@@ -155,7 +156,7 @@ global.player = function(x,y,name,ip){
                 if( this.vY == 0 && this.Energy >= 40 ){
                     this.vY = -5;
                     this.Energy -= 40;
-                    this.sck.emit("event",{
+                    this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
                         src: "assets/audio/_sfxJump.ogg"

@@ -60,7 +60,7 @@ setInterval(function(){
                 p.ESP += item.award/10;
                 p.Chaos += item.award;
                 if( item.type == "ringBig" ){ p.hp = p.maxHP };
-                p.sck.emit("event",{
+                p.socket.emit("event",{
                     name: "jump",
                     type: "sound",
                     src: "assets/audio/_sfxRing.ogg"
@@ -172,16 +172,19 @@ setInterval(function(){
             
             if( b.a == false) { io.emit("updateBadnik",{ id: i, a: b.a }) };
             
-            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 800 ){
-            //if( rectsOverlap( b.x, b.y, 64, 32, pl.x - 512 - 32, pl.y - 300 - 16, 1024, 600) ){
-                io.emit("updateBadnik",{
-                    id: i,
-                    x: b.x,
-                    y: b.y,
-                    i: b.i,
-                    HP: parseInt(b.HP),
-                    a: b.a
-                });
+            if ( distance( b.x, b.y, pl.x, pl.y - 16 ) < 800 ){
+                if ( b.a == false ) {
+                    pl.socket.emit("updateBadnik",{ id: i, a: b.a }) 
+                } else {
+                    pl.socket.emit("updateBadnik",{
+                        id: i,
+                        x: b.x,
+                        y: b.y,
+                        i: b.i,
+                        HP: parseInt(b.HP),
+                        a: b.a
+                    });
+                };
             };
         };  // COLLISION WITH PLAYERS       
   
@@ -190,7 +193,7 @@ setInterval(function(){
     //PLAYERS
     for( var i = 0; i < players.length; i++) {
         var p = players[i];
-        p.sck.emit('this', {
+        p.socket.emit('this', {
             id: i,  // Which player in CLIENT's array is THEIR local player. (Must be same as server's)
             score: p.score,
             rings: p.rings,
@@ -291,9 +294,8 @@ io.on('connection', function(socket){
                                 thisPlayer.score = doc.score;
                                 thisPlayer.rings = doc.rings;
                                 thisPlayer.level = doc.level;
-                                thisPlayer.xp = doc.experience;                                
-                                
-                                thisPlayer.sck = socket;
+                                thisPlayer.xp = doc.experience;        
+                                thisPlayer.socket = socket;
                                 thisPlayer.lastShot = now();
                                 thisPlayer.hp = thisPlayer.level * 10 + 100;
 
@@ -395,7 +397,7 @@ io.on('connection', function(socket){
                                                     thisPlayer.Energy -= 10;
                                                     var pj = new projectile(thisPlayer.x, thisPlayer.y-16, data.sX, data.sY, socket.id)
                                                     proj.push(pj);
-                                                    thisPlayer.sck.emit("event",{
+                                                    thisPlayer.socket.emit("event",{
                                                         name: "laser",
                                                         type: "sound",
                                                         src: "assets/audio/_sfxLaser.ogg"
