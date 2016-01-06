@@ -15,6 +15,7 @@ global.badnik = function(x,y){
     this.lastY = 0;
     this.maxHP = 25;
     this.HP = this.maxHP;
+    this.doubleJump = false;
     
     this.update = function(){
         if(this.HP < this.maxHP ) { this.HP += 0.01 };
@@ -154,9 +155,18 @@ global.player = function(x,y,name,ip){
     this.useSkill = function(skill, parameter1, parameter2){
         switch( skill ){
             case "jump":
-                if( this.vY == 0 && this.Energy >= 40 ){
+                if( this.vY == 0 && this.Energy >= 30 ){
                     this.vY = -5;
-                    this.Energy -= 40;
+                    this.Energy -= 30;
+                    this.socket.emit("event",{
+                        name: "jump",
+                        type: "sound",
+                        src: "assets/audio/_sfxJump.ogg"
+                    });
+                } else if( this.vY != 0 && this.doubleJump && this.Energy >= 30 ) {
+                    this.doubleJump = false;
+                    this.vY =-5;
+                    this.Energy -= 30;
                     this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
