@@ -15,8 +15,7 @@ global.badnik = function(x,y){
     this.lastY = 0;
     this.maxHP = 25;
     this.HP = this.maxHP;
-    this.doubleJump = false;
-    
+
     this.update = function(){
         if(this.HP < this.maxHP ) { this.HP += 0.01 };
         if(this.HP > this.maxHP ) { this.HP = this.maxHP };        
@@ -69,6 +68,7 @@ global.player = function(x,y,name,ip){
     this.Controllable = true;
     this.target = null;
     this.cTimer = 0;
+    this.doubleJump = false;
 
     this.update = function(){
         var updateThis = false;
