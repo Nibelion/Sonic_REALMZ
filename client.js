@@ -84,6 +84,26 @@ function init(){
                     };
                     break;
                     
+                default:
+                    break;                
+            };
+
+        };
+    });
+    
+    document.body.addEventListener("keyup", function(e) {
+        
+        if ( document.activeElement.id != "formText" && socket ){
+            
+            switch( e.keyCode ){
+                case 65:
+                    socket.emit('btnRelease', { 'key' : 'A' });
+                    break;
+                    
+                case 68:
+                    socket.emit('btnRelease', { 'key' : 'D' });
+                    break;
+                    
                 case 32:
                     if( document.activeElement.id != "formText" ){                    
                         socket.emit('btnPress', { 'key' : 'SPACE' });
@@ -111,25 +131,6 @@ function init(){
                     };
                     break;
 
-                default:
-                    break;                
-            };
-
-        };
-    });
-    
-    document.body.addEventListener("keyup", function(e) {
-        
-        if ( document.activeElement.id != "formText" && socket ){
-            
-            switch( e.keyCode ){
-                case 65:
-                    socket.emit('btnRelease', { 'key' : 'A' });
-                    break;
-                    
-                case 68:
-                    socket.emit('btnRelease', { 'key' : 'D' });
-                    break;                
             };
 
         };
