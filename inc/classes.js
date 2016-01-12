@@ -115,8 +115,8 @@ global.player = function(x,y,name,ip){
 
             if (this.y >= 700 + ch * 0.5 ) {
                 this.hp = this.maxHP;
-                this.x = Math.random() * 1900;
-                this.y = 300;
+                this.x = 0;
+                this.y = 0;
                 this.vY = 1;
                 this.socket.emit("event",{
                     name: "jump",
@@ -127,8 +127,8 @@ global.player = function(x,y,name,ip){
 
             if(this.hp <= 0) {
                 this.hp = this.maxHP,
-                    this.x = Math.random() * 1900;
-                    this.y = 300;
+                    this.x = 0;
+                    this.y = 0;
                     this.vY = 1;
                     this.socket.emit("event",{
                         name: "jump",
@@ -223,12 +223,13 @@ global.projectile = function(x1,y1,sX,sY,id){
     };
 };
 
-global.platform = function(x,y,w,h,i){
+global.platform = function(x,y,w,h,i,c){
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
     this.i = i;
+    this.c = c;    
 };
 
 global.item = function(x,y,type){

@@ -10,7 +10,7 @@ Lead tester:
 Chip
 
 Main assistant:
-Clic The Echidna
+Clic The Echidna (Metakimi)
 
 2D rips from Sonic games by:
 Daniel Sidney
@@ -20,3 +20,4 @@ Deekman
 Shadow333
 shadow_91
 Domenico
+Techokami

@@ -49,8 +49,8 @@ function netSocket()
 
             socket.on("updateBadnik",   function(data) {
                 if( !badniks[data.id] ) {
-                    badniks[data.id] = new badnik( data.x, data.y);
-                    badniks[data.id].i = _sprite_Badnik_Cloud;
+                    badniks[data.id] = new badnik( data.x, data.y, data.type );
+                    badniks[data.id].i = _SpriteBuzzbomber;
                     badniks[data.id].HP = data.HP;
                     badniks[data.id].id = data.id;
                 } else {

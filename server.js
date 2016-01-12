@@ -108,7 +108,8 @@ setInterval(function(){
             if (prj.x1 >= l.x &&
                 prj.x1 <= l.x + l.w &&
                 prj.y1 >= l.y &&
-                prj.y1 <= l.y + l.h)
+                prj.y1 <= l.y + l.h &&
+                l.c)
             {
                 prj.a = false;
                 break;
@@ -213,14 +214,16 @@ setInterval(function(){
                 p.x <= l.x + l.w &&
                 p.y >= l.y &&
                 p.y <= l.y + l.h &&
-                p.vY > 0)
+                p.vY > 0 &&
+                l.c
+               )
             {
                 p.vY = 0;
                 p.Controllable = true;
                 p.y = l.y;
                 if ( p.doubleJump == false ) { p.doubleJump = true };
             };
-        };
+        };  // LEVEL COLLISION
         
         if( p.update() ) {
             io.emit("netPlayers", {
@@ -288,7 +291,7 @@ io.on('connection', function(socket){
                                 break;
                             case 0:
                                 socket.emit('loginOK');
-                                var thisPlayer = new player(15,300, userName, ip);
+                                var thisPlayer = new player(0,0, userName, ip);
                                 thisPlayer.id = socket.id;
                                 
                                 thisPlayer.score = doc.score;
@@ -353,7 +356,6 @@ io.on('connection', function(socket){
                                     text: "Use AD to move, SPACE to jump and MOUSE to shoot.",
                                     time: dH + ":" + dM + ":" + dS
                                 }); // Use theese controls
-
 
                                 socket.on("netChatMsg", function(data){
                                     var msgText = "";

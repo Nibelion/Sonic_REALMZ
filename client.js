@@ -177,8 +177,15 @@ function init(){
                 );
             };
 
-            context.globalAlpha = 1;
-            context.drawImage(_level_TechnoTower,0,-860);
+            context.globalAlpha = 1;          
+
+            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
+
+            for ( var i = 0; i < level.length; i++) { level[i].draw() };
+
+            for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
+
+            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };            
             
             localTarget = null;
 
@@ -200,7 +207,7 @@ function init(){
             };
             } // HOMING ATTACK ALGORITHM
             
-            if( localTarget ) {
+            if( localTarget && localPlayer.vY != 0 ) {
                 context.strokeStyle = "red";
                 context.lineWidth = 5;
                 context.beginPath();
@@ -208,15 +215,7 @@ function init(){
                 context.stroke();
             };
             
-            context.lineWidth = 1;
-
-            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
-
-            for ( var i = 0; i < level.length; i++) { level[i].draw() };
-
-            for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
-
-            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };
+            context.lineWidth = 1;            
             
             if( localPlayer ){
                 context.fillStyle = "rgba( 0, 0, 168,0.5)";
