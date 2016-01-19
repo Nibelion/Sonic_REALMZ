@@ -19,6 +19,7 @@ var proj    = [];
 var chat    = [];
 global.cw = 1024;
 global.ch = 600;
+var gravity = 0.2
 
 var forgotTimer = 0;
 var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:Peauty69@smtp.1and1.com');
@@ -204,14 +205,14 @@ setInterval(function(){
             Chaos: p.Chaos
         });
 
-        if( p.mode != "f" && p.Controllable ) { p.vY += 0.15 };
+        if( p.mode != "f" && p.Controllable ) { p.vY += gravity };
         
         // !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!        
         
         for ( var o = 0; o < level.length; o++) {
         var l = level[o];
             
-            if( p.x >= l.x && p.x <= l.x + l.w && p.y >= l.y && p.y <= l.y + l.h * 0.5 && l.c && p.vY > 0 )
+            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y + p.vY >= l.y && p.y + p.vY <= l.y + l.h && l.c && p.vY > 0 )
                 {
                     p.vY = 0;
                     p.Controllable = true;
@@ -220,23 +221,23 @@ setInterval(function(){
                 };
 
 
-            if( p.x >= l.x && p.x <= l.x + l.w && p.y >= l.y + l.h * 0.5 && p.y <= l.y + l.h && l.c && p.vY < 0 )
+            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y >= l.y + l.h * 0.5 && p.y <= l.y + l.h + 32 && l.c && p.vY < 0 )
                 {
                     p.vY = 0;
                     p.Controllable = true;
-                    p.y = l.y + l.h;
                 };
             
-            if( p.y >= l.y + 2 && p.y <= l.y + l.h && p.x >= l.x - p.w * 0.25 && p.x <= l.x + l.w * 0.5 && l.c && p.vX > 0 )
+            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x >= l.x - p.w * 0.25 && p.x <= l.x + l.w * 0.5 && l.c && p.vX > 0 )
                 {
                     p.vX = 0;
-                    p.x = l.x - p.w * 0.25 ;
+                    p.x = l.x - 16;
+                    
                 };
             
-            if( p.y >= l.y + 2 && p.y <= l.y + l.h && p.x <= l.x + l.h + p.w * 0.25 && p.x >= l.x - l.w * 0.25 && l.c && p.vX < 0 )
+            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x <= l.x + l.h + p.w * 0.25 && p.x >= l.x - l.w * 0.25 && l.c && p.vX < 0 )
                 {
                     p.vX = 0;
-                    p.x = l.x + l.w + p.w * 0.25;
+                    p.x = l.x + l.w + 16;
                 };
             
         };  // LEVEL COLLISION
