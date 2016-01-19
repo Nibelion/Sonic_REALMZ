@@ -12,10 +12,11 @@ function player(x,y,name,cpic){
     this.fW = 64, this.fH = 64;
     this.face = 1;
     
-    this.Energy;
-    this.ESP;
-    this.Chaos;
-    this.XP;
+    this.Energy = 0;
+    this.ESP = 0;
+    this.Chaos = 0;
+    this.XP = 0;
+    this.score = 0;
     
     this.type = "Normal";
     this.mode = "n";
@@ -212,6 +213,7 @@ function badnik(x, y, type){
     this.aF = [4,4,1];
     this.f = 0;
     
+    
     switch( type ) {
         case 0:
             this.i = _SpriteBuzzbomber;
@@ -255,20 +257,35 @@ function badnik(x, y, type){
     };
 };
 
-function platform(x,y,w,h,i){
+function platform(x,y,w,h,i,c,id){
     this.x = x;
     this.y = y;
     this.w = w;
-    this.h = h;    
+    this.h = h;
+    this.c = c;
+    this.id = id;
     this.vX = 0;
     this.vY = 0;
     this.offsetX = 16 * i;
     this.offsetY = 0;
-    if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 }
-    if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 }
-    if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 }
-    if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 }
-    if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 }
+    
+    if( this.id === 1 ) {
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };       
+    };
+    
+    if( this.id === 2 ) {
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+    };
 
     this.draw = function(){
         context.drawImage( _TilesetGHZ, this.offsetX, this.offsetY * 16, 16, 16, this.x, this.y, 16, 16);

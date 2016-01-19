@@ -15,7 +15,7 @@ function netSocket()
             clientState = 1;
             
             socket.on('platform',       function(data){
-                var plat = new platform( data.x, data.y, data.w, data.h, data.i );
+                var plat = new platform( data.x, data.y, data.w, data.h, data.i, data.c, data.id );
                 level.push(plat);
             });
             
@@ -37,7 +37,6 @@ function netSocket()
                     p[data.id] = new player( data.x, data.y, data.name, data.cpic );
                     p[data.id].level = data.level;
                     p[data.id].hp = data.hp;
-                    p[data.id].rings = data.rings;
                 } else {
                     p[data.id].update( data.x, data.y );
                     p[data.id].vX = data.vX;
@@ -74,15 +73,16 @@ function netSocket()
             
             socket.on('this',           function(data){
                 localPlayer = p[data.id];
-                localPlayer.Score = data.score;
-                localPlayer.Rings = data.rings;
-                localPlayer.XP = data.exper;
-                localPlayer.Energy = data.Energy;
-                localPlayer.ESP = data.ESP;
-                localPlayer.Chaos = data.Chaos;
-                localPlayer.HP = data.HP;
-                localPlayer.Level = data.PlayerLevel;
-            
+                if( localPlayer ){
+                    if(data.score) { localPlayer.Score = data.score };
+                    if(data.rings) { localPlayer.Rings = data.rings };
+                    if(data.exper) { localPlayer.XP = data.exper };
+                    if(data.Energy) { localPlayer.Energy = data.Energy };
+                    if(data.ESP) { localPlayer.ESP = data.ESP };
+                    if(data.Chaos) { localPlayer.Chaos = data.Chaos };
+                    if(data.HP) { localPlayer.HP = data.HP };
+                    if(data.PlayerLevel) { localPlayer.Level = data.PlayerLevel };
+                };
             });            
             
         });

@@ -28,7 +28,7 @@ function init(){
         $('#field').trigger('click');
     });
     
-    var _gameWaterLever = 700;
+    var _gameWaterLever = 1000;
     
     var canvas  = document.getElementById("game");
     region  = canvas.getBoundingClientRect();
@@ -153,7 +153,15 @@ function init(){
         };
         
         // ### RENDER ### //
-        context.drawImage(_image_Sky,0,0,1024,600);
+        //context.drawImage(_image_Sky,0,0,1024,600);
+        
+        var grd = context.createLinearGradient(0,0,0,170);
+        grd.addColorStop(0,"#3251D1");
+        grd.addColorStop(1,"#37D6FF");
+
+        context.fillStyle = grd;
+        context.fillRect(0,0,1280,800);
+        
         
         if( clientState == 0 ) {
             context.drawImage(_imgIsland, 0,0,1039,540);
@@ -181,7 +189,13 @@ function init(){
 
             for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
 
-            for ( var i = 0; i < level.length; i++) { level[i].draw() };
+            if( localPlayer ) {
+                for ( var i = 0; i < level.length; i++) {
+                    if( distance(level[i].x,level[i].y,localPlayer.x,localPlayer.y) < 640 * 640 ){
+                        level[i].draw()
+                    };                
+                };
+            };
 
             for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
 
@@ -196,8 +210,8 @@ function init(){
                 if ( b ) {
                     b.draw();
                     if ( localPlayer ) {
-                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 && b.a ) {
-                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist ) {
+                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 * 200 && b.a ) {
+                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist * dist ) {
                                 dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
                                 localTarget = b;
                             };
@@ -209,7 +223,7 @@ function init(){
             
             if( localTarget && localPlayer.vY != 0 ) {
                 context.strokeStyle = "red";
-                context.lineWidth = 5;
+                context.lineWidth = 3;
                 context.beginPath();
                 context.arc( localTarget.x, localTarget.y, 15, 0, 2 * Math.PI );
                 context.stroke();
@@ -402,6 +416,6 @@ function shoot(){
     };
 };
 
-function distance(x1,y1,x2,y2){ return Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ) };
+function distance(x1,y1,x2,y2){ return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) };
     
 function rnd(value){ return parseInt( Math.random() * value ) };

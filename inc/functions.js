@@ -47,16 +47,13 @@ global.sendPlayersOnce = function(){
                 id: p.id,
                 x: p.x,
                 y: p.y,
-                vX: p.vX,
-                vY: p.vY,
                 hp: p.hp,
                 name: p.name,
                 cpic: p.cpic,
                 type: p.type,
-                level: p.level,
-                rings: p.rings,
-                id: i
-        });
+                ESP: p.ESP,
+                level: p.level
+            });
     };
 };
 

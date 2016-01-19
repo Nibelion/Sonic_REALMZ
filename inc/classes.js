@@ -101,7 +101,7 @@ global.player = function(x,y,name,ip){
         
         if( this.Controllable ){
             this.cTimer = 0;
-            if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
+            if( this.y >= 1032 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
             if( this.keyA && this.vX > -this.maxSpeed ){ this.vX -= this.accel }; // MOVE LEFT
             if( this.keyD && this.vX < this.maxSpeed ){ this.vX += this.accel }; // MOVE LEFT
             if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
@@ -113,7 +113,7 @@ global.player = function(x,y,name,ip){
             if( this.vX > this.maxSpeed ){ this.vX = this.maxSpeed };
         };
 
-            if (this.y >= 700 + ch * 0.5 ) {
+            if (this.y >= 1000 + ch * 0.5 ) {
                 this.hp = this.maxHP;
                 this.x = 0;
                 this.y = 0;
@@ -223,13 +223,14 @@ global.projectile = function(x1,y1,sX,sY,id){
     };
 };
 
-global.platform = function(x,y,w,h,i,c){
+global.platform = function(x,y,w,h,i,c,id){
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
     this.i = i;
-    this.c = c;    
+    this.c = c;
+    this.id = id;
 };
 
 global.item = function(x,y,type){
