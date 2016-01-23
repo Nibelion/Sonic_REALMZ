@@ -40,22 +40,11 @@ function init(){
     {
         
     document.body.addEventListener("keydown", function(e) {
-        
-        
-        
-        if( document.activeElement.id != "formText" &&
-           document.activeElement.id != "widgetLogin" &&
-           e.keyCode == 32 )
-        {
-            e.preventDefault();
-        };  // PREVENT SPACEBAR FROM SCROLLING THE PAGE DOWN
-        
-        
-        
+
         if ( socket ){
             
             switch( e.keyCode ){
-
+                    
                 case 13:
                     if ( document.activeElement.id == "formText" ) {
                         document.getElementById("game").focus();                
@@ -96,32 +85,33 @@ function init(){
         if ( document.activeElement.id != "formText" && socket ){
             
             switch( e.keyCode ){
-                case 65:
-                    socket.emit('btnRelease', { 'key' : 'A' });
-                    break;
-                    
-                case 68:
-                    socket.emit('btnRelease', { 'key' : 'D' });
-                    break;
-                    
+
                 case 32:
                     if( document.activeElement.id != "formText" ){                    
                         socket.emit('btnPress', { 'key' : 'SPACE' });
                     };
                     break;
-                    
+
+                case 65:
+                    socket.emit('btnRelease', { 'key' : 'A' });
+                    break;
+
+                case 68:
+                    socket.emit('btnRelease', { 'key' : 'D' });
+                    break;
+
                 case 84:
                     if( document.activeElement.id != "formText" ){
                         socket.emit('btnPress', { 'key' : 'T' });
                     };
                     break;
-                    
+
                 case 69:
                     if( localTarget && document.activeElement.id != "formText" ) {
                         socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
                     };
                     break;
-                    
+
                 case 70:
                     if ( localPlayer && document.activeElement.id != "formText" ) {
                         socket.emit('btnPress', { 'key': 'F',
@@ -129,6 +119,12 @@ function init(){
                             'parameter2': localPlayer.y - ( ch * 0.5 - mY ),
                         });
                     };
+                    break;
+
+                case 82:
+                    if( document.activeElement.id != "formText" ){
+                        socket.emit('btnPress', { 'key' : 'R' });
+                    };                    
                     break;
 
             };
@@ -143,7 +139,7 @@ function init(){
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
         
     function update(){
-        
+
         $("#userCount").html( p.length );
 
         if( document.activeElement.id == "formText" || $('#widgetChat').is(":hover") ) {
@@ -153,8 +149,7 @@ function init(){
         };
         
         // ### RENDER ### //
-        //context.drawImage(_image_Sky,0,0,1024,600);
-        
+
         var grd = context.createLinearGradient(0,0,0,170);
         grd.addColorStop(0,"#3251D1");
         grd.addColorStop(1,"#37D6FF");
@@ -185,22 +180,19 @@ function init(){
                 );
             };
 
-            context.globalAlpha = 1;          
+            context.globalAlpha = 1;
+
+            context.drawImage(_spriteLevelHub,-256,0);
+            context.drawImage(_spriteLevelGHZ,224,0);
 
             for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
 
-            if( localPlayer ) {
-                for ( var i = 0; i < level.length; i++) {
-                    if( distance(level[i].x,level[i].y,localPlayer.x,localPlayer.y) < 640 * 640 ){
-                        level[i].draw()
-                    };                
-                };
-            };
-
             for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
 
-            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };            
-            
+            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };
+
+            //for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } }; // OBSOLETE
+
             localTarget = null;
 
             {

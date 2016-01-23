@@ -32,17 +32,14 @@ global.selectByName = function(array, name) {
     return false;
 };
 
-global.distance = function(x1,y1,x2,y2){
-    return Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
-};
+global.distance = function(x1,y1,x2,y2){ return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) };
 
-global.now = function(){
-    return (new Date).getTime();
-};
+global.now = function(){ return (new Date).getTime() };
 
 global.sendPlayersOnce = function(){
     for( var i = 0; i < players.length; i++) {
         var p = players[i];
+        
             io.emit("netPlayers", {
                 id: p.id,
                 x: p.x,
@@ -51,7 +48,6 @@ global.sendPlayersOnce = function(){
                 name: p.name,
                 cpic: p.cpic,
                 type: p.type,
-                ESP: p.ESP,
                 level: p.level
             });
     };

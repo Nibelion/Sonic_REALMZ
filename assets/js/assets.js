@@ -25,6 +25,11 @@ var _TilesetGHZ = new Image();          _TilesetGHZ.src          = "../assets/i/
 var _spriteRing = new Image();          _spriteRing.src         = "../assets/i/sprites/_spriteRing.png";
 var _spriteBigRing = new Image();       _spriteBigRing.src      = "../assets/i/sprites/_spriteBigRing.png";
 
+var _spriteLevelHub = new Image();      _spriteLevelHub.src     = "../assets/i/levels/_spriteLevelHUB.png";
+var _spriteLevelGHZ = new Image();      _spriteLevelGHZ.src     = "../assets/i/levels/_spriteLevelGHZ.png";
+
+
+
 var _SpriteSonic = new Image();         _SpriteSonic.src        = "../assets/i/player/_SpriteSonic.png";
 var _SpriteShadow = new Image();        _SpriteShadow.src       = "../assets/i/player/_SpriteShadow.png";
 var _SpriteSilver = new Image();        _SpriteSilver.src       = "../assets/i/player/_SpriteSilver.png";
@@ -55,7 +60,6 @@ var _sprite_prj001 = new Image();       _sprite_prj001.src      = "../assets/i/_
 var _imglogo = new Image();             _imglogo.src            = "../assets/i/_imgLogo.png";
 var _imgFun = new Image();              _imgFun.src             = "../assets/i/_imgFun.png";
 var _sprite_Eggmobile = new Image();    _sprite_Eggmobile.src   = "../assets/i/_sprite_Eggmobile.png";
-var _image_Sky = new Image();           _image_Sky.src          = "../assets/i/_image_Sky.png";
 
 var _SpriteDarkVortex = new Image();    _SpriteDarkVortex.src       = "../assets/i/badniks/_SpriteDarkVortex.png";
 var _SpriteBuzzbomber = new Image();    _SpriteBuzzbomber.src       = "../assets/i/badniks/_SpriteBuzzbomber.png";

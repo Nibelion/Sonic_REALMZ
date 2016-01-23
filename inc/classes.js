@@ -47,6 +47,7 @@ global.player = function(x,y,name,ip){
     this.lastY = 0;
     this.lastHP = 100;
     this.socket;
+    this.initialUpdate = false;
 
     this.score = 0;
     this.rings = 0;
@@ -69,6 +70,7 @@ global.player = function(x,y,name,ip){
     this.target = null;
     this.cTimer = 0;
     this.doubleJump = false;
+    this.Levitate = 0;
 
     this.update = function(){
         var updateThis = false;
@@ -105,6 +107,7 @@ global.player = function(x,y,name,ip){
             if( this.keyA && this.vX > -this.maxSpeed ){ this.vX -= this.accel }; // MOVE LEFT
             if( this.keyD && this.vX < this.maxSpeed ){ this.vX += this.accel }; // MOVE LEFT
             if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
+            if( (this.keyA && this.vX > 0) || (this.keyD && this.vX < 0) ) { this.vX *= 0.9 };
 
             if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
                 { this.vX = 0; };
@@ -154,9 +157,10 @@ global.player = function(x,y,name,ip){
 
     this.useSkill = function(skill, parameter1, parameter2){
         switch( skill ){
+                
             case "jump":
                 if( this.vY == 0 && this.Energy >= 30 ){
-                    this.vY = -5;
+                    this.vY = -6.5;
                     this.Energy -= 30;
                     this.socket.emit("event",{
                         name: "jump",
@@ -165,7 +169,7 @@ global.player = function(x,y,name,ip){
                     });
                 } else if( this.vY != 0 && this.doubleJump && this.Energy >= 30 ) {
                     this.doubleJump = false;
-                    this.vY =-5;
+                    this.vY = -5.5;
                     this.Energy -= 30;
                     this.socket.emit("event",{
                         name: "jump",
@@ -174,6 +178,7 @@ global.player = function(x,y,name,ip){
                     });
                 };
                 break;
+                
             case "dash":
                 if( this.Energy >= 20 && this.vX != 0 ){
                     this.Energy -= 20;
@@ -181,10 +186,11 @@ global.player = function(x,y,name,ip){
                     if( this.vX > 0 ){ this.vX = 14 };
                 };
                 break;
+                
             case "homingAttack":
                 if( this.Energy >= 30 &&
                    this.vY != 0 &&
-                   distance(this.x, this.y, parameter1, parameter2) < 200 ){
+                   distance(this.x, this.y, parameter1, parameter2) < 200 * 200 ){
 
                     this.Controllable = false;
                     this.Energy -= 30;
@@ -193,13 +199,21 @@ global.player = function(x,y,name,ip){
                     this.vY = Math.sin(angle) * 15;
                 };
                 break;
+                
             case "chaosControl":
-                if( this.Chaos >= 20 && distance(this.x, this.y, parameter1, parameter2)  < 360 ){
+                if( this.Chaos >= 20 && distance(this.x, this.y, parameter1, parameter2)  < 360 * 360 ){
                     this.x = parameter1;
                     this.y = parameter2;
                     this.Chaos -= 20;
                     this.vY = 0;
                 };
+                break;
+                
+            case "ESP_Levitate":
+                this.Levitate = 1 - this.Levitate;
+                break;
+
+            default:
                 break;
         };
     };

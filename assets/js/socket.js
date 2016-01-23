@@ -37,6 +37,7 @@ function netSocket()
                     p[data.id] = new player( data.x, data.y, data.name, data.cpic );
                     p[data.id].level = data.level;
                     p[data.id].hp = data.hp;
+                    p[data.id].xp = data.XP;
                 } else {
                     p[data.id].update( data.x, data.y );
                     p[data.id].vX = data.vX;
@@ -72,11 +73,11 @@ function netSocket()
             });
             
             socket.on('this',           function(data){
-                localPlayer = p[data.id];
+                if( data.id != undefined ) { localPlayer = p[data.id] };
                 if( localPlayer ){
-                    if(data.score) { localPlayer.Score = data.score };
-                    if(data.rings) { localPlayer.Rings = data.rings };
-                    if(data.exper) { localPlayer.XP = data.exper };
+                    if(data.Score) { localPlayer.Score = data.Score };
+                    if(data.Rings) { localPlayer.Rings = data.Rings };
+                    if(data.XP) { localPlayer.XP = data.XP };
                     if(data.Energy) { localPlayer.Energy = data.Energy };
                     if(data.ESP) { localPlayer.ESP = data.ESP };
                     if(data.Chaos) { localPlayer.Chaos = data.Chaos };

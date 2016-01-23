@@ -4,5 +4,5 @@
     "logging": false,
     "version": "1.8.0 - Water",
     "LMA": 50,
-    "updateDelay": 25
+    "updateDelay": 30
 }

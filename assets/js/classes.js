@@ -264,8 +264,6 @@ function platform(x,y,w,h,i,c,id){
     this.h = h;
     this.c = c;
     this.id = id;
-    this.vX = 0;
-    this.vY = 0;
     this.offsetX = 16 * i;
     this.offsetY = 0;
     
@@ -288,7 +286,8 @@ function platform(x,y,w,h,i,c,id){
     };
 
     this.draw = function(){
-        context.drawImage( _TilesetGHZ, this.offsetX, this.offsetY * 16, 16, 16, this.x, this.y, 16, 16);
+        //context.drawImage( _TilesetGHZ, this.offsetX, this.offsetY * 16, 16, 16, this.x, this.y, 16, 16);
+        context.fillRect( this.x, this.y, this.w, this.h );
     };
 };
 
