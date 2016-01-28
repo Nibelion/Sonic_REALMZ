@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>DON'T TELL A SOUL BUT I WORKED FOR THE SANDMAN</title>
+        <title>SERVER</title>
         <link rel="shortcut icon" href="../assets/i/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"/>
         <link rel="stylesheet" type="text/css" href="assets/css/main.css"/>
@@ -13,6 +13,7 @@
     </head>
     
 <body onload="init()">
+    <div id="loadingScreen">LOADING.</div>
     <div id="wrap">
         
         <div id="widgetLogin">
@@ -31,7 +32,7 @@
                 <input id="formSignupPass1" maxlength="10" type="password" placeholder="Password" class="forms" />
                 <input id="formSignupPass2" maxlength="10" type="password" placeholder="Password (Repeat)" class="forms" />
                 <input id="formEmail" maxlength="26" type="email" placeholder="E-mail" class="forms" />
-                <b>Character: </b>
+                <b>Character:</b>
                 <select id="char">
                     <option value="1">Sonic</option>
                     <option value="2">Shadow</option>
@@ -70,19 +71,25 @@
             </form>
         </div>
         
+        <script> $("#widgetChat").hide() </script>
+        
         <div style="text-align: center">
-            Players online: <span id="userCount"> Unknown </span> |
+            Players online: <span id="userCount"></span> |
             Sound:<input id="optionsSound" type="checkbox" checked></input> |
+            Music:<input id="optionsMusic" type="checkbox" checked onclick="toggleMusic()"></input> |
             <input type="button" id="toogleChat" value="Toogle chat" onclick="toggleChat()"></input>
         </div>
-        <script> $("#widgetChat").hide() </script>
-    
-    </div>
-</body>
+
+        <audio id="ost">
+            <source src="assets/audio/_ostRealmz.mp3" type="audio/mpeg">
+            <source src="assets/audio/_ostRealmz.ogg" type="audio/ogg">
+        </audio>
 
         <script src="assets/js/assets.js"></script>
         <script src="assets/js/classes.js"></script>
         <script src="assets/js/socket.js"></script>
         <script src="client.js"></script>
-    
+
+    </div>
+</body>
 </html>

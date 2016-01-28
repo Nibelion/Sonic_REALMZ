@@ -5,7 +5,7 @@
   <property name="offsetY" value="0"/>
  </properties>
  <tileset firstgid="1" name="_TilesetGreenHillZone16x16" tilewidth="16" tileheight="16" tilecount="90">
-  <image source="../../_TilesetGreenHillZone16x16.png" trans="ffffff" width="240" height="96"/>
+  <image source="_TilesetGreenHillZone16x16.png" trans="ffffff" width="240" height="96"/>
  </tileset>
  <layer name="Tiles" width="100" height="100">
   <data encoding="base64" compression="gzip">

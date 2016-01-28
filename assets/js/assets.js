@@ -25,6 +25,8 @@ var _TilesetGHZ = new Image();          _TilesetGHZ.src          = "../assets/i/
 var _spriteRing = new Image();          _spriteRing.src         = "../assets/i/sprites/_spriteRing.png";
 var _spriteBigRing = new Image();       _spriteBigRing.src      = "../assets/i/sprites/_spriteBigRing.png";
 
+var _spriteLevelHCZ_o = new Image();    _spriteLevelHCZ_o.src     = "../assets/i/levels/_spriteLevelHCZ_o.png";
+var _spriteLevelHCZ = new Image();      _spriteLevelHCZ.src     = "../assets/i/levels/_spriteLevelHCZ.png";
 var _spriteLevelHub = new Image();      _spriteLevelHub.src     = "../assets/i/levels/_spriteLevelHUB.png";
 var _spriteLevelGHZ = new Image();      _spriteLevelGHZ.src     = "../assets/i/levels/_spriteLevelGHZ.png";
 

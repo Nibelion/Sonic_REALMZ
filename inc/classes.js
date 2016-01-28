@@ -47,14 +47,13 @@ global.player = function(x,y,name,ip){
     this.lastY = 0;
     this.lastHP = 100;
     this.socket;
-    this.initialUpdate = false;
 
     this.score = 0;
     this.rings = 0;
     this.xp = 0;
     this.level = 1;
-    this.maxSpeed = 5;
-    this.accel = 0.12;
+    this.maxSpeed = 6;
+    this.accel = 0.15;
     this.keyA = false;
     this.keyD = false;
 
@@ -191,7 +190,6 @@ global.player = function(x,y,name,ip){
                 if( this.Energy >= 30 &&
                    this.vY != 0 &&
                    distance(this.x, this.y, parameter1, parameter2) < 200 * 200 ){
-
                     this.Controllable = false;
                     this.Energy -= 30;
                     var angle = Math.atan2( parameter2 - this.y + 16, parameter1 - this.x );

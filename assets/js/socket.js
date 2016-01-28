@@ -40,8 +40,6 @@ function netSocket()
                     p[data.id].xp = data.XP;
                 } else {
                     p[data.id].update( data.x, data.y );
-                    p[data.id].vX = data.vX;
-                    p[data.id].vY = data.vY;
                     p[data.id].hp = data.hp;                    
                     p[data.id].level = data.level;
                     }
@@ -83,6 +81,7 @@ function netSocket()
                     if(data.Chaos) { localPlayer.Chaos = data.Chaos };
                     if(data.HP) { localPlayer.HP = data.HP };
                     if(data.PlayerLevel) { localPlayer.Level = data.PlayerLevel };
+                    if(data.vY) { localPlayer.vY = data.vY };
                 };
             });            
             

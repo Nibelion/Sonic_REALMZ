@@ -1,44 +1,51 @@
 var levelOne = JSON.parse( fs.readFileSync("./data/_level_hub.json") );
 var levelTwo = JSON.parse( fs.readFileSync("./data/_level_greenhill.json") );
+var levelTri = JSON.parse( fs.readFileSync("./data/_level_hydrocity.json") );
 
-for( var i = 0; i < levelOne.layers[1].objects.length; i++ ){
-    level.push( new platform(
-        levelOne.layers[1].objects[i].x + parseInt( levelOne.properties.offsetX ),
-        levelOne.layers[1].objects[i].y + parseInt( levelOne.properties.offsetY ),
-        levelOne.layers[1].objects[i].width,
-        levelOne.layers[1].objects[i].height,
-        -1,
-        true,
-        1
-    ));
+function loadLevel(jsonLevel, layer){    
+    for( var i = 0; i < jsonLevel.layers[layer].objects.length; i++ ){
+        level.push( new platform(
+            jsonLevel.layers[layer].objects[i].x + parseInt( jsonLevel.properties.offsetX ),
+            jsonLevel.layers[layer].objects[i].y + parseInt( jsonLevel.properties.offsetY ),
+            jsonLevel.layers[layer].objects[i].width,
+            jsonLevel.layers[layer].objects[i].height,
+            -1,
+            true,
+            1
+        ));
+    };    
 };
 
-for( var i = 0; i < levelTwo.layers[1].objects.length; i++ ){
-    level.push( new platform(
-        levelTwo.layers[1].objects[i].x + parseInt( levelTwo.properties.offsetX ),
-        levelTwo.layers[1].objects[i].y + parseInt( levelTwo.properties.offsetY ),
-        levelTwo.layers[1].objects[i].width,
-        levelTwo.layers[1].objects[i].height,
-        -1,
-        true,
-        1
-    ));
+function loadRings(jsonLevel, layer){
+    for( var i = 0; i < jsonLevel.layers[layer].objects.length; i++ ){
+        items.push( new item(
+            jsonLevel.layers[layer].objects[i].x + jsonLevel.layers[layer].objects[i].width * 0.5 + parseInt( jsonLevel.properties.offsetX ),
+            jsonLevel.layers[layer].objects[i].y + jsonLevel.layers[layer].objects[i].height* 0.5 + parseInt( jsonLevel.properties.offsetY ),
+            "ring"
+        ) );
+    };
 };
 
-for( var i = 0; i < levelTwo.layers[2].objects.length; i++ ){
-    items.push( new item(
-        levelTwo.layers[2].objects[i].x + levelTwo.layers[2].objects[i].width * 0.5 + parseInt( levelTwo.properties.offsetX ),
-        levelTwo.layers[2].objects[i].y + levelTwo.layers[2].objects[i].height* 0.5 + parseInt( levelTwo.properties.offsetY ),
-        "ring"
-    ) );
+function loadBadniks(jsonLevel, layer){
+    for( var i = 0; i < jsonLevel.layers[layer].objects.length; i++ ){
+        badniks.push( new badnik(
+            jsonLevel.layers[layer].objects[i].x + jsonLevel.layers[layer].objects[i].width * 0.5 + parseInt( jsonLevel.properties.offsetX ),
+            jsonLevel.layers[layer].objects[i].y + jsonLevel.layers[layer].objects[i].height* 0.5 + parseInt( jsonLevel.properties.offsetY )
+        ) );
+    };
 };
 
-for( var i = 0; i < levelTwo.layers[3].objects.length; i++ ){
-    badniks.push( new badnik(
-        levelTwo.layers[3].objects[i].x + levelTwo.layers[3].objects[i].width * 0.5 + parseInt( levelTwo.properties.offsetX ),
-        levelTwo.layers[3].objects[i].y + levelTwo.layers[3].objects[i].height* 0.5 + parseInt( levelTwo.properties.offsetY )
-    ) );
-};
+
+loadLevel(levelOne, 1);
+
+loadLevel(levelTwo,   1); // Layer with collision
+loadRings(levelTwo,   2); // Level with rings
+loadBadniks(levelTwo, 3); // Layer with badniks
+
+loadLevel(levelTri,   3);
+loadRings(levelTri,   4);
+loadBadniks(levelTri, 5);
+
 
 /*global.loadLevel = function( l, layer, collidable ){
     

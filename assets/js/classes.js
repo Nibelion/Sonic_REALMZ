@@ -6,6 +6,8 @@ function player(x,y,name,cpic){
     this.h = 64;
     this.vX = 0;
     this.vY = 0;
+    this.lastX = 0;
+    this.lastY = 0;
     this.ip;
     var id;
     this.f = 0, this.a = 0;
@@ -126,13 +128,16 @@ function player(x,y,name,cpic){
         };
         
     this.update = function(x,y){
-        this.x = x; this.y = y;
+        if( x ){ this.x = x };
+        if( y ){ this.y = y };
+        { this.vY = this.y - this.lastY; this.lastY = this.y };
+        { this.vX = +(this.x - this.lastX).toFixed(2); this.lastX = this.x };
     };
     
     this.updateAnim = function(){
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
-        
+
         if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
         if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
         if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
@@ -144,21 +149,23 @@ function player(x,y,name,cpic){
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
         if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
         if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
-        
+
         if( this.vX == -1.5 && this.vY == -1.5 ) { this.a = 9 };
         if( this.vX == 1.5 && this.vY == -1.5 ) { this.a = 10 };
-        
-        
+
         this.f += Math.max(0.15, Math.abs(this.vX * 0.075) );
         if( this.f > this.anim[this.a] - 1 ) { this.f = 0 };
     };
     
-    this.drawPlayer = function(){
+    this.do = function(){
+        if( this.vX >= -0.15 && this.vX <= 0.15 ) { this.vX = 0 };
+
         this.updateAnim();
+
         context.textAlign = "center";
         context.font = "12px Andale Mono";
 
-        if(p[i] && p[i].type == "admin") {
+        if( p[i] && p[i].type == "admin" ) {
             context.strokeStyle = "black";
             context.strokeText( "ADMIN", this.x, this.y-55 );
             context.fillStyle = "#e8a";
@@ -169,7 +176,7 @@ function player(x,y,name,cpic){
         context.strokeText( "("+this.level+")"+this.name, this.x, this.y-45 );
         context.fillStyle = 'white';
         context.fillText( "("+this.level+")"+this.name, this.x, this.y-45 );     
-    
+
         if(this.i){
             context.drawImage(
                 this.i,
@@ -182,6 +189,7 @@ function player(x,y,name,cpic){
                 this.fH
             );
         };
+        
         if ( this.mode == "f" ) { context.drawImage(_sprite_Eggmobile,this.face * 64, 0, 64, 46, this.x-32, this.y-25, 64, 46) };
 
         if ( localPlayer != this ) {

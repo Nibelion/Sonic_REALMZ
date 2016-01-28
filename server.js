@@ -252,11 +252,8 @@ setInterval(function(){
         
         if( p.update() ) {
             io.emit("netPlayers", {
-                id: p.id,
-                x: parseInt(p.x),
-                y: parseInt(p.y),
-                vX: p.vX,
-                vY: p.vY,
+                x: +(p.x).toFixed(2),
+                y: +(p.y).toFixed(2),
                 hp: parseInt(p.hp),
                 name: p.name,
                 cpic: p.cpic,

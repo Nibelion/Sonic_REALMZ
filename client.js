@@ -33,6 +33,11 @@ function init(){
     var canvas  = document.getElementById("game");
     region  = canvas.getBoundingClientRect();
     context = canvas.getContext("2d");
+    
+    var grd = context.createLinearGradient(0,0,0,170);
+        grd.addColorStop(0,"#3251D1");
+        grd.addColorStop(1,"#37D6FF");
+    
     canvas.onmousemove = updateMouse;
     cw = (canvas.width = 1024);     // 640 default
     ch = (canvas.height = 600);    // 480 default
@@ -133,7 +138,7 @@ function init(){
     });
 
     canvas.addEventListener("mousedown", shoot);
-        
+
     }; // CONTROLS
     
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
@@ -150,24 +155,19 @@ function init(){
         
         // ### RENDER ### //
 
-        var grd = context.createLinearGradient(0,0,0,170);
-        grd.addColorStop(0,"#3251D1");
-        grd.addColorStop(1,"#37D6FF");
-
         context.fillStyle = grd;
-        context.fillRect(0,0,1280,800);
-        
+        context.fillRect( 0, 0, 1280, 800 );        
         
         if( clientState == 0 ) {
-            context.drawImage(_imgIsland, 0,0,1039,540);
-            context.drawImage(_imglogo, 0,0);
+            context.drawImage( _imgIsland, 0, 0, 1039, 540 );
+            context.drawImage( _imglogo, 0, 0 );
         } else {
 
             context.save();
             
             if( localPlayer ){     // IF WE HAVE OUR LOCAL PLAYER
                 context.translate(
-                    parseInt(cw * 0.5 - localPlayer.x),
+                    parseInt( cw * 0.5 - localPlayer.x ),
                     parseInt(Math.max( ch * 0.5 - localPlayer.y, -_gameWaterLever + ch * 0.5 ))
                 );
                 context.globalAlpha = 0.25;
@@ -184,19 +184,22 @@ function init(){
 
             context.drawImage(_spriteLevelHub,-256,0);
             context.drawImage(_spriteLevelGHZ,224,0);
+            context.drawImage(_spriteLevelHCZ,1568,-5568);
 
             for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
 
             for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
 
-            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };
+            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].do() } };
+            
+            context.drawImage(_spriteLevelHCZ_o,1568,-5568);
 
             //for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } }; // OBSOLETE
 
             localTarget = null;
 
             {
-            var dist = 200;
+            var dist = 200 * 200;
             for ( var i = 0; i < badniks.length; i++) {
             var b = badniks[i];            
                 if ( b ) {
@@ -219,7 +222,7 @@ function init(){
                 context.beginPath();
                 context.arc( localTarget.x, localTarget.y, 15, 0, 2 * Math.PI );
                 context.stroke();
-            };
+            }; // DRAW NEAREST TARGET
             
             context.lineWidth = 1;            
             
@@ -238,7 +241,7 @@ function init(){
                 drawBar(context, 0, ch - 15, "#80F", cw, 15, 3, localPlayer.XP, localPlayer.level * 100 );
                 context.font = "12px SonicTitle";
                 context.fillStyle = "#FFF";
-                context.textAlign = "left"
+                context.textAlign = "left";
                 context.strokeText("rings: "+localPlayer.Rings,11,85);
                 context.fillText("rings: "+localPlayer.Rings,11,85);
                 context.strokeText("score: "+localPlayer.Score,11,100);
@@ -250,11 +253,22 @@ function init(){
         requestAnimationFrame(update);
     };
 
+    $("#loadingScreen").hide();
+    toggleMusic();
+    document.getElementById("ost").play();
+    
     update();
 
 };
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+
+function toggleMusic(){
+    if( document.getElementById("optionsMusic").checked )
+        { document.getElementById("ost").volume = 0.25 }
+    else
+        { document.getElementById("ost").volume = 0.0 };    
+};
 
 const rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
     if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) {
