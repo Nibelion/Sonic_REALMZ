@@ -257,6 +257,7 @@ global.item = function(x,y,type){
     this.awardEnergy = 0;
     this.awardESP = 0;
     this.awardChaos = 0;
+    this.rr = 0;        // rr - respawn rate
     
     switch( this.type ){
         case "ring":

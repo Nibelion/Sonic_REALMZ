@@ -45,8 +45,7 @@ setInterval(function(){
     
     // ITEMS
     for( var i = 0; i < items.length; i++){
-        var item = items[i];  
-        
+        var item = items[i];        
         if( item.update() ){
             io.emit("item", {
                 x: item.x,

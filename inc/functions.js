@@ -83,16 +83,16 @@ global.rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
     if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) { return true } else { return false };
 };
 
-global.awardPlayer = function( item, player ) {
+global.awardPlayer = function( item, target ) {
     item.a = false;
     item.r = now();
     item.u = true;
-    player.ring += item.awardRings;
-    player.score += item.awardScore;
-    player.hp += item.awardHP;
-    player.Energy += item.awardEnergy;
-    player.ESP += item.awardESP;
-    player.Chaos += item.awardChaos;
+    target.ring += item.awardRings;
+    target.score += item.awardScore;
+    target.hp += item.awardHP;
+    target.Energy += item.awardEnergy;
+    target.ESP += item.awardESP;
+    target.Chaos += item.awardChaos;
     
     player.socket.emit("event",{
         name: "jump",
