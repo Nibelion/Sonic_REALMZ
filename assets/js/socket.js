@@ -66,7 +66,7 @@ function netSocket()
             });
             
             socket.on('item',           function(data){
-                var newItem = new item( data.x, data.y, data.type, data.a );
+                var newItem = new item( data.x, data.y, data.type, data.a, data.id );
                 items[data.id] = newItem;
             });
             

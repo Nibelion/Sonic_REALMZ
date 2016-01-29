@@ -186,7 +186,7 @@ function init(){
             context.drawImage(_spriteLevelGHZ,224,0);
             context.drawImage(_spriteLevelHCZ,1568,-5568);
 
-            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
+            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].do() } };
 
             for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
 
@@ -205,9 +205,9 @@ function init(){
                 if ( b ) {
                     b.draw();
                     if ( localPlayer ) {
-                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 * 200 && b.a ) {
-                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist * dist ) {
-                                dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
+                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", 200 ) && b.a ) {
+                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", dist ) ) {
+                                dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "return" );
                                 localTarget = b;
                             };
                         };
@@ -422,6 +422,12 @@ function shoot(){
     };
 };
 
-function distance(x1,y1,x2,y2){ return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) };
+function distance(x1,y1,x2,y2,condition,ammount){
+    var dist = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
+    if( condition == "less" && dist < ammount * ammount ) { return true };
+    if( condition == "more" && dist > ammount * ammount) { return true };
+    if( condition == "return" ) { return dist };
+    return false;
+};
     
 function rnd(value){ return parseInt( Math.random() * value ) };

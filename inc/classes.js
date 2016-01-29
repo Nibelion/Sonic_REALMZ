@@ -158,18 +158,18 @@ global.player = function(x,y,name,ip){
         switch( skill ){
                 
             case "jump":
-                if( this.vY == 0 && this.Energy >= 30 ){
+                if( this.vY == 0 && this.Energy >= 10 ){
                     this.vY = -6.5;
-                    this.Energy -= 30;
+                    this.Energy -= 10;
                     this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
                         src: "assets/audio/_sfxJump.ogg"
                     });
-                } else if( this.vY != 0 && this.doubleJump && this.Energy >= 30 ) {
+                } else if( this.vY != 0 && this.doubleJump && this.Energy >= 10 ) {
                     this.doubleJump = false;
                     this.vY = -5.5;
-                    this.Energy -= 30;
+                    this.Energy -= 10;
                     this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
@@ -179,19 +179,19 @@ global.player = function(x,y,name,ip){
                 break;
                 
             case "dash":
-                if( this.Energy >= 20 && this.vX != 0 ){
-                    this.Energy -= 20;
+                if( this.Energy >= 5 && this.vX != 0 ){
+                    this.Energy -= 5;
                     if( this.vX < 0 ){ this.vX = -14 };
                     if( this.vX > 0 ){ this.vX = 14 };
                 };
                 break;
                 
             case "homingAttack":
-                if( this.Energy >= 30 &&
+                if( this.Energy >= 25 &&
                    this.vY != 0 &&
                    distance(this.x, this.y, parameter1, parameter2) < 200 * 200 ){
                     this.Controllable = false;
-                    this.Energy -= 30;
+                    this.Energy -= 25;
                     var angle = Math.atan2( parameter2 - this.y + 16, parameter1 - this.x );
                     this.vX = Math.cos(angle) * 15;
                     this.vY = Math.sin(angle) * 15;
@@ -249,19 +249,32 @@ global.item = function(x,y,type){
     this.x = x;
     this.y = y;
     this.type = type;
-    this.r = 0;
-    
+    this.r = 0;    
     this.a = true;
+    this.awardRings = 0;
+    this.awardScore = 0;
+    this.awardHP = 0;
+    this.awardEnergy = 0;
+    this.awardESP = 0;
+    this.awardChaos = 0;
     
     switch( this.type ){
         case "ring":
-            this.award = 1; this.d = 24; this.rr = 20;
+            this.awardRings = 1;
+            this.awardScore = 10;
+            this.awardHP = 1;
+            this.awardEnergy = 10;
+            this.awardESP = 0;
+            this.awardChaos = 5;
+            
+            this.d = 24; this.rr = 20;
             break;
         case "ringBig":
-            this.award = 50; this.d = 48; this.rr = 300;
+            this.awardRings = 50; this.d = 48; this.rr = 300;
             break;
         default:
-            this.award = 1; this.d = 16; this.rr = 10;
+            this.d = 48;
+            this.rr = 100;            
             break;
     };
     

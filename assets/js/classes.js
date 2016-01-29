@@ -308,10 +308,13 @@ function projectile(x,y){
     };
 };
 
-function item(x,y,t,a){
+function item(x,y,t,a,id){
     this.x = x;
     this.y = y;
     this.t = t;
+    this.f = 0.0;
+    this.a = a;
+    this.id = id;
     switch( this.t ){
         case "ring":
             this.i = _spriteRing;
@@ -319,16 +322,14 @@ function item(x,y,t,a){
         case "ringBig":
             this.i = _spriteBigRing;
             break;
-/*        default:
+        default:
             this.i = _spriteRing;
-            break;*/
+            break;
     };
 
-    this.f = 0.0;
-    this.a = a;
     
-    this.draw = function(){
-        if( this.a ){
+    this.do = function(){
+        if( this.a && localPlayer && distance(localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 480 ) ) {
             this.f += 0.15;
             if( this.f >= this.i.width / this.i.height ) { this.f = 0 };
             context.drawImage(
@@ -342,6 +343,10 @@ function item(x,y,t,a){
                 this.i.height,
                 this.i.height
             );
+                
+            if ( distance(localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) ) {
+                socket.emit('sysItemCollected', { id: this.id } );
+            };            
         };
     };    
 };

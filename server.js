@@ -45,28 +45,7 @@ setInterval(function(){
     
     // ITEMS
     for( var i = 0; i < items.length; i++){
-        var item = items[i];
-        
-        for( var o = 0; o < players.length; o++) {
-            var p = players[o];
-            if( distance( item.x, item.y, p.x, p.y - 32 ) < item.d * item.d && item.a == true ){
-                item.a = false;
-                item.r = now();
-                item.u = true;
-                p.rings += item.award;
-                p.score += 100;
-                p.hp += item.award;
-                p.Energy += item.award/10;
-                p.ESP += item.award/10;
-                p.Chaos += item.award;
-                if( item.type == "ringBig" ){ p.hp = p.maxHP };
-                p.socket.emit("event",{
-                    name: "jump",
-                    type: "sound",
-                    src: "assets/audio/_sfxRing.ogg"
-                });
-            };
-        };        
+        var item = items[i];  
         
         if( item.update() ){
             io.emit("item", {
@@ -77,7 +56,6 @@ setInterval(function(){
                 id: i
             }); 
         };
-
     };
     
     // PROJECTILES
@@ -379,6 +357,17 @@ io.on('connection', function(socket){
                                     text: "Use AD to move, SPACE to jump and MOUSE to shoot.",
                                     time: dH + ":" + dM + ":" + dS
                                 }); // Use theese controls
+                                
+                                socket.on("sysItemCollected", function(data){
+                                    if( items[data.id] &&
+                                        distance(
+                                        items[data.id].x,
+                                        items[data.id].y,
+                                        thisPlayer.x,
+                                        thisPlayer.y - 16) < 32 * 32 && 
+                                        items[data.id].a == true )
+                                    { awardPlayer( items[data.id], thisPlayer ) }
+                                });
 
                                 socket.on("netChatMsg", function(data){
                                     var msgText = "";
