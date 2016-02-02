@@ -87,18 +87,18 @@ global.awardPlayer = function( item, target ) {
     item.a = false;
     item.r = now();
     item.u = true;
-    target.ring += item.awardRings;
+    target.rings += item.awardRings;
     target.score += item.awardScore;
     target.hp += item.awardHP;
     target.Energy += item.awardEnergy;
     target.ESP += item.awardESP;
     target.Chaos += item.awardChaos;
     
-    player.socket.emit("event",{
+/*    target.socket.emit("event",{
         name: "jump",
         type: "sound",
         src: "assets/audio/_sfxRing.ogg"
-    });
+    });*/
 };
 
 // shpargalko

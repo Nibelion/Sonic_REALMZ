@@ -199,13 +199,13 @@ function init(){
             localTarget = null;
 
             {
-            var dist = 200 * 200;
+            var dist = 200;
             for ( var i = 0; i < badniks.length; i++) {
             var b = badniks[i];            
                 if ( b ) {
                     b.draw();
                     if ( localPlayer ) {
-                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", 200 ) && b.a ) {
+                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", 200 * 200 ) && b.a ) {
                             if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", dist ) ) {
                                 dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "return" );
                                 localTarget = b;
@@ -426,7 +426,7 @@ function distance(x1,y1,x2,y2,condition,ammount){
     var dist = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
     if( condition == "less" && dist < ammount * ammount ) { return true };
     if( condition == "more" && dist > ammount * ammount) { return true };
-    if( condition == "return" ) { return dist };
+    if( condition == "return" ) { return Math.sqrt(dist) };
     return false;
 };
     

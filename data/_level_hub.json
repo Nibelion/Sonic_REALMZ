@@ -40,7 +40,7 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"nocollision",
                  "visible":true,
                  "width":48,
                  "x":96,
@@ -85,7 +85,7 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"nocollision",
                  "visible":true,
                  "width":64,
                  "x":368,
@@ -115,7 +115,7 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"nocollision",
                  "visible":true,
                  "width":64,
                  "x":64,
@@ -220,7 +220,7 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"nocollision",
                  "visible":true,
                  "width":64,
                  "x":448,
@@ -235,7 +235,7 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"nocollision",
                  "visible":true,
                  "width":32,
                  "x":224,
@@ -250,7 +250,7 @@
 
                     },
                  "rotation":0,
-                 "type":"",
+                 "type":"nocollision",
                  "visible":true,
                  "width":32,
                  "x":304,
@@ -264,18 +264,67 @@
          "y":0
         }, 
         {
+         "color":"#ffaa00",
          "draworder":"topdown",
-         "height":32,
+         "height":0,
          "name":"Rings",
-         "objects":[],
+         "objects":[
+                {
+                 "ellipse":true,
+                 "height":16,
+                 "id":26,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":224,
+                 "y":464
+                }, 
+                {
+                 "ellipse":true,
+                 "height":16,
+                 "id":27,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":256,
+                 "y":464
+                }, 
+                {
+                 "ellipse":true,
+                 "height":16,
+                 "id":28,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":288,
+                 "y":464
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":32,
+         "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":21,
+ "nextobjectid":30,
  "orientation":"orthogonal",
  "properties":
     {
@@ -287,7 +336,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/..\/_TilesetGreenHillZone16x16.png",
+         "image":"_TilesetGreenHillZone16x16.png",
          "imageheight":96,
          "imagewidth":240,
          "margin":0,

@@ -18,7 +18,8 @@ function player(x,y,name,cpic){
     this.ESP = 0;
     this.Chaos = 0;
     this.XP = 0;
-    this.score = 0;
+    this.Score = 0;
+    this.Rings = 0;
     
     this.type = "Normal";
     this.mode = "n";
@@ -130,14 +131,18 @@ function player(x,y,name,cpic){
     this.update = function(x,y){
         if( x ){ this.x = x };
         if( y ){ this.y = y };
-        { this.vY = this.y - this.lastY; this.lastY = this.y };
+        { this.vY = +(this.y - this.lastY).toFixed(2); this.lastY = this.y };
         { this.vX = +(this.x - this.lastX).toFixed(2); this.lastX = this.x };
     };
     
     this.updateAnim = function(){
+        for( var i = 0; i < level.length; i++ )
+            {
+                var L = level[i];
+                if( rectsOverlap(this.x - 8,this.y, 16, 1, L.x, L.y, L.w, L.h ) && this.vY > 0 ) { this.vY = 0 }
+            };
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
-
         if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
         if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
         if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
@@ -158,6 +163,7 @@ function player(x,y,name,cpic){
     };
     
     this.do = function(){
+        
         if( this.vX >= -0.15 && this.vX <= 0.15 ) { this.vX = 0 };
 
         this.updateAnim();
@@ -212,8 +218,10 @@ function badnik(x, y, type){
     this.vY = 0;
     this.lastX = 0;
     this.lastY = 0;
-    this.w = 38;
-    this.h = 38;
+/*    this.w = 38;
+    this.h = 38;*/
+    this.w = 72;
+    this.h = 87;
     this.a = true;
     this.HP = 0;
     this.maxHP = 25;
@@ -237,9 +245,10 @@ function badnik(x, y, type){
         this.vX = this.x - this.lastX;
         this.lastX = this.x;
         this.f += 0.25;
-        if( this.f >= 2 ) { this.f = 0 };
+        //if( this.f >= 2 ) { this.f = 0 };
+        if( this.f >= 16 ) { this.f = 0 };
         if( this.vX < 0 ) { this.face = 0 };
-        if( this.vX > 0 ) { this.face = 1 };
+        //if( this.vX > 0 ) { this.face = 1 };
         if( this.a ) {
             context.drawImage(
                 this.i,
@@ -344,7 +353,7 @@ function item(x,y,t,a,id){
                 this.i.height
             );
                 
-            if ( distance(localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) ) {
+            if ( distance( localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) ) {
                 socket.emit('sysItemCollected', { id: this.id } );
             };            
         };

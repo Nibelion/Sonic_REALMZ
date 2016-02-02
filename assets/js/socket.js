@@ -42,7 +42,7 @@ function netSocket()
                     p[data.id].update( data.x, data.y );
                     p[data.id].hp = data.hp;                    
                     p[data.id].level = data.level;
-                    }
+                };
             });
 
             socket.on("updateBadnik",   function(data) {

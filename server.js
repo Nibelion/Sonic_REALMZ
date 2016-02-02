@@ -45,24 +45,22 @@ setInterval(function(){
     
     // ITEMS
     for( var i = 0; i < items.length; i++){
-        var item = items[i];        
-        if( item.update() ){
-            io.emit("item", {
-                x: item.x,
-                y: item.y,
-                type: item.type,
-                a: item.a,
+        if( items[i].update() )
+            { io.emit("item", {
+                x: items[i].x,
+                y: items[i].y,
+                type: items[i].type,
+                a: items[i].a,
                 id: i
-            }); 
-        };
+            } ) };
     };
     
     // PROJECTILES
-    for( var i = 0; i < proj.length; i++){
+    for( var i = 0; i < proj.length; i++ ) {
         var prj = proj[i];
         prj.update();
         
-        for(var o = 0; o < players.length; o++) {
+        for( var o = 0; o < players.length; o++ ) {
             var p = players[o];
             
             if( distance( prj.x1, prj.y1, p.x, p.y - 16 ) < 18 * 18 &&
@@ -90,7 +88,7 @@ setInterval(function(){
                 prj.x1 <= l.x + l.w &&
                 prj.y1 >= l.y &&
                 prj.y1 <= l.y + l.h &&
-                l.c)
+                l.c != 'nocollision')
             {
                 prj.a = false;
                 break;
@@ -196,7 +194,7 @@ setInterval(function(){
         for ( var o = 0; o < level.length; o++) {
         var l = level[o];
             
-            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y + p.vY >= l.y && p.y + p.vY <= l.y + l.h && l.c && p.vY > 0 )
+            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y + p.vY >= l.y && p.y + p.vY <= l.y + l.h && l.c != "skip" && p.vY > 0 )
                 {
                     p.vY = 0;
                     p.Controllable = true;
@@ -204,20 +202,20 @@ setInterval(function(){
                     if ( p.doubleJump == false ) { p.doubleJump = true };
                 };
 
-            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y >= l.y + l.h * 0.5 && p.y <= l.y + l.h + 32 && l.c && p.vY < 0 )
+            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y >= l.y + l.h * 0.5 && p.y <= l.y + l.h + 32 && l.c != "nocollision" && p.vY < 0 )
                 {
                     p.vY = 0;
                     p.Controllable = true;
                 };
             
-            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x >= l.x - p.w * 0.25 && p.x <= l.x + l.w * 0.5 && l.c && p.vX > 0 )
+            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x >= l.x - p.w * 0.25 && p.x <= l.x + l.w * 0.5 && l.c != "nocollision" && p.vX > 0 )
                 {
                     p.vX = 0;
                     p.x = l.x - 16;
                     
                 };
             
-            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x <= l.x + l.w + p.w * 0.25 && p.x >= l.x && l.c && p.vX < 0 )
+            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x <= l.x + l.w + p.w * 0.25 && p.x >= l.x && l.c != "nocollision" && p.vX < 0 )
                 {
                     p.vX = 0;
                     p.x = l.x + l.w + 16;
@@ -293,6 +291,7 @@ io.on('connection', function(socket){
                                 var thisPlayer = new player(0,0, userName, ip);
                                 thisPlayer.id = socket.id;
                                 
+                                thisPlayer.name = doc.name;
                                 thisPlayer.score = doc.score;
                                 thisPlayer.rings = doc.rings;
                                 thisPlayer.level = doc.level;
@@ -400,7 +399,7 @@ io.on('connection', function(socket){
                                         text: msgText,
                                         time: dH + ":" + dM + ":" + dS
                                     });
-                                    log('['+dH + ":" + dM + ":" + dS+'] '+data.name+": "+data.text);
+                                    log('['+dH + ":" + dM + ":" + dS+'] '+thisPlayer.name+": "+data.text);
                                     });
 
                                 socket.on("netNewProjectile", function(data){
@@ -500,9 +499,6 @@ io.on('connection', function(socket){
                         } else {
                             if( !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(data.name) ){
                                 var sprite = data.cpic;
-                                if( data.name == "Metakimi" ) { sprite = "clic"};
-                                if( data.name == "SN1F" ) { sprite = "snif"};
-                                
                                 db.collection('players').insertOne( {
                                     "name": data.name,
                                     "pass": data.pass,
@@ -513,7 +509,7 @@ io.on('connection', function(socket){
                                     "email": data.mail,
                                     "sprite": sprite
                                 });
-                                log( 'Player registered: ' + data.name );                             
+                                log( 'Player registered: ' + data.name );
                                 socket.emit("event",{
                                     name: "registered",
                                     type: "text",
@@ -543,8 +539,8 @@ io.on('connection', function(socket){
                         from: 'Sonic RealmZ admin <admin@sonic-realmz.com>',
                         to: doc.email,
                         subject: 'Password recovery',
-                        text: recoveryText+doc.pass,
-                        html: recoveryHtml+doc.pass
+                        text: recoveryText + doc.pass,
+                        html: recoveryHtml + doc.pass
                     };
                     transporter.sendMail(email, function(error, info){
                         if(error){
@@ -579,3 +575,5 @@ io.on('connection', function(socket){
 http.listen(config.port, function(){
           log('-= Sonic RealmZ Server v.'+config.version+' =- PORT: ' + config.port);
     });
+
+// dirty sloths a ruining my suflae

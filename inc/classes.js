@@ -300,5 +300,6 @@ global.item = function(x,y,type){
         };
         
         if( this.u ) { this.u = false; return true };
+        return false;
     };
 };
