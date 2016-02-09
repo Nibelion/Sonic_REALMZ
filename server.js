@@ -15,12 +15,23 @@ global.level    = [];
 global.badniks  = [];
 global.players  = [];
 global.items    = [];
-var proj    = [];
-var chat    = [];
+global.proj     = [];
+global.chat     = [];
+
+global.spawnPoints = [
+    { x: 0, y: 0 },
+    { x: 5300, y: -1090 },
+    { x: 6750, y: 450 },
+    { x: 7400, y: -2560 },
+    { x: 11050, y: -2350 },
+    { x: 11050, y: -2350 }
+];
+
 global.cw = 1024;
 global.ch = 600;
-var gravity = 0.25
 
+
+var gravity = 0.25;
 var forgotTimer = 0;
 var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:Peauty69@smtp.1and1.com');
 
@@ -64,9 +75,9 @@ setInterval(function(){
             var p = players[o];
             
             if( distance( prj.x1, prj.y1, p.x, p.y - 16 ) < 18 * 18 &&
-                distance( 0, 0, p.x, p.y - 16 ) > 100 * 100 &&               
+                distance( 0, 0, p.x, p.y - 16 ) > 200 * 200 &&               
                 prj.id != p.id ) {
-                p.hp -= parseInt( Math.random() * 4 + 8 );
+                p.hp -= prj.damage();
                 p.vY = -1.5;
                 p.Controllable = false;
                 p.cTimer = 15;
@@ -99,7 +110,8 @@ setInterval(function(){
             x: prj.x1,
             y: prj.y1,
             id: i,
-            a: prj.a
+            a: prj.a,
+            i: prj.i
         });
         
         if( proj[i].a == false ) { proj.splice(i,1) };     
@@ -108,40 +120,34 @@ setInterval(function(){
     // BADNIKS
     for( var i = 0; i < badniks.length; i++){
         var b = badniks[i];
-        b.update()
+        b.update();
 
         for(var p = 0; p < proj.length; p++){
-            if( distance( proj[p].x1, proj[p].y1, badniks[i].x, badniks[i].y ) < 24 * 24 &&
+            if( distance( proj[p].x1, proj[p].y1, b.x, b.y ) < 24 * 24 &&
                b.a == true &&
                proj[p].id != "badnik" ) {
-                b.HP -= parseInt( Math.random() * 4 ) + 8;
-                proj[p].a = false;
-                var w = selectById(players, proj[p].id);
-                
-                if( b.HP > 1 ){
-                    var angle = Math.atan2( b.y - w.y , b.x - w.x );
-                    proj.push( new projectile( b.x, b.y, Math.cos(angle)*15, Math.sin(angle)*15, "badnik"));
-                };
-
+                    b.HP -= parseInt( Math.random() * 4 ) + 8;
+                    proj[p].a = false;
                 };
                 if( b.HP < 1 ) {
                     b.a = false;
                     b.t = now();
                     b.HP = b.maxHP;
                     var winner = selectById(players, proj[p].id)
-                    winner.score = parseInt(winner.score) + 100;
-                    winner.xp = parseInt(winner.xp) + 10;                    
+                    winner.score = winner.score + b.awardScore;
+                    winner.xp = winner.xp + b.awardXP;
+                    winner.socket.emit('this',{ XP: winner.xp })
                 };
-            };
+        };  // COLLISION WITH PROJECTILES AND DEATH
         
-    for( var o = 0; o < players.length; o++) {
+        for( var o = 0; o < players.length; o++) {
             var p = players[o];
         
             if( distance( b.x, b.y, p.x, p.y-16 ) < 32 * 32 && b.a == true ){
                 b.HP -= 10;
                 p.vY = -2;
                 p.y = b.y - 32;
-                p.Controllable = true;                
+                p.Controllable = true;
                 
                 if(b.HP < 1){
                     b.a = false;
@@ -152,12 +158,15 @@ setInterval(function(){
                         Score: p.score = parseInt(p.score) + 100,
                         XP: p.xp = parseInt(p.xp) + 10
                     });
-                };                
+                };
             };  // COLLISION WITH PLAYERS
+        
+            if( distance( b.x, b.y, p.x, p.y - 16 ) < 300 * 300 )
+            { b.aggro = p } else { b.aggro = undefined };
             
             if ( distance( b.x, b.y, p.x, p.y - 16 * 16 ) < 800 * 800 ){
                 if ( b.a == false ) {
-                    p.socket.emit("updateBadnik",{ id: i, a: b.a }) 
+                    p.socket.emit("updateBadnik",{ id: i, a: b.a, type: b.type }) 
                 } else {
                     p.socket.emit("updateBadnik",{
                         id: i,
@@ -165,12 +174,12 @@ setInterval(function(){
                         y: b.y,
                         i: b.i,
                         HP: parseInt(b.HP),
-                        a: b.a
+                        a: b.a,
+                        type: b.type
                     });
                 };
             };  // IS BADNIK ON THE SCREEN?
-        };
-  
+        };  
     };
     
     //PLAYERS
@@ -277,8 +286,8 @@ io.on('connection', function(socket){
                     if(doc) {
                         login = doc.name;
                         paswd = doc.pass;
-                        if( paswd != userPass ) { status = 1 };
-                        if( players.indexOf( selectByName(players, userName) ) != -1 ){ status = 2 };
+                        if( paswd != userPass ){ status = 1 };
+                        if( players.indexOf(selectByName(players, userName)) != -1 ){ status = 2 };
                         switch( status ){
                             case 1:
                                 socket.emit('loginNO', { text: "Wrong password." } );
@@ -289,6 +298,7 @@ io.on('connection', function(socket){
                             case 0:
                                 socket.emit('loginOK');
                                 var thisPlayer = new player(0,0, userName, ip);
+                                thisPlayer.spawn();
                                 thisPlayer.id = socket.id;
                                 
                                 thisPlayer.name = doc.name;
@@ -330,9 +340,10 @@ io.on('connection', function(socket){
 
                                 for( var i = Math.max(chat.length - config.LMA, 0); i < chat.length; i++ ) {
                                     socket.emit("netChatMsg", {
-                                    name: chat[i].name,
-                                    text: chat[i].text,
-                                    time: chat[i].time
+                                        name: chat[i].name,
+                                        text: chat[i].text,
+                                        type: chat[i].type,
+                                        time: chat[i].time
                                     }) 
                                 };
                                 // LAST CHAT MESSAGES
@@ -343,18 +354,9 @@ io.on('connection', function(socket){
                                 if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
                                 if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
                                 
-                                socket.emit("netChatMsg", {
-                                    name: "",
-                                    type: "system",
-                                    text: "Welcome to Sonic RealmZ v"+config.version+" (Public Beta)",
-                                    time: dH + ":" + dM + ":" + dS
-                                }); // Welcome to Sonic RalmZ
-                                socket.emit("netChatMsg", {
-                                    name: "",
-                                    type: "system",
-                                    text: "Use AD to move, SPACE to jump and MOUSE to shoot.",
-                                    time: dH + ":" + dM + ":" + dS
-                                }); // Use theese controls
+                                netChatMsg('','system',"☣ Welcome to Sonic RealmZ v"+config.version+" (Public Beta) ☣",false); // Welcome to Sonic RalmZ
+                                
+                                netChatMsg('','system',"Use AD to move, SPACE to jump and MOUSE to shoot.",false); // Welcome to Sonic RalmZ
                                 
                                 socket.on("sysItemCollected", function(data){
                                     if( items[data.id] &&
@@ -383,24 +385,8 @@ io.on('connection', function(socket){
                                         };
                                     };
                                     
-                                    var d = new Date();
-                                    var dH, dM, dS;
-                                    if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
-                                    if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
-                                    if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
-
-                                    chat.push({
-                                        name: thisPlayer.name,
-                                        text: msgText,
-                                        time: dH + ":" + dM + ":" + dS
-                                    });
-                                    io.emit("netChatMsg",{
-                                        name: thisPlayer.name,
-                                        text: msgText,
-                                        time: dH + ":" + dM + ":" + dS
-                                    });
-                                    log('['+dH + ":" + dM + ":" + dS+'] '+thisPlayer.name+": "+data.text);
-                                    });
+                                    netChatMsg(thisPlayer.name, undefined, msgText, true, true);
+                                });
 
                                 socket.on("netNewProjectile", function(data){
                                             var d = now();
@@ -464,14 +450,11 @@ io.on('connection', function(socket){
                                                         break;
                                                 }
                                             });
-                                break;
-                        };
-                        
+                        };                        
                         if(db){ db.close() };
                     } else {
                         socket.emit('loginNO', { text: "No such player!"} );
                         db.close()
-                        status = 3;
                     };
                 });
             };

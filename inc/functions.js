@@ -1,4 +1,7 @@
 // FUNCTIONS
+global.rand = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+};
 
 global.log = function(text){
     var date = new Date();
@@ -99,6 +102,32 @@ global.awardPlayer = function( item, target ) {
         type: "sound",
         src: "assets/audio/_sfxRing.ogg"
     });*/
+};
+
+global.netChatMsg = function( author, type, text, cache, logging ) {
+    var d = new Date();
+    var dH, dM, dS;
+    if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
+    if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
+    if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
+    
+    io.emit("netChatMsg", {
+        name: author,
+        type: type,
+        text: text,
+        time: dH + ":" + dM + ":" + dS
+    });
+    if( cache ) {
+        chat.push({
+            name: author,
+            type: type,
+            text: text,            
+            time: dH + ":" + dM + ":" + dS
+        });
+    };
+    if( logging ){
+        log(author+": "+text);
+    };    
 };
 
 // shpargalko

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="715" height="88" tilewidth="16" tileheight="16" nextobjectid="330">
+ <properties>
+  <property name="offsetX" value="0"/>
+  <property name="offsetY" value="-3200"/>
+ </properties>
+ <tileset firstgid="1" name="_TilesetGreenHillZone16x16" tilewidth="16" tileheight="16" tilecount="90">
+  <image source="_TilesetGreenHillZone16x16.png" trans="ffffff" width="240" height="96"/>
+ </tileset>
+ <imagelayer name="Слой изображений 1">
+  <image source="_level_wingf.png"/>
+ </imagelayer>
+ <layer name="Tiles" width="715" height="88" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3dy24TMRgG0KgSUC4tm6yg3fQNuGwRtw0XtQI2XN7/QfBItRgFT8bTjCd2co70KyWMyLirbz4ZZ7UCAAB28TLMqzCvZ7purs9b0rZ7yrnfGtcEAMDu3of5EObjTNfN9XlL2nZPOfdb45oAANjdtzDfw/yY6bq5Pm9J2+4p535rXBMAAMOeZsy9MPfDPFh4TsM8DPOo2Orz9X8HpxlzdjvnmdfXsk4AAKY5Wf3LfRdhLhd6Pbt9fVt+iaO638F54TlZbDUAAMyln5WXfI1Z+ab8EkfFrHxZcGRlAID27LtXviy/xFExK5d6JtArAwC0aahXjj+X7pVrysrd/axX8z4TxJ9lZQCA9gz1yvG9mPOOpVde3862rL/OvK6/RlkZAKA9Ob1yiT0KNWZlvTIAAH165bL7lWVlAIB21dIrfwrzOcyXMF/LLTep3yvP/UwgKwMAtKuWXvlnmF9hfof5U265SXplAABShnrlmPG6P18n/v5Q9yvP8SywXumVAQAOQc75yo/DPCn4um9jvfKUcy82r5OVAQDalfO9fc/CPC/4um9jvfJ64H29MgDAYdv39/bVkCHtVwYAICWnVy75vX01ZEjnYAAAkLKPXrnWrKxXBgCgT6+sVwYAIE2vrFcGACBNr5zulePZb3c9/0KvDADQPr1yulfOPU957PxlWRkAoF16ZfuVAQBIS2XlzczXXXM1YQ6hV7ZfGQCA1B6MzcxXIkvWmJX1ygAA9OXsVz4ZeH+X1xqzcm7Wz93HrFcGAGhbzn5lvfL4eRd6ZQCAw6NX1isDAJC22SuvV3rlsf5YrwwAcBz0ytvPV049O0w5b1lWBgBol/3K5c7BkJUBANo2tVeecs5yztSQIZ2vDABAil7Z+coAAKTZr1yuV5aVAQDapleep1dO/X8+WRkAoG165fmeAVLnLsvKAADt0isPPytMOUfZfmUAgMOjV57WEzsHAwDgeOiV088Kce+xXhkA4Hjplcucq6xXBgBo37565di53gzc17swbzLXsOu1Y88KemUAgOO07175svwSR90l68c9GnplAIDD1WW4mOf2sV+5lqw8dWJWHrtOVgYAaFfslbfNdcY1d5lasvJF4enWOLTXBACAenU5eCzrrVf/fy9df64y/o1uXgzM1cYsbei+5h4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgOgvNRF4oCDXAwA=
+  </data>
+ </layer>
+ <objectgroup color="#00eaff" name="Collision">
+  <object id="145" x="1088" y="896" width="448" height="128"/>
+  <object id="147" x="512" y="1088" width="1152" height="32"/>
+  <object id="148" x="512" y="896" width="48" height="192"/>
+  <object id="149" x="624" y="960" width="464" height="64"/>
+  <object id="150" x="1088" y="864" width="432" height="32"/>
+  <object id="152" x="0" y="864" width="1024" height="32"/>
+  <object id="155" type="nocollision" x="1024" y="864" width="64" height="16"/>
+  <object id="157" x="1664" y="1152" width="128" height="32"/>
+  <object id="158" x="1792" y="1216" width="704" height="32"/>
+  <object id="161" x="2496" y="1248" width="64" height="32"/>
+  <object id="162" x="2560" y="1280" width="192" height="32"/>
+  <object id="163" x="2752" y="1312" width="64" height="32"/>
+  <object id="165" type="nocollision" x="2240" y="1088" width="256" height="32"/>
+  <object id="166" x="1920" y="896" width="512" height="112"/>
+  <object id="169" x="2560" y="960" width="256" height="192"/>
+  <object id="170" type="nocollision" x="2432" y="896" width="128" height="32"/>
+  <object id="171" x="1920" y="832" width="128" height="32"/>
+  <object id="172" type="nocollision" x="2816" y="960" width="128" height="32"/>
+  <object id="173" x="2816" y="1344" width="64" height="32"/>
+  <object id="175" x="2944" y="960" width="640" height="320"/>
+  <object id="176" x="3584" y="960" width="384" height="32"/>
+  <object id="180" x="3584" y="992" width="256" height="160"/>
+  <object id="181" x="3904" y="1280" width="448" height="32"/>
+  <object id="182" x="4224" y="1152" width="256" height="128"/>
+  <object id="185" type="nocollision" x="1136" y="640" width="5570" height="48"/>
+  <object id="186" x="6208" y="832" width="368" height="48"/>
+  <object id="187" x="5696" y="1216" width="512" height="32"/>
+  <object id="188" x="6528" y="1216" width="640" height="32"/>
+  <object id="189" x="6656" y="896" width="512" height="128"/>
+  <object id="190" type="nocollision" x="6704" y="704" width="208" height="32"/>
+  <object id="191" type="nocollision" x="6720" y="832" width="192" height="32"/>
+  <object id="192" type="nocollision" x="6784" y="576" width="224" height="32"/>
+  <object id="194" x="6400" y="512" width="256" height="128"/>
+  <object id="195" type="nocollision" x="6272" y="512" width="128" height="32"/>
+  <object id="196" type="nocollision" x="6464" y="384" width="528" height="32"/>
+  <object id="199" type="nocollision" x="3840" y="512" width="768" height="32"/>
+  <object id="200" type="nocollision" x="3904" y="320" width="960" height="32"/>
+  <object id="201" type="nocollision" x="4864" y="384" width="528" height="32"/>
+  <object id="202" type="nocollision" x="4608" y="512" width="1280" height="32"/>
+  <object id="204" x="7040" y="768" width="128" height="128"/>
+  <object id="205" type="nocollision" x="7168" y="768" width="384" height="32"/>
+  <object id="206" type="nocollision" x="7296" y="896" width="320" height="32"/>
+  <object id="207" type="nocollision" x="7616" y="704" width="144" height="32"/>
+  <object id="208" type="nocollision" x="7216" y="640" width="272" height="32"/>
+  <object id="209" type="nocollision" x="7216" y="512" width="208" height="32"/>
+  <object id="210" type="nocollision" x="7216" y="384" width="208" height="32"/>
+  <object id="211" type="nocollision" x="7424" y="384" width="64" height="16"/>
+  <object id="215" type="nocollision" x="7168" y="256" width="144" height="32"/>
+  <object id="216" type="nocollision" x="7312" y="256" width="48" height="16"/>
+  <object id="224" x="7424" y="1152" width="128" height="32"/>
+  <object id="225" x="7552" y="1152" width="432" height="128"/>
+  <object id="226" x="7808" y="1024" width="128" height="128"/>
+  <object id="227" type="nocollision" x="7984" y="960" width="464" height="32"/>
+  <object id="228" type="nocollision" x="7984" y="896" width="80" height="32"/>
+  <object id="229" type="nocollision" x="8128" y="832" width="400" height="32"/>
+  <object id="230" type="nocollision" x="8000" y="704" width="448" height="32"/>
+  <object id="231" type="nocollision" x="7984" y="448" width="144" height="32"/>
+  <object id="232" type="nocollision" x="8752" y="448" width="336" height="32"/>
+  <object id="233" type="nocollision" x="8752" y="640" width="80" height="32"/>
+  <object id="234" x="8752" y="768" width="80" height="32"/>
+  <object id="235" type="nocollision" x="8752" y="832" width="416" height="32"/>
+  <object id="237" type="nocollision" x="8832" y="896" width="256" height="32"/>
+  <object id="241" type="nocollision" x="8960" y="704" width="208" height="32"/>
+  <object id="242" x="9168" y="640" width="192" height="384"/>
+  <object id="243" x="9360" y="704" width="624" height="320"/>
+  <object id="244" x="9984" y="704" width="192" height="32"/>
+  <object id="245" type="nocollision" x="9984" y="832" width="512" height="32"/>
+  <object id="246" type="nocollision" x="10496" y="864" width="64" height="32"/>
+  <object id="248" type="nocollision" x="10560" y="896" width="384" height="32"/>
+  <object id="249" x="10240" y="704" width="896" height="32"/>
+  <object id="251" x="9984" y="992" width="1280" height="32"/>
+  <object id="252" type="nocollision" x="11008" y="848" width="128" height="48"/>
+  <object id="253" x="11136" y="704" width="128" height="288"/>
+  <object id="257" x="10592" y="1152" width="800" height="32"/>
+  <object id="258" x="10368" y="1024" width="512" height="64"/>
+  <object id="259" type="nocollision" x="10208" y="544" width="128" height="64"/>
+  <object id="260" type="nocollision" x="10432" y="896" width="64" height="32"/>
+  <object id="262" x="8528" y="384" width="224" height="768"/>
+  <object id="263" x="7760" y="384" width="240" height="384"/>
+  <object id="265" x="7792" y="768" width="192" height="256"/>
+  <object id="268" x="7040" y="384" width="176" height="384"/>
+  <object id="269" x="6992" y="128" width="176" height="256"/>
+  <object id="270" x="6992" y="384" width="48" height="224"/>
+  <object id="328" type="nocollision" x="8896" y="512" width="80" height="32"/>
+  <object id="329" type="nocollision" x="8976" y="512" width="48" height="16"/>
+ </objectgroup>
+ <objectgroup color="#ffaa00" name="Rings">
+  <object id="287" x="1640" y="448">
+   <ellipse/>
+  </object>
+  <object id="291" x="576" y="832" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="293" x="608" y="832" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="294" x="640" y="832" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="296" x="960" y="928" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="297" x="912" y="928" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="298" x="864" y="928" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="300" x="816" y="928" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="301" x="768" y="928" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="304" x="6720" y="1184" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="305" x="6752" y="1184" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="306" x="6784" y="1184" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="307" x="6816" y="1184" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="308" x="6688" y="1184" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="309" x="8480" y="976" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="310" x="8480" y="1008" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="311" x="8480" y="1040" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="312" x="8480" y="1072" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="313" x="8480" y="1104" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="314" x="10032" y="960" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="316" x="10000" y="960" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="318" x="10064" y="960" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="319" x="11024" y="1120" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="320" x="11056" y="1120" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="321" x="11088" y="1120" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="322" x="11120" y="1120" width="16" height="16">
+   <ellipse/>
+  </object>
+  <object id="323" x="11152" y="1120" width="16" height="16">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup color="#ff0000" name="Badniks">
+  <object id="272" x="4592" y="1072" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="273" x="4896" y="1008" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="274" x="5200" y="928" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="275" x="5520" y="864" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="276" x="6000" y="1008" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="277" x="5968" y="784" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="278" x="8208" y="544" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="279" x="8224" y="320" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="280" x="9696" y="624" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="281" x="1728" y="784" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="282" x="2192" y="560" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="283" x="1360" y="544" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="284" x="4352" y="176" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="285" x="6816" y="208" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="286" x="6912" y="48" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="288" x="1344" y="720" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="289" x="7520" y="1008" width="32" height="32">
+   <ellipse/>
+  </object>
+  <object id="290" x="5600" y="1088" width="32" height="32">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

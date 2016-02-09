@@ -42,6 +42,8 @@ function init(){
     cw = (canvas.width = 1024);     // 640 default
     ch = (canvas.height = 600);    // 480 default
     
+    
+    
     {
         
     document.body.addEventListener("keydown", function(e) {
@@ -185,6 +187,7 @@ function init(){
             context.drawImage(_spriteLevelHub,-256,0);
             context.drawImage(_spriteLevelGHZ,224,0);
             context.drawImage(_spriteLevelHCZ,1568,-5568);
+            context.drawImage(_spriteLevelWFZ,0,-3200);
 
             for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].do() } };
 

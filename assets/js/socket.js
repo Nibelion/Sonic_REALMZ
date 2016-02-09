@@ -48,7 +48,6 @@ function netSocket()
             socket.on("updateBadnik",   function(data) {
                 if( !badniks[data.id] ) {
                     badniks[data.id] = new badnik( data.x, data.y, data.type );
-                    badniks[data.id].i = _SpriteBuzzbomber;
                     badniks[data.id].HP = data.HP;
                     badniks[data.id].id = data.id;
                 } else {
@@ -60,7 +59,7 @@ function netSocket()
             });
 
             socket.on('projectile',     function(data){
-                var newProj = new projectile(data.x, data.y);
+                var newProj = new projectile(data.x, data.y, data.i);
                 proj[data.id] = newProj;
                 if(data.a == false) { proj.splice(data.id, 1) };
             });

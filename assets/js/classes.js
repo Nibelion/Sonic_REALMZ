@@ -218,37 +218,41 @@ function badnik(x, y, type){
     this.vY = 0;
     this.lastX = 0;
     this.lastY = 0;
-/*    this.w = 38;
-    this.h = 38;*/
-    this.w = 72;
-    this.h = 87;
     this.a = true;
     this.HP = 0;
     this.maxHP = 25;
     this.id;
     this.aF = [4,4,1];
     this.f = 0;
-    
-    
+
     switch( type ) {
-        case 0:
-            this.i = _SpriteBuzzbomber;
-            this.maxHP = 25;
+        case "ballthing":
+            this.i = _SpriteBossBallthing;
+            this.w = 72;
+            this.h = 87;
+            this.maxHP = 500;
+            this.maxFrames = 16;
+            this.dualSideSprites = false;
+            this.animationSpeed = 0.5;
             break;
         default:
-            this.i = _SpriteDarkVortex;
+            this.i = _SpriteBuzzbomber;
+            this.w = 38;
+            this.h = 38;
             this.maxHP = 25;
+            this.maxFrames = 2;
+            this.dualSideSprites = true;
+            this.animationSpeed = 0.25;
             break;
     };
     
     this.draw = function(){
         this.vX = this.x - this.lastX;
         this.lastX = this.x;
-        this.f += 0.25;
-        //if( this.f >= 2 ) { this.f = 0 };
-        if( this.f >= 16 ) { this.f = 0 };
+        this.f += this.animationSpeed;
+        if( this.f >= this.maxFrames ) { this.f = 0 };
         if( this.vX < 0 ) { this.face = 0 };
-        //if( this.vX > 0 ) { this.face = 1 };
+        if( this.vX > 0 && this.dualSideSprites ) { this.face = 1 };
         if( this.a ) {
             context.drawImage(
                 this.i,
@@ -308,12 +312,26 @@ function platform(x,y,w,h,i,c,id){
     };
 };
 
-function projectile(x,y){
+function projectile(x,y,i){
     this.x = x;
     this.y = y;
+    switch( i ) {
+        case "prj001":
+            this.i = _SpriteProjBT;
+            break;
+        default:
+            this.i = _sprite_prj001;
+            break;
+    };
         
     this.draw = function(){
-        if( context ){ context.drawImage( _sprite_prj001, this.x-3, this.y-3) };
+        if( context ){
+            //context.save();
+            //context.translate(this.x, this.y);
+            //context.rotate(0*Math.PI/180);
+            context.drawImage( this.i, this.x-this.i.width*0.5, this.y-this.i.height*0.5)
+            //context.restore();
+        };
     };
 };
 
@@ -355,6 +373,11 @@ function item(x,y,t,a,id){
                 
             if ( distance( localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) ) {
                 socket.emit('sysItemCollected', { id: this.id } );
+                var snd = new Audio("assets/audio/_sfxRing.ogg");
+                snd.onended = function() {
+                    // remove this child
+                };
+                snd.play();
             };            
         };
     };    
