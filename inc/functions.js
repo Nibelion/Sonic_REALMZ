@@ -1,4 +1,7 @@
 // FUNCTIONS
+global.rand = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+};
 
 global.log = function(text){
     var date = new Date();
@@ -81,6 +84,61 @@ global.updateDB = function(){
 
 global.rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
     if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) { return true } else { return false };
+};
+
+global.awardPlayer = function( item, target ) {
+    item.a = false;
+    item.r = now();
+    item.u = true;
+    target.rings += item.awardRings;
+    target.score += item.awardScore;
+    target.hp += item.awardHP;
+    target.Energy += item.awardEnergy;
+    target.ESP += item.awardESP;
+    target.Chaos += item.awardChaos;
+    
+/*    target.socket.emit("event",{
+        name: "jump",
+        type: "sound",
+        src: "assets/audio/_sfxRing.ogg"
+    });*/
+};
+
+global.netChatMsg = function( author, type, text, cache, logging, recepient ) {
+    var d = new Date();
+    var dH, dM, dS;
+    if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
+    if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
+    if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
+    
+    if( recepient ){
+        recepient.socket.emit('netChatMsg',{
+                name: author,
+                type: type,
+                text: text,
+                time: dH + ":" + dM + ":" + dS
+            });
+    } else {
+        io.emit("netChatMsg", {
+            name: author,
+            type: type,
+            text: text,
+            time: dH + ":" + dM + ":" + dS
+        });
+    };
+    
+    
+    if( cache ) {
+        chat.push({
+            name: author,
+            type: type,
+            text: text,            
+            time: dH + ":" + dM + ":" + dS
+        });
+    };
+    if( logging ){
+        log(author+": "+text);
+    };    
 };
 
 // shpargalko

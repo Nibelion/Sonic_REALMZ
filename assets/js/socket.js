@@ -42,13 +42,12 @@ function netSocket()
                     p[data.id].update( data.x, data.y );
                     p[data.id].hp = data.hp;                    
                     p[data.id].level = data.level;
-                    }
+                };
             });
 
             socket.on("updateBadnik",   function(data) {
                 if( !badniks[data.id] ) {
                     badniks[data.id] = new badnik( data.x, data.y, data.type );
-                    badniks[data.id].i = _SpriteBuzzbomber;
                     badniks[data.id].HP = data.HP;
                     badniks[data.id].id = data.id;
                 } else {
@@ -60,13 +59,13 @@ function netSocket()
             });
 
             socket.on('projectile',     function(data){
-                var newProj = new projectile(data.x, data.y);
+                var newProj = new projectile(data.x, data.y, data.i);
                 proj[data.id] = newProj;
                 if(data.a == false) { proj.splice(data.id, 1) };
             });
             
             socket.on('item',           function(data){
-                var newItem = new item( data.x, data.y, data.type, data.a );
+                var newItem = new item( data.x, data.y, data.type, data.a, data.id );
                 items[data.id] = newItem;
             });
             

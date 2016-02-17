@@ -18,12 +18,14 @@ function player(x,y,name,cpic){
     this.ESP = 0;
     this.Chaos = 0;
     this.XP = 0;
-    this.score = 0;
+    this.Score = 0;
+    this.Rings = 0;
     
     this.type = "Normal";
     this.mode = "n";
     this.hp;
     this.level;
+    this.onFloor = false;
     
     this.cpic = cpic;
     
@@ -130,25 +132,36 @@ function player(x,y,name,cpic){
     this.update = function(x,y){
         if( x ){ this.x = x };
         if( y ){ this.y = y };
-        { this.vY = this.y - this.lastY; this.lastY = this.y };
+        { this.vY = +(this.y - this.lastY).toFixed(2); this.lastY = this.y };
         { this.vX = +(this.x - this.lastX).toFixed(2); this.lastX = this.x };
     };
     
     this.updateAnim = function(){
+        if( this.vY < 0 ) { this.onFloor = false };
+        
+        for( var i = 0; i < level.length; i++ ){
+            var L = level[i];
+            if( rectsOverlap(this.x-16, this.y, 32, 5, L.x, L.y, L.w, L.h ) && this.vY >= 0 )
+                { this.vY = 0; this.onFloor = true };
+        };
+        
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
-
-        if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
-        if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
-        if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
-        if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
-        if( this.vX < -4.6 ) { this.a = 8 };                       // RUN RIGHT
-        if( this.vX > 4.6 ) { this.a = 7 };                       // WALK LEFT
-        if( this.vY < 0 ) { this.a = 3 };                       // JUMP
-        if( this.vY > 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
-        if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
-        if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
-        if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
+        if( this.onFloor ) {
+            if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
+            if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
+            if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
+            if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
+            if( this.vX < -4.6 ) { this.a = 8 };                       // RUN RIGHT
+            if( this.vX > 4.6 ) { this.a = 7 };                       // WALK LEFT
+        };
+        if( !this.onFloor ){
+            if( this.vY < 0 ) { this.a = 3 };                       // JUMP
+            if( this.vY >= 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
+            if( this.vY >= 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
+            if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
+            if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
+        };
 
         if( this.vX == -1.5 && this.vY == -1.5 ) { this.a = 9 };
         if( this.vX == 1.5 && this.vY == -1.5 ) { this.a = 10 };
@@ -158,6 +171,7 @@ function player(x,y,name,cpic){
     };
     
     this.do = function(){
+        
         if( this.vX >= -0.15 && this.vX <= 0.15 ) { this.vX = 0 };
 
         this.updateAnim();
@@ -212,34 +226,41 @@ function badnik(x, y, type){
     this.vY = 0;
     this.lastX = 0;
     this.lastY = 0;
-    this.w = 38;
-    this.h = 38;
     this.a = true;
     this.HP = 0;
     this.maxHP = 25;
     this.id;
     this.aF = [4,4,1];
     this.f = 0;
-    
-    
+
     switch( type ) {
-        case 0:
-            this.i = _SpriteBuzzbomber;
-            this.maxHP = 25;
+        case "ballthing":
+            this.i = _SpriteBossBallthing;
+            this.w = 72;
+            this.h = 87;
+            this.maxHP = 500;
+            this.maxFrames = 16;
+            this.dualSideSprites = false;
+            this.animationSpeed = 0.5;
             break;
         default:
-            this.i = _SpriteDarkVortex;
+            this.i = _SpriteBuzzbomber;
+            this.w = 38;
+            this.h = 38;
             this.maxHP = 25;
+            this.maxFrames = 2;
+            this.dualSideSprites = true;
+            this.animationSpeed = 0.25;
             break;
     };
     
     this.draw = function(){
         this.vX = this.x - this.lastX;
         this.lastX = this.x;
-        this.f += 0.25;
-        if( this.f >= 2 ) { this.f = 0 };
+        this.f += this.animationSpeed;
+        if( this.f >= this.maxFrames ) { this.f = 0 };
         if( this.vX < 0 ) { this.face = 0 };
-        if( this.vX > 0 ) { this.face = 1 };
+        if( this.vX > 0 && this.dualSideSprites ) { this.face = 1 };
         if( this.a ) {
             context.drawImage(
                 this.i,
@@ -294,24 +315,41 @@ function platform(x,y,w,h,i,c,id){
     };
 
     this.draw = function(){
-        //context.drawImage( _TilesetGHZ, this.offsetX, this.offsetY * 16, 16, 16, this.x, this.y, 16, 16);
-        context.fillRect( this.x, this.y, this.w, this.h );
+        context.strokeStyle = "#F00";
+        context.strokeRect(this.x, this.y, this.w, this.h);
     };
 };
 
-function projectile(x,y){
+function projectile(x,y,i){
     this.x = x;
     this.y = y;
+    switch( i ) {
+        case "prj001":
+            this.i = _SpriteProjBT;
+            break;
+        default:
+            this.i = _sprite_prj001;
+            break;
+    };
         
     this.draw = function(){
-        if( context ){ context.drawImage( _sprite_prj001, this.x-3, this.y-3) };
+        if( context ){
+            //context.save();
+            //context.translate(this.x, this.y);
+            //context.rotate(0*Math.PI/180);
+            context.drawImage( this.i, this.x-this.i.width*0.5, this.y-this.i.height*0.5)
+            //context.restore();
+        };
     };
 };
 
-function item(x,y,t,a){
+function item(x,y,t,a,id){
     this.x = x;
     this.y = y;
     this.t = t;
+    this.f = 0.0;
+    this.a = a;
+    this.id = id;
     switch( this.t ){
         case "ring":
             this.i = _spriteRing;
@@ -319,16 +357,14 @@ function item(x,y,t,a){
         case "ringBig":
             this.i = _spriteBigRing;
             break;
-/*        default:
+        default:
             this.i = _spriteRing;
-            break;*/
+            break;
     };
 
-    this.f = 0.0;
-    this.a = a;
     
-    this.draw = function(){
-        if( this.a ){
+    this.do = function(){
+        if( this.a && localPlayer && distance(localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 480 ) ) {
             this.f += 0.15;
             if( this.f >= this.i.width / this.i.height ) { this.f = 0 };
             context.drawImage(
@@ -342,6 +378,11 @@ function item(x,y,t,a){
                 this.i.height,
                 this.i.height
             );
+                
+            if ( distance( localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) && this.a ) {
+                socket.emit('sysItemCollected', { id: this.id } );                playSound('assets/audio/_sfxRing.ogg');
+                this.a = false;
+            };            
         };
     };    
 };

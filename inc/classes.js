@@ -1,28 +1,80 @@
-global.badnik = function(x,y){
+global.badnik = function(x,y,type){
     this.spawnX = x;
     this.spawnY = y;
+    this.type = type;
     this.x = x;
     this.y = y;
     this.f = 0;
     this.sX = 1;
-    this.i = 0
-    this.r = 100 //Math.max(100, (Math.random() * 300) );
+    this.i = 0;
     this.id = (new Date).getTime();
     this.a = true;
     this.t = 0;
     this.lastShot = 0;
     this.lastX = 0;
     this.lastY = 0;
-    this.maxHP = 25;
+    this.aggro = undefined;
+    
+    switch( type ) {
+        case "ballthing":
+            this.name = "Ballthing"
+            this.r = 575;
+            this.maxHP = 500;
+            this.respawnRate = 1800;
+            this.chatCDTimer = 0;
+            this.chatCooldown = 3600;
+            this.chatPhrases = [
+                'Ballz to you!',
+                'I came in like a WREEECKING BAAAL!',
+                "I'll spin you right round, baby, right round!"
+            ]
+            this.attackTM = 0;
+            this.attackCD = 800;
+            this.awardScore = 5000;
+            this.awardXP = 500;
+            this.projType = "prj001";
+            break;
+        default:
+            this.name = "Buzzbomber"
+            this.r = 100;
+            this.maxHP = 25;
+            this.respawnRate = 10;
+            this.attackTM = 0;
+            this.attackCD = 2000;
+            this.awardScore = 100;
+            this.awardXP = 10;
+            break;
+    };
+    
     this.HP = this.maxHP;
 
     this.update = function(){
+        if( this.chatCDTimer + this.chatCooldown * 1000 <= now() && this.chatCooldown && this.a ) {
+            this.chatCDTimer = now();
+            netChatMsg(this.name,
+                       'badnik',
+                       this.chatPhrases[Math.floor((Math.random() * 3))],
+                       true,
+                       false);
+        };
+        
+        if( this.attackTM + this.attackCD <= now() && this.a && this.aggro )
+            {
+                this.attackTM = now();
+                var angle = Math.atan2( this.y - this.aggro.y + 16 , this.x - this.aggro.x );
+                proj.push( new projectile( this.x, this.y, Math.cos(angle)*15, Math.sin(angle)*15, "badnik",this.projType));
+            }
+        
+        if( this.t + this.respawnRate * 1000 < (new Date).getTime() && this.a == false  ) {
+            this.a = true;
+            if(this.type) { netChatMsg(this.name,'badnik','I LIVE AGAIN!',true,false) };
+        };
+        
         if(this.HP < this.maxHP ) { this.HP += 0.01 };
         if(this.HP > this.maxHP ) { this.HP = this.maxHP };        
         if(this.x > this.spawnX + this.r) { this.sX = -1 };
         if(this.x < this.spawnX ) { this.sX = 1 };
         if(this.a) { this.x += this.sX };
-        if(this.t + 10000 < (new Date).getTime()) { this.a = true };
         if(this.x != this.lastX || this.y != this.lastY){
             this.lastX = this.x;
             this.lastY = this.y;
@@ -70,6 +122,12 @@ global.player = function(x,y,name,ip){
     this.cTimer = 0;
     this.doubleJump = false;
     this.Levitate = 0;
+    
+    this.spawn = function(){
+        var r = rand(0, spawnPoints.length-1)
+        this.x = spawnPoints[r].x;
+        this.y = spawnPoints[r].y;
+    };
 
     this.update = function(){
         var updateThis = false;
@@ -125,6 +183,7 @@ global.player = function(x,y,name,ip){
                     type: "sound",
                     src: "assets/audio/_sfxBlackout.ogg"
                 });
+                this.spawn();
             };  // death by sea
 
             if(this.hp <= 0) {
@@ -137,6 +196,7 @@ global.player = function(x,y,name,ip){
                         type: "sound",
                         src: "assets/audio/_sfxBlackout.ogg"
                     });
+                this.spawn();
             };  // death by no hp
 
         this.y += this.vY;
@@ -158,18 +218,18 @@ global.player = function(x,y,name,ip){
         switch( skill ){
                 
             case "jump":
-                if( this.vY == 0 && this.Energy >= 30 ){
+                if( this.vY == 0 && this.Energy >= 10 ){
                     this.vY = -6.5;
-                    this.Energy -= 30;
+                    this.Energy -= 10;
                     this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
                         src: "assets/audio/_sfxJump.ogg"
                     });
-                } else if( this.vY != 0 && this.doubleJump && this.Energy >= 30 ) {
+                } else if( this.vY != 0 && this.doubleJump && this.Energy >= 10 ) {
                     this.doubleJump = false;
                     this.vY = -5.5;
-                    this.Energy -= 30;
+                    this.Energy -= 10;
                     this.socket.emit("event",{
                         name: "jump",
                         type: "sound",
@@ -179,19 +239,19 @@ global.player = function(x,y,name,ip){
                 break;
                 
             case "dash":
-                if( this.Energy >= 20 && this.vX != 0 ){
-                    this.Energy -= 20;
+                if( this.Energy >= 5 && this.vX != 0 ){
+                    this.Energy -= 5;
                     if( this.vX < 0 ){ this.vX = -14 };
                     if( this.vX > 0 ){ this.vX = 14 };
                 };
                 break;
                 
             case "homingAttack":
-                if( this.Energy >= 30 &&
+                if( this.Energy >= 25 &&
                    this.vY != 0 &&
                    distance(this.x, this.y, parameter1, parameter2) < 200 * 200 ){
                     this.Controllable = false;
-                    this.Energy -= 30;
+                    this.Energy -= 25;
                     var angle = Math.atan2( parameter2 - this.y + 16, parameter1 - this.x );
                     this.vX = Math.cos(angle) * 15;
                     this.vY = Math.sin(angle) * 15;
@@ -217,7 +277,7 @@ global.player = function(x,y,name,ip){
     };
 };
 
-global.projectile = function(x1,y1,sX,sY,id){
+global.projectile = function(x1,y1,sX,sY,id,i){
     this.x1 = x1;
     this.y1 = y1;
     this.s = 3;     // speed
@@ -226,6 +286,20 @@ global.projectile = function(x1,y1,sX,sY,id){
     this.sY = sY;
     this.a = true;
     this.id = id;
+    this.i = i;
+    switch( this.i ){
+        case "prj001":
+            this.radius = 32;
+            this.minDamage = 25;
+            this.maxDamage = 60;
+            break;
+        default:
+            this.radius = 16;
+            this.minDamage = 8;
+            this.maxDamage = 12;
+            break;
+    };
+
     
     this.update = function(){
         this.t += 25;
@@ -233,6 +307,9 @@ global.projectile = function(x1,y1,sX,sY,id){
         this.y1 -= this.sY;
         if( this.t > 500) { this.a = false; };
     };
+    
+    this.damage = function()
+        { return rand( this.minDamage, this.maxDamage ) };
 };
 
 global.platform = function(x,y,w,h,i,c,id){
@@ -249,19 +326,35 @@ global.item = function(x,y,type){
     this.x = x;
     this.y = y;
     this.type = type;
-    this.r = 0;
-    
+    this.r = 0;    
     this.a = true;
+    this.awardRings = 0;
+    this.awardScore = 0;
+    this.awardHP = 0;
+    this.awardEnergy = 0;
+    this.awardESP = 0;
+    this.awardChaos = 0;
+    this.rr = 0;        // rr - respawn rate
     
     switch( this.type ){
         case "ring":
-            this.award = 1; this.d = 24; this.rr = 20;
+            this.awardRings = 1;
+            this.awardScore = 10;
+            this.awardHP = 1;
+            this.awardEnergy = 10;
+            this.awardESP = 0;
+            this.awardChaos = 5;
+            
+            this.d = 24; this.rr = 20;
             break;
         case "ringBig":
-            this.award = 50; this.d = 48; this.rr = 300;
+            this.awardRings = 50; this.d = 48; this.rr = 300;
+            break;
+        case "ringWarp":
             break;
         default:
-            this.award = 1; this.d = 16; this.rr = 10;
+            this.d = 48;
+            this.rr = 100;            
             break;
     };
     
@@ -286,5 +379,6 @@ global.item = function(x,y,type){
         };
         
         if( this.u ) { this.u = false; return true };
+        return false;
     };
 };

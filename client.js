@@ -42,6 +42,8 @@ function init(){
     cw = (canvas.width = 1024);     // 640 default
     ch = (canvas.height = 600);    // 480 default
     
+    
+    
     {
         
     document.body.addEventListener("keydown", function(e) {
@@ -129,6 +131,7 @@ function init(){
                 case 82:
                     if( document.activeElement.id != "formText" ){
                         socket.emit('btnPress', { 'key' : 'R' });
+                        if( localPlayer ){ localPlayer.vY = 0 };
                     };                    
                     break;
 
@@ -181,33 +184,36 @@ function init(){
             };
 
             context.globalAlpha = 1;
-
+            
             context.drawImage(_spriteLevelHub,-256,0);
             context.drawImage(_spriteLevelGHZ,224,0);
             context.drawImage(_spriteLevelHCZ,1568,-5568);
+            context.drawImage(_spriteLevelWFZ,0,-3200);
 
-            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
+            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].do() } };
 
             for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
 
             for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].do() } };
             
             context.drawImage(_spriteLevelHCZ_o,1568,-5568);
-
-            //for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } }; // OBSOLETE
+            
+            if( document.getElementById("optionsDebug").checked ) { 
+                for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } };
+            }
 
             localTarget = null;
 
             {
-            var dist = 200 * 200;
+            var dist = 200;
             for ( var i = 0; i < badniks.length; i++) {
             var b = badniks[i];            
                 if ( b ) {
                     b.draw();
                     if ( localPlayer ) {
-                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 * 200 && b.a ) {
-                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist * dist ) {
-                                dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
+                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", 200 * 200 ) && b.a ) {
+                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "less", dist ) ) {
+                                dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16, "return" );
                                 localTarget = b;
                             };
                         };
@@ -263,6 +269,15 @@ function init(){
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 
+function playSound(path){
+    if( optionsSound.checked ) {
+        var snd = new Audio(path);
+        snd.onended = function()
+            { snd.remove() };
+        snd.play();
+    };    
+};
+
 function toggleMusic(){
     if( document.getElementById("optionsMusic").checked )
         { document.getElementById("ost").volume = 0.25 }
@@ -271,7 +286,7 @@ function toggleMusic(){
 };
 
 const rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
-    if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) {
+    if( x1 + w1 >= x2 && x1 <= x2 + w2 && y1 + h1 >= y2 && y1 <= y2 + h2 ) {
         return true
     } else {
         return false
@@ -422,6 +437,12 @@ function shoot(){
     };
 };
 
-function distance(x1,y1,x2,y2){ return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) };
+function distance(x1,y1,x2,y2,condition,ammount){
+    var dist = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
+    if( condition == "less" && dist < ammount * ammount ) { return true };
+    if( condition == "more" && dist > ammount * ammount) { return true };
+    if( condition == "return" ) { return Math.sqrt(dist) };
+    return false;
+};
     
 function rnd(value){ return parseInt( Math.random() * value ) };
