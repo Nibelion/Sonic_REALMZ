@@ -24,66 +24,66 @@
  </layer>
  <objectgroup name="Collision">
   <object id="3" x="256" y="5632" width="768" height="768"/>
-  <object id="4" type="nocollision" x="1024" y="5634" width="640" height="12"/>
+  <object id="4" type="nocollision" x="1024" y="5632" width="640" height="12"/>
   <object id="5" x="1664" y="5632" width="768" height="768"/>
   <object id="6" x="2432" y="5632" width="256" height="128"/>
-  <object id="8" type="nocollision" x="2432" y="5890" width="512" height="12"/>
+  <object id="8" type="nocollision" x="2432" y="5888" width="512" height="12"/>
   <object id="9" x="2432" y="5952" width="256" height="448"/>
   <object id="10" x="1664" y="4864" width="512" height="640"/>
   <object id="11" type="nocollision" x="1536" y="5442" width="128" height="12"/>
   <object id="12" type="nocollision" x="1152" y="5442" width="128" height="12"/>
-  <object id="13" type="nocollision" x="2432" y="5442" width="128" height="12"/>
-  <object id="14" type="nocollision" x="2816" y="5442" width="128" height="12"/>
-  <object id="15" type="nocollision" x="3008" y="5698" width="128" height="12"/>
-  <object id="16" type="nocollision" x="3200" y="5826" width="128" height="12"/>
-  <object id="17" type="nocollision" x="3200" y="5378" width="128" height="12"/>
-  <object id="18" type="nocollision" x="3200" y="5250" width="128" height="12"/>
+  <object id="13" type="nocollision" x="2432" y="5440" width="128" height="12"/>
+  <object id="14" type="nocollision" x="2816" y="5440" width="128" height="12"/>
+  <object id="15" type="nocollision" x="3008" y="5696" width="128" height="12"/>
+  <object id="16" type="nocollision" x="3200" y="5824" width="128" height="12"/>
+  <object id="17" type="nocollision" x="3200" y="5376" width="128" height="12"/>
+  <object id="18" type="nocollision" x="3200" y="5248" width="128" height="12"/>
   <object id="20" x="3328" y="5184" width="1024" height="704"/>
   <object id="21" x="3328" y="5888" width="384" height="512"/>
   <object id="22" x="3712" y="6144" width="1920" height="256"/>
-  <object id="23" type="nocollision" x="3840" y="6018" width="128" height="12"/>
-  <object id="24" type="nocollision" x="4096" y="6018" width="128" height="12"/>
-  <object id="25" type="nocollision" x="4864" y="6018" width="128" height="12"/>
-  <object id="26" type="nocollision" x="5120" y="6018" width="128" height="12"/>
+  <object id="23" type="nocollision" x="3840" y="6016" width="128" height="12"/>
+  <object id="24" type="nocollision" x="4096" y="6016" width="128" height="12"/>
+  <object id="25" type="nocollision" x="4864" y="6016" width="128" height="12"/>
+  <object id="26" type="nocollision" x="5120" y="6016" width="128" height="12"/>
   <object id="27" x="4352" y="5760" width="1024" height="128"/>
   <object id="28" x="5632" y="5760" width="768" height="640"/>
   <object id="30" x="5504" y="4736" width="896" height="896"/>
-  <object id="32" type="nocollision" x="4352" y="5442" width="256" height="12"/>
-  <object id="33" type="nocollision" x="4608" y="5570" width="128" height="12"/>
-  <object id="34" type="nocollision" x="4864" y="5634" width="128" height="12"/>
-  <object id="35" type="nocollision" x="4736" y="5442" width="128" height="12"/>
-  <object id="36" type="nocollision" x="4864" y="5378" width="128" height="12"/>
-  <object id="37" type="nocollision" x="4992" y="5442" width="128" height="12"/>
-  <object id="38" type="nocollision" x="4864" y="5250" width="128" height="12"/>
-  <object id="39" type="nocollision" x="4992" y="5122" width="512" height="12"/>
-  <object id="40" type="nocollision" x="5248" y="5442" width="256" height="12"/>
+  <object id="32" type="nocollision" x="4352" y="5440" width="256" height="12"/>
+  <object id="33" type="nocollision" x="4608" y="5568" width="128" height="12"/>
+  <object id="34" type="nocollision" x="4864" y="5632" width="128" height="12"/>
+  <object id="35" type="nocollision" x="4736" y="5440" width="128" height="12"/>
+  <object id="36" type="nocollision" x="4864" y="5376" width="128" height="12"/>
+  <object id="37" type="nocollision" x="4992" y="5440" width="128" height="12"/>
+  <object id="38" type="nocollision" x="4864" y="5248" width="128" height="12"/>
+  <object id="39" type="nocollision" x="4992" y="5120" width="512" height="12"/>
+  <object id="40" type="nocollision" x="5248" y="5440" width="256" height="12"/>
   <object id="44" x="3328" y="4736" width="896" height="256"/>
   <object id="46" x="896" y="4864" width="384" height="128"/>
-  <object id="48" type="nocollision" x="1216" y="4674" width="128" height="12"/>
-  <object id="50" type="nocollision" x="1088" y="4546" width="128" height="12"/>
-  <object id="51" type="nocollision" x="1216" y="4418" width="128" height="12"/>
-  <object id="52" type="nocollision" x="1088" y="4290" width="128" height="12"/>
-  <object id="53" type="nocollision" x="1344" y="4226" width="128" height="12"/>
+  <object id="48" type="nocollision" x="1216" y="4672" width="128" height="12"/>
+  <object id="50" type="nocollision" x="1088" y="4544" width="128" height="12"/>
+  <object id="51" type="nocollision" x="1216" y="4416" width="128" height="12"/>
+  <object id="52" type="nocollision" x="1088" y="4288" width="128" height="12"/>
+  <object id="53" type="nocollision" x="1344" y="4224" width="128" height="12"/>
   <object id="59" x="3328" y="4608" width="256" height="128"/>
-  <object id="60" type="nocollision" x="3584" y="4610" width="128" height="12"/>
+  <object id="60" type="nocollision" x="3584" y="4608" width="128" height="12"/>
   <object id="70" x="6272" y="3712" width="128" height="128"/>
   <object id="72" x="6144" y="3968" width="256" height="640"/>
-  <object id="73" type="nocollision" x="6016" y="4290" width="128" height="12"/>
-  <object id="74" type="nocollision" x="6016" y="4418" width="128" height="12"/>
+  <object id="73" type="nocollision" x="6016" y="4288" width="128" height="12"/>
+  <object id="74" type="nocollision" x="6016" y="4416" width="128" height="12"/>
   <object id="76" x="2176" y="4864" width="384" height="384"/>
-  <object id="77" type="nocollision" x="3072" y="4994" width="128" height="12"/>
-  <object id="78" type="nocollision" x="2880" y="4930" width="128" height="12"/>
-  <object id="79" type="nocollision" x="2688" y="4866" width="128" height="12"/>
-  <object id="80" x="1664" y="5504" width="639" height="37"/>
+  <object id="77" type="nocollision" x="3072" y="4992" width="128" height="12"/>
+  <object id="78" type="nocollision" x="2880" y="4928" width="128" height="12"/>
+  <object id="79" type="nocollision" x="2688" y="4864" width="128" height="12"/>
+  <object id="80" x="1664" y="5504" width="639" height="32"/>
   <object id="116" x="896" y="4736" width="256" height="31"/>
-  <object id="117" type="nocollision" x="1280" y="4866" width="384" height="12"/>
-  <object id="133" type="nocollision" x="3072" y="5122" width="256" height="12"/>
+  <object id="117" type="nocollision" x="1280" y="4862" width="384" height="12"/>
+  <object id="133" type="nocollision" x="3072" y="5120" width="256" height="12"/>
   <object id="134" x="3328" y="5120" width="1024" height="64"/>
-  <object id="135" type="nocollision" x="4352" y="5122" width="512" height="12"/>
+  <object id="135" type="nocollision" x="4352" y="5120" width="512" height="12"/>
   <object id="137" x="4864" y="4224" width="1024" height="384"/>
   <object id="139" x="3840" y="4480" width="1024" height="128"/>
-  <object id="140" type="nocollision" x="3712" y="4482" width="128" height="12"/>
-  <object id="141" type="nocollision" x="5888" y="4546" width="128" height="12"/>
+  <object id="140" type="nocollision" x="3712" y="4480" width="128" height="12"/>
+  <object id="141" type="nocollision" x="5888" y="4544" width="128" height="12"/>
   <object id="143" x="1664" y="4224" width="512" height="512"/>
   <object id="145" x="2176" y="4224" width="1408" height="384"/>
   <object id="146" x="3584" y="4224" width="1024" height="128"/>
@@ -199,7 +199,7 @@
   <object id="100" x="3136" y="4800" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="104" x="4608" y="5312" width="64" height="64">
+  <object id="104" x="4608" y="5310" width="64" height="64">
    <ellipse/>
   </object>
   <object id="106" x="5120" y="5312" width="64" height="64">

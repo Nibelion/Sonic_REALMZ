@@ -131,6 +131,7 @@ function init(){
                 case 82:
                     if( document.activeElement.id != "formText" ){
                         socket.emit('btnPress', { 'key' : 'R' });
+                        if( localPlayer ){ localPlayer.vY = 0 };
                     };                    
                     break;
 
@@ -183,7 +184,7 @@ function init(){
             };
 
             context.globalAlpha = 1;
-
+            
             context.drawImage(_spriteLevelHub,-256,0);
             context.drawImage(_spriteLevelGHZ,224,0);
             context.drawImage(_spriteLevelHCZ,1568,-5568);
@@ -196,8 +197,10 @@ function init(){
             for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].do() } };
             
             context.drawImage(_spriteLevelHCZ_o,1568,-5568);
-
-            //for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } }; // OBSOLETE
+            
+            if( document.getElementById("optionsDebug").checked ) { 
+                for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } };
+            }
 
             localTarget = null;
 
@@ -266,6 +269,15 @@ function init(){
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
 
+function playSound(path){
+    if( optionsSound.checked ) {
+        var snd = new Audio(path);
+        snd.onended = function()
+            { snd.remove() };
+        snd.play();
+    };    
+};
+
 function toggleMusic(){
     if( document.getElementById("optionsMusic").checked )
         { document.getElementById("ost").volume = 0.25 }
@@ -274,7 +286,7 @@ function toggleMusic(){
 };
 
 const rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
-    if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) {
+    if( x1 + w1 >= x2 && x1 <= x2 + w2 && y1 + h1 >= y2 && y1 <= y2 + h2 ) {
         return true
     } else {
         return false

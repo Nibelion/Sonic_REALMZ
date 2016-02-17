@@ -20,9 +20,9 @@ global.badnik = function(x,y,type){
             this.name = "Ballthing"
             this.r = 575;
             this.maxHP = 500;
-            this.respawnRate = 300;
+            this.respawnRate = 1800;
             this.chatCDTimer = 0;
-            this.chatCooldown = 300;
+            this.chatCooldown = 3600;
             this.chatPhrases = [
                 'Ballz to you!',
                 'I came in like a WREEECKING BAAAL!',
@@ -289,10 +289,12 @@ global.projectile = function(x1,y1,sX,sY,id,i){
     this.i = i;
     switch( this.i ){
         case "prj001":
+            this.radius = 32;
             this.minDamage = 25;
             this.maxDamage = 60;
             break;
         default:
+            this.radius = 16;
             this.minDamage = 8;
             this.maxDamage = 12;
             break;

@@ -25,6 +25,7 @@ function player(x,y,name,cpic){
     this.mode = "n";
     this.hp;
     this.level;
+    this.onFloor = false;
     
     this.cpic = cpic;
     
@@ -136,24 +137,31 @@ function player(x,y,name,cpic){
     };
     
     this.updateAnim = function(){
-        for( var i = 0; i < level.length; i++ )
-            {
-                var L = level[i];
-                if( rectsOverlap(this.x - 8,this.y, 16, 1, L.x, L.y, L.w, L.h ) && this.vY > 0 ) { this.vY = 0 }
-            };
+        if( this.vY < 0 ) { this.onFloor = false };
+        
+        for( var i = 0; i < level.length; i++ ){
+            var L = level[i];
+            if( rectsOverlap(this.x-16, this.y, 32, 5, L.x, L.y, L.w, L.h ) && this.vY >= 0 )
+                { this.vY = 0; this.onFloor = true };
+        };
+        
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
-        if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
-        if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
-        if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
-        if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
-        if( this.vX < -4.6 ) { this.a = 8 };                       // RUN RIGHT
-        if( this.vX > 4.6 ) { this.a = 7 };                       // WALK LEFT
-        if( this.vY < 0 ) { this.a = 3 };                       // JUMP
-        if( this.vY > 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
-        if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
-        if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
-        if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
+        if( this.onFloor ) {
+            if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
+            if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
+            if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
+            if( this.vX < -0.15 ) { this.a = 1 };                       // WALK LEFT
+            if( this.vX < -4.6 ) { this.a = 8 };                       // RUN RIGHT
+            if( this.vX > 4.6 ) { this.a = 7 };                       // WALK LEFT
+        };
+        if( !this.onFloor ){
+            if( this.vY < 0 ) { this.a = 3 };                       // JUMP
+            if( this.vY >= 0 && this.face == 1) { this.a = 5 };      // FALL TO RIGHT
+            if( this.vY >= 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
+            if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
+            if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
+        };
 
         if( this.vX == -1.5 && this.vY == -1.5 ) { this.a = 9 };
         if( this.vX == 1.5 && this.vY == -1.5 ) { this.a = 10 };
@@ -307,8 +315,8 @@ function platform(x,y,w,h,i,c,id){
     };
 
     this.draw = function(){
-        //context.drawImage( _TilesetGHZ, this.offsetX, this.offsetY * 16, 16, 16, this.x, this.y, 16, 16);
-        context.fillRect( this.x, this.y, this.w, this.h );
+        context.strokeStyle = "#F00";
+        context.strokeRect(this.x, this.y, this.w, this.h);
     };
 };
 
@@ -371,13 +379,9 @@ function item(x,y,t,a,id){
                 this.i.height
             );
                 
-            if ( distance( localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) ) {
-                socket.emit('sysItemCollected', { id: this.id } );
-                var snd = new Audio("assets/audio/_sfxRing.ogg");
-                snd.onended = function() {
-                    // remove this child
-                };
-                snd.play();
+            if ( distance( localPlayer.x, localPlayer.y - 16, this.x, this.y, "less", 32 ) && this.a ) {
+                socket.emit('sysItemCollected', { id: this.id } );                playSound('assets/audio/_sfxRing.ogg');
+                this.a = false;
             };            
         };
     };    

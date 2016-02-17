@@ -3,7 +3,6 @@ var levelTwo = JSON.parse( fs.readFileSync("./data/_level_greenhill.json") );
 var levelTri = JSON.parse( fs.readFileSync("./data/_level_hydrocity.json") );
 var levelFor = JSON.parse( fs.readFileSync("./data/_level_wingf.json") );
 
-
 function loadLevel(jsonLevel, layer){    
     for( var i = 0; i < jsonLevel.layers[layer].objects.length; i++ ){
         level.push( new platform(
@@ -39,18 +38,18 @@ function loadBadniks(jsonLevel, layer){
     };
 };
 
-loadLevel(levelOne, 1);
+loadLevel(levelOne,     1);
 
-loadLevel(levelTwo,   1); // Layer with collision
-loadRings(levelTwo,   2); // Level with rings
-loadBadniks(levelTwo, 3); // Layer with badniks
+loadLevel(levelTwo,     1); // Layer with collision
+loadRings(levelTwo,     2); // Level with rings
+loadBadniks(levelTwo,   3); // Layer with badniks
 
-loadLevel(levelTri,   3);
-loadRings(levelTri,   4);
-loadBadniks(levelTri, 5);
+loadLevel(levelTri,     3);
+loadRings(levelTri,     4);
+loadBadniks(levelTri,   5);
 
-loadLevel(levelFor, 2);
-loadRings(levelFor, 3);
-loadBadniks(levelFor, 4);
+loadLevel(levelFor,     2);
+loadRings(levelFor,     3);
+loadBadniks(levelFor,   4);
 
 //items.push( new item( 0, 0, "ringWarp" ) );

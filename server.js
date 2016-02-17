@@ -19,17 +19,16 @@ global.proj     = [];
 global.chat     = [];
 
 global.spawnPoints = [
-    { x: 0, y: 0 },
-    { x: 5300, y: -1090 },
+    { x: 0, y: 0 }
+    /*{ x: 5300, y: -1090 },
     { x: 6750, y: 450 },
     { x: 7400, y: -2560 },
     { x: 11050, y: -2350 },
-    { x: 11050, y: -2350 }
+    { x: 11050, y: -2350 }*/
 ];
 
 global.cw = 1024;
 global.ch = 600;
-
 
 var gravity = 0.25;
 var forgotTimer = 0;
@@ -74,7 +73,7 @@ setInterval(function(){
         for( var o = 0; o < players.length; o++ ) {
             var p = players[o];
             
-            if( distance( prj.x1, prj.y1, p.x, p.y - 16 ) < 18 * 18 &&
+            if( distance( prj.x1, prj.y1, p.x, p.y - 16 ) < prj.radius * prj.radius &&
                 distance( 0, 0, p.x, p.y - 16 ) > 200 * 200 &&               
                 prj.id != p.id ) {
                 p.hp -= prj.damage();
@@ -114,16 +113,17 @@ setInterval(function(){
             i: prj.i
         });
         
-        if( proj[i].a == false ) { proj.splice(i,1) };     
+        if( proj[i].a == false ) { proj.splice( i, 1 ) };     
     };
     
     // BADNIKS
     for( var i = 0; i < badniks.length; i++){
         var b = badniks[i];
-        b.update();
+        b.update();        
 
-        for(var p = 0; p < proj.length; p++){
-            if( distance( proj[p].x1, proj[p].y1, b.x, b.y ) < 24 * 24 &&
+        for( var p = 0; p < proj.length; p++ ){
+            var prj = proj[p];
+            if( distance( proj[p].x1, proj[p].y1, b.x, b.y ) < prj.radius * prj.radius &&
                b.a == true &&
                proj[p].id != "badnik" ) {
                     b.HP -= parseInt( Math.random() * 4 ) + 8;
@@ -140,7 +140,7 @@ setInterval(function(){
                 };
         };  // COLLISION WITH PROJECTILES AND DEATH
         
-        for( var o = 0; o < players.length; o++) {
+        for( var o = 0; o < players.length; o++ ) {
             var p = players[o];
         
             if( distance( b.x, b.y, p.x, p.y-16 ) < 32 * 32 && b.a == true ){
@@ -161,9 +161,6 @@ setInterval(function(){
                 };
             };  // COLLISION WITH PLAYERS
         
-            if( distance( b.x, b.y, p.x, p.y - 16 ) < 300 * 300 )
-            { b.aggro = p } else { b.aggro = undefined };
-            
             if ( distance( b.x, b.y, p.x, p.y - 16 * 16 ) < 800 * 800 ){
                 if ( b.a == false ) {
                     p.socket.emit("updateBadnik",{ id: i, a: b.a, type: b.type }) 
@@ -179,10 +176,16 @@ setInterval(function(){
                     });
                 };
             };  // IS BADNIK ON THE SCREEN?
+            
+            if( distance( b.x, b.y, p.x, p.y - 16 ) < 300 * 300 && !b.aggro )
+                { b.aggro = p; break };
+            
+            if( distance( b.x, b.y, p.x, p.y - 16 ) > 300 * 300 && b.aggro )
+                { b.aggro = undefined };
         };  
     };
     
-    //PLAYERS
+    // PLAYERS
     for( var i = 0; i < players.length; i++) {
     var p = players[i];
         p.socket.emit('this', {
@@ -297,7 +300,7 @@ io.on('connection', function(socket){
                                 break;
                             case 0:
                                 socket.emit('loginOK');
-                                var thisPlayer = new player(0,0, userName, ip);
+                                var thisPlayer = new player( 0, 0, userName, ip );
                                 thisPlayer.spawn();
                                 thisPlayer.id = socket.id;
                                 
@@ -354,9 +357,9 @@ io.on('connection', function(socket){
                                 if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
                                 if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
                                 
-                                netChatMsg('','system',"☣ Welcome to Sonic RealmZ v"+config.version+" (Public Beta) ☣",false); // Welcome to Sonic RalmZ
+                                netChatMsg('','system',"☣ Welcome to Sonic RealmZ v"+config.version+" (Public Beta) ☣",false, false, thisPlayer); // Welcome to Sonic RealmZ
                                 
-                                netChatMsg('','system',"Use AD to move, SPACE to jump and MOUSE to shoot.",false); // Welcome to Sonic RalmZ
+                                netChatMsg('','system',"Use AD to move, SPACE to jump and MOUSE to shoot.",false, false, thisPlayer); // Welcome to Sonic RealmZ
                                 
                                 socket.on("sysItemCollected", function(data){
                                     if( items[data.id] &&
@@ -451,7 +454,7 @@ io.on('connection', function(socket){
                                                 }
                                             });
                         };                        
-                        if(db){ db.close() };
+                        if( db ){ db.close() };
                     } else {
                         socket.emit('loginNO', { text: "No such player!"} );
                         db.close()

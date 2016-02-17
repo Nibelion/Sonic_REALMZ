@@ -104,19 +104,30 @@ global.awardPlayer = function( item, target ) {
     });*/
 };
 
-global.netChatMsg = function( author, type, text, cache, logging ) {
+global.netChatMsg = function( author, type, text, cache, logging, recepient ) {
     var d = new Date();
     var dH, dM, dS;
     if ( d.getHours() < 10 ) { dH = "0" +d.getHours()}else{ dH = d.getHours() };
     if ( d.getMinutes() < 10 ) { dM = "0" +d.getMinutes()}else{ dM = d.getMinutes() };
     if ( d.getSeconds() < 10 ) { dS = "0" +d.getSeconds()}else{ dS = d.getSeconds() };
     
-    io.emit("netChatMsg", {
-        name: author,
-        type: type,
-        text: text,
-        time: dH + ":" + dM + ":" + dS
-    });
+    if( recepient ){
+        recepient.socket.emit('netChatMsg',{
+                name: author,
+                type: type,
+                text: text,
+                time: dH + ":" + dM + ":" + dS
+            });
+    } else {
+        io.emit("netChatMsg", {
+            name: author,
+            type: type,
+            text: text,
+            time: dH + ":" + dM + ":" + dS
+        });
+    };
+    
+    
     if( cache ) {
         chat.push({
             name: author,
