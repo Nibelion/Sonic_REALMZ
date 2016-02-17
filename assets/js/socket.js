@@ -15,7 +15,7 @@ function netSocket()
             clientState = 1;
             
             socket.on('platform',       function(data){
-                var plat = new platform( data.x, data.y, data.w, data.h, data.i );
+                var plat = new platform( data.x, data.y, data.w, data.h, data.i, data.c, data.id );
                 level.push(plat);
             });
             
@@ -37,11 +37,9 @@ function netSocket()
                     p[data.id] = new player( data.x, data.y, data.name, data.cpic );
                     p[data.id].level = data.level;
                     p[data.id].hp = data.hp;
-                    p[data.id].rings = data.rings;
+                    p[data.id].xp = data.XP;
                 } else {
                     p[data.id].update( data.x, data.y );
-                    p[data.id].vX = data.vX;
-                    p[data.id].vY = data.vY;
                     p[data.id].hp = data.hp;                    
                     p[data.id].level = data.level;
                     }
@@ -49,8 +47,8 @@ function netSocket()
 
             socket.on("updateBadnik",   function(data) {
                 if( !badniks[data.id] ) {
-                    badniks[data.id] = new badnik( data.x, data.y);
-                    badniks[data.id].i = _sprite_Badnik_Cloud;
+                    badniks[data.id] = new badnik( data.x, data.y, data.type );
+                    badniks[data.id].i = _SpriteBuzzbomber;
                     badniks[data.id].HP = data.HP;
                     badniks[data.id].id = data.id;
                 } else {
@@ -73,16 +71,18 @@ function netSocket()
             });
             
             socket.on('this',           function(data){
-                localPlayer = p[data.id];
-                localPlayer.Score = data.score;
-                localPlayer.Rings = data.rings;
-                localPlayer.XP = data.exper;
-                localPlayer.Energy = data.Energy;
-                localPlayer.ESP = data.ESP;
-                localPlayer.Chaos = data.Chaos;
-                localPlayer.HP = data.HP;
-                localPlayer.Level = data.PlayerLevel;
-            
+                if( data.id != undefined ) { localPlayer = p[data.id] };
+                if( localPlayer ){
+                    if(data.Score) { localPlayer.Score = data.Score };
+                    if(data.Rings) { localPlayer.Rings = data.Rings };
+                    if(data.XP) { localPlayer.XP = data.XP };
+                    if(data.Energy) { localPlayer.Energy = data.Energy };
+                    if(data.ESP) { localPlayer.ESP = data.ESP };
+                    if(data.Chaos) { localPlayer.Chaos = data.Chaos };
+                    if(data.HP) { localPlayer.HP = data.HP };
+                    if(data.PlayerLevel) { localPlayer.Level = data.PlayerLevel };
+                    if(data.vY) { localPlayer.vY = data.vY };
+                };
             });            
             
         });

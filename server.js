@@ -19,6 +19,7 @@ var proj    = [];
 var chat    = [];
 global.cw = 1024;
 global.ch = 600;
+var gravity = 0.25
 
 var forgotTimer = 0;
 var transporter = mail.createTransport('smtps://admin%40sonic-realmz.com:Peauty69@smtp.1and1.com');
@@ -29,7 +30,6 @@ var recoveryHtml = "<b>Dear user</b><p>Here is your password for your character:
 require('./inc/classes.js');
 require('./inc/functions.js');
 require('./inc/level.js');
-require('./inc/badniks.js');
 
 app.get('/*', function(req,res){
     var reqPath = req.path;
@@ -49,7 +49,7 @@ setInterval(function(){
         
         for( var o = 0; o < players.length; o++) {
             var p = players[o];
-            if( distance( item.x, item.y, p.x, p.y - 32 ) < item.d && item.a == true ){
+            if( distance( item.x, item.y, p.x, p.y - 32 ) < item.d * item.d && item.a == true ){
                 item.a = false;
                 item.r = now();
                 item.u = true;
@@ -86,21 +86,25 @@ setInterval(function(){
         prj.update();
         
         for(var o = 0; o < players.length; o++) {
-            var pla = players[o];
-            if( distance( prj.x1, prj.y1, pla.x, pla.y - 16 ) < 18 && prj.id != pla.id ) {
-                pla.hp -= parseInt( Math.random() * 4 + 8 );
+            var p = players[o];
+            
+            if( distance( prj.x1, prj.y1, p.x, p.y - 16 ) < 18 * 18 &&
+                distance( 0, 0, p.x, p.y - 16 ) > 100 * 100 &&               
+                prj.id != p.id ) {
+                p.hp -= parseInt( Math.random() * 4 + 8 );
+                p.vY = -1.5;
+                p.Controllable = false;
+                p.cTimer = 15;
+                p.socket.emit('this', { HP: p.hp });
 
-                if( prj.x1 > pla.x ) {
-                    pla.vX = -1.5
+                if( prj.x1 > p.x ) {
+                    p.vX = -1.5
                 } else {
-                    pla.vX = 1.5
+                    p.vX = 1.5
                 };
-
-                pla.vY = -1.5;
-                pla.Controllable = false;
-                pla.cTimer = 15;
+                
                 prj.a = false;
-            }
+            };            
         };
         
         for ( var o = 0; o < level.length; o++) {
@@ -108,7 +112,8 @@ setInterval(function(){
             if (prj.x1 >= l.x &&
                 prj.x1 <= l.x + l.w &&
                 prj.y1 >= l.y &&
-                prj.y1 <= l.y + l.h)
+                prj.y1 <= l.y + l.h &&
+                l.c)
             {
                 prj.a = false;
                 break;
@@ -131,7 +136,7 @@ setInterval(function(){
         b.update()
 
         for(var p = 0; p < proj.length; p++){
-            if( distance( proj[p].x1, proj[p].y1, badniks[i].x, badniks[i].y ) < 24 &&
+            if( distance( proj[p].x1, proj[p].y1, badniks[i].x, badniks[i].y ) < 24 * 24 &&
                b.a == true &&
                proj[p].id != "badnik" ) {
                 b.HP -= parseInt( Math.random() * 4 ) + 8;
@@ -155,28 +160,31 @@ setInterval(function(){
             };
         
     for( var o = 0; o < players.length; o++) {
-            var pl = players[o];
+            var p = players[o];
         
-            if( distance( b.x, b.y, pl.x, pl.y-16 ) < 32 && b.a == true ){
+            if( distance( b.x, b.y, p.x, p.y-16 ) < 32 * 32 && b.a == true ){
                 b.HP -= 10;
-                pl.vY = -2;
-                pl.y = b.y - 32;
-                pl.Controllable = true;
+                p.vY = -2;
+                p.y = b.y - 32;
+                p.Controllable = true;                
                 
                 if(b.HP < 1){
                     b.a = false;
                     b.t = now();
                     b.HP = b.maxHP;
-                    pl.score = parseInt(pl.score) + 100;
-                    pl.xp = parseInt(pl.xp) + 10;
+                    p.socket.emit('this', {
+                        id: o,  // Which player in CLIENT's array is THEIR local player. (Must be same as server's)
+                        Score: p.score = parseInt(p.score) + 100,
+                        XP: p.xp = parseInt(p.xp) + 10
+                    });
                 };                
             };  // COLLISION WITH PLAYERS
             
-            if ( distance( b.x, b.y, pl.x, pl.y - 16 ) < 800 ){
+            if ( distance( b.x, b.y, p.x, p.y - 16 * 16 ) < 800 * 800 ){
                 if ( b.a == false ) {
-                    pl.socket.emit("updateBadnik",{ id: i, a: b.a }) 
+                    p.socket.emit("updateBadnik",{ id: i, a: b.a }) 
                 } else {
-                    pl.socket.emit("updateBadnik",{
+                    p.socket.emit("updateBadnik",{
                         id: i,
                         x: b.x,
                         y: b.y,
@@ -192,44 +200,61 @@ setInterval(function(){
     
     //PLAYERS
     for( var i = 0; i < players.length; i++) {
-        var p = players[i];
+    var p = players[i];
         p.socket.emit('this', {
-            id: i,  // Which player in CLIENT's array is THEIR local player. (Must be same as server's)
-            score: p.score,
-            rings: p.rings,
-            exper: p.xp,
+            id: i,
             Energy: p.Energy,
             ESP: p.ESP,
             Chaos: p.Chaos,
-            HP: p.hp,
-            PlayerLevel: p.level
+            Score: p.score,
+            Rings: p.rings
         });
 
-        if( p.mode != "f" && p.Controllable ) { p.vY += 0.15 };
+        if( p.mode != "f" && p.Controllable ) { p.vY += gravity };
+        if( p.Levitate == 1 ) { p.vY = 0; p.ESP -= 1 };
+        if( p.ESP < 1 && p.Levitate == 1 ) { p.Levitate = 0 };
+        
+        // !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !
         
         for ( var o = 0; o < level.length; o++) {
-            var l = level[o];
-            if (p.x >= l.x &&
-                p.x <= l.x + l.w &&
-                p.y >= l.y &&
-                p.y <= l.y + l.h &&
-                p.vY > 0)
-            {
-                p.vY = 0;
-                p.Controllable = true;
-                p.y = l.y;
-                if ( p.doubleJump == false ) { p.doubleJump = true };
-            };
-        };
+        var l = level[o];
+            
+            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y + p.vY >= l.y && p.y + p.vY <= l.y + l.h && l.c && p.vY > 0 )
+                {
+                    p.vY = 0;
+                    p.Controllable = true;
+                    p.y = l.y;
+                    if ( p.doubleJump == false ) { p.doubleJump = true };
+                };
+
+            if( p.x >= l.x - 8 && p.x <= l.x + l.w + 8 && p.y >= l.y + l.h * 0.5 && p.y <= l.y + l.h + 32 && l.c && p.vY < 0 )
+                {
+                    p.vY = 0;
+                    p.Controllable = true;
+                };
+            
+            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x >= l.x - p.w * 0.25 && p.x <= l.x + l.w * 0.5 && l.c && p.vX > 0 )
+                {
+                    p.vX = 0;
+                    p.x = l.x - 16;
+                    
+                };
+            
+            if( p.y - 16 >= l.y && p.y <= l.y + l.h + 16 && p.x <= l.x + l.w + p.w * 0.25 && p.x >= l.x && l.c && p.vX < 0 )
+                {
+                    p.vX = 0;
+                    p.x = l.x + l.w + 16;
+                };
+            
+        };  // LEVEL COLLISION
+        
+        // !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !
         
         if( p.update() ) {
             io.emit("netPlayers", {
-                id: p.id,
-                x: p.x,
-                y: p.y,
-                vX: p.vX,
-                vY: p.vY,
-                hp: parseInt( p.hp ),
+                x: +(p.x).toFixed(2),
+                y: +(p.y).toFixed(2),
+                hp: parseInt(p.hp),
                 name: p.name,
                 cpic: p.cpic,
                 type: p.type,
@@ -243,7 +268,7 @@ setInterval(function(){
 
 }, config.updateDelay); // GLOBAL UPDATE MECHANICS
 
-setInterval(updateDB, 5000);
+setInterval(updateDB, 3500);
 
 // ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### //
  
@@ -278,7 +303,7 @@ io.on('connection', function(socket){
                         login = doc.name;
                         paswd = doc.pass;
                         if( paswd != userPass ) { status = 1 };
-                        if( players.indexOf( selectByName(players, userName)) != -1 ){ status = 2 };
+                        if( players.indexOf( selectByName(players, userName) ) != -1 ){ status = 2 };
                         switch( status ){
                             case 1:
                                 socket.emit('loginNO', { text: "Wrong password." } );
@@ -288,7 +313,7 @@ io.on('connection', function(socket){
                                 break;
                             case 0:
                                 socket.emit('loginOK');
-                                var thisPlayer = new player(15,300, userName, ip);
+                                var thisPlayer = new player(0,0, userName, ip);
                                 thisPlayer.id = socket.id;
                                 
                                 thisPlayer.score = doc.score;
@@ -298,12 +323,11 @@ io.on('connection', function(socket){
                                 thisPlayer.socket = socket;
                                 thisPlayer.lastShot = now();
                                 thisPlayer.hp = thisPlayer.level * 10 + 100;
-
-                                thisPlayer.cpic = doc.sprite;
+                                thisPlayer.cpic = doc.sprite;                                
 
                                 players.push(thisPlayer);
                                 sendPlayersOnce();
-                                
+
                                 for ( var i = 0; i < level.length; i++) {
                                 var l = level[i];
                                     socket.emit("platform", {
@@ -312,6 +336,8 @@ io.on('connection', function(socket){
                                         w: l.w,
                                         h: l.h,
                                         i: l.i,
+                                        c: l.c,
+                                        id: l.id
                                     });
                                 };  // SEND LEVEL INFO
                                 
@@ -353,7 +379,6 @@ io.on('connection', function(socket){
                                     text: "Use AD to move, SPACE to jump and MOUSE to shoot.",
                                     time: dH + ":" + dM + ":" + dS
                                 }); // Use theese controls
-
 
                                 socket.on("netChatMsg", function(data){
                                     var msgText = "";
@@ -408,7 +433,7 @@ io.on('connection', function(socket){
 
                                 socket.on('btnPress', function(data){
                                                 switch(data.key){
-                                                    case 'A':                                                    
+                                                    case 'A':
                                                         thisPlayer.keyA = true;
                                                         break;
                                                     case 'E':
@@ -417,6 +442,9 @@ io.on('connection', function(socket){
                                                             badniks[data.parameter1].x,
                                                             badniks[data.parameter1].y
                                                         );
+                                                        break;
+                                                    case 'R':
+                                                        thisPlayer.useSkill("ESP_Levitate");
                                                         break;
                                                     case 'D':
                                                         thisPlayer.keyD = true;
@@ -449,7 +477,6 @@ io.on('connection', function(socket){
                                                         break;
                                                 }
                                             });
-                                
                                 break;
                         };
                         

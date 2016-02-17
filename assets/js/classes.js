@@ -6,16 +6,19 @@ function player(x,y,name,cpic){
     this.h = 64;
     this.vX = 0;
     this.vY = 0;
+    this.lastX = 0;
+    this.lastY = 0;
     this.ip;
     var id;
     this.f = 0, this.a = 0;
     this.fW = 64, this.fH = 64;
     this.face = 1;
     
-    this.Energy;
-    this.ESP;
-    this.Chaos;
-    this.XP;
+    this.Energy = 0;
+    this.ESP = 0;
+    this.Chaos = 0;
+    this.XP = 0;
+    this.score = 0;
     
     this.type = "Normal";
     this.mode = "n";
@@ -125,13 +128,16 @@ function player(x,y,name,cpic){
         };
         
     this.update = function(x,y){
-        this.x = x; this.y = y;
+        if( x ){ this.x = x };
+        if( y ){ this.y = y };
+        { this.vY = this.y - this.lastY; this.lastY = this.y };
+        { this.vX = +(this.x - this.lastX).toFixed(2); this.lastX = this.x };
     };
     
     this.updateAnim = function(){
         if( this.vX > 0 ) { this.face = 1 };
         if( this.vX < 0 ) { this.face = 0 };
-        
+
         if( this.vX <= 0.15 && this.face == 1 ) { this.a = 2 };    // STAND RIGHT
         if( this.vX >= -0.15 && this.face == 0 ) { this.a = 6 };    // STAND LEFT
         if( this.vX > 0.15 ) { this.a = 0 };                       // WALK RIGHT
@@ -143,21 +149,23 @@ function player(x,y,name,cpic){
         if( this.vY > 0 && this.face == 0) { this.a = 4 };      // FALL TO LEFT
         if( this.face == 0 && this.mode =="f" ) { this.a = 6 }; // EGGMOBILE LEFT
         if( this.face == 1 && this.mode =="f" ) { this.a = 2 }; // EGGMOBILE RIGHT
-        
+
         if( this.vX == -1.5 && this.vY == -1.5 ) { this.a = 9 };
         if( this.vX == 1.5 && this.vY == -1.5 ) { this.a = 10 };
-        
-        
+
         this.f += Math.max(0.15, Math.abs(this.vX * 0.075) );
         if( this.f > this.anim[this.a] - 1 ) { this.f = 0 };
     };
     
-    this.drawPlayer = function(){
+    this.do = function(){
+        if( this.vX >= -0.15 && this.vX <= 0.15 ) { this.vX = 0 };
+
         this.updateAnim();
+
         context.textAlign = "center";
         context.font = "12px Andale Mono";
 
-        if(p[i] && p[i].type == "admin") {
+        if( p[i] && p[i].type == "admin" ) {
             context.strokeStyle = "black";
             context.strokeText( "ADMIN", this.x, this.y-55 );
             context.fillStyle = "#e8a";
@@ -168,7 +176,7 @@ function player(x,y,name,cpic){
         context.strokeText( "("+this.level+")"+this.name, this.x, this.y-45 );
         context.fillStyle = 'white';
         context.fillText( "("+this.level+")"+this.name, this.x, this.y-45 );     
-    
+
         if(this.i){
             context.drawImage(
                 this.i,
@@ -181,7 +189,8 @@ function player(x,y,name,cpic){
                 this.fH
             );
         };
-        if (this.mode == "f") { context.drawImage(_sprite_Eggmobile,this.face * 64, 0, 64, 46, this.x-32, this.y-25, 64, 46) };
+        
+        if ( this.mode == "f" ) { context.drawImage(_sprite_Eggmobile,this.face * 64, 0, 64, 46, this.x-32, this.y-25, 64, 46) };
 
         if ( localPlayer != this ) {
             context.strokeStyle = 'black';
@@ -196,69 +205,97 @@ function player(x,y,name,cpic){
     };
 };
 
-function badnik(x, y){
+function badnik(x, y, type){
     this.x = x;
     this.y = y;
+    this.vX = 0;
+    this.vY = 0;
+    this.lastX = 0;
+    this.lastY = 0;
+    this.w = 38;
+    this.h = 38;
     this.a = true;
     this.HP = 0;
+    this.maxHP = 25;
     this.id;
-        
+    this.aF = [4,4,1];
+    this.f = 0;
+    
+    
+    switch( type ) {
+        case 0:
+            this.i = _SpriteBuzzbomber;
+            this.maxHP = 25;
+            break;
+        default:
+            this.i = _SpriteDarkVortex;
+            this.maxHP = 25;
+            break;
+    };
+    
     this.draw = function(){
+        this.vX = this.x - this.lastX;
+        this.lastX = this.x;
+        this.f += 0.25;
+        if( this.f >= 2 ) { this.f = 0 };
+        if( this.vX < 0 ) { this.face = 0 };
+        if( this.vX > 0 ) { this.face = 1 };
         if( this.a ) {
-            context.drawImage(this.i, parseInt(this.x)-32, parseInt(this.y)-16);
+            context.drawImage(
+                this.i,
+                parseInt(this.f) * this.w,
+                this.face * this.h,
+                this.w,
+                this.h,
+                parseInt(this.x) - this.w * 0.5,
+                parseInt(this.y) - this.h * 0.5,
+                this.w,
+                this.h
+            );
             context.textAlign = "center";
             context.strokeStyle = 'black';
             context.font = "10px Andale Mono";
             context.fillStyle = "black";
             context.fillRect(this.x-25, this.y+16,50,12);
             context.fillStyle = "red";
-            context.fillRect(this.x-22, this.y+18,(44*this.HP)/25,8);
+            context.fillRect(this.x-22, this.y+18,(44*this.HP)/this.maxHP,8);
             context.fillStyle = "#FFF";
             context.fillText(this.HP, this.x, this.y + 25);
         };
     };
 };
 
-function platform(x,y,w,h,i){
+function platform(x,y,w,h,i,c,id){
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    this.i = i;
+    this.c = c;
+    this.id = id;
+    this.offsetX = 16 * i;
+    this.offsetY = 0;
     
-    switch(i){
-        case "pa001":
-            this.i = _sprite_PlatformA001;
-            break;
-        case "pb001":
-            this.i = _sprite_PlatformB001;
-            break;
-        case "ba001":
-            this.i = _sprite_BlockA001;
-            break;
-        case "bb001":
-            this.i = _sprite_BlockB001;
-            break;
-        case "bb002":
-            this.i = _sprite_BlockB002;
-            break;
+    if( this.id === 1 ) {
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };
+        if( this.offsetX >= 240 ) { this.offsetX -= 240; this.offsetY += 1 };       
     };
-            
-    this.vX = 0;
-    this.vY = 0;
+    
+    if( this.id === 2 ) {
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+        if( this.offsetX >= 1600 ) { this.offsetX -= 1600; this.offsetY += 1 };
+    };
 
     this.draw = function(){
-        if(this.i){
-            if( this.w > this.i.width ){
-                var d = this.w / this.i.width;
-                for(var l = 0; l < d; l++) {
-                    context.drawImage(this.i,this.x + l * this.i.width, this.y);
-                };
-            } else {
-                context.drawImage(this.i, this.x, this.y);
-            };
-
-        };
+        //context.drawImage( _TilesetGHZ, this.offsetX, this.offsetY * 16, 16, 16, this.x, this.y, 16, 16);
+        context.fillRect( this.x, this.y, this.w, this.h );
     };
 };
 

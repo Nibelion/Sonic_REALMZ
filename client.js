@@ -28,11 +28,16 @@ function init(){
         $('#field').trigger('click');
     });
     
-    var _gameWaterLever = 700;
+    var _gameWaterLever = 1000;
     
     var canvas  = document.getElementById("game");
     region  = canvas.getBoundingClientRect();
     context = canvas.getContext("2d");
+    
+    var grd = context.createLinearGradient(0,0,0,170);
+        grd.addColorStop(0,"#3251D1");
+        grd.addColorStop(1,"#37D6FF");
+    
     canvas.onmousemove = updateMouse;
     cw = (canvas.width = 1024);     // 640 default
     ch = (canvas.height = 600);    // 480 default
@@ -40,22 +45,11 @@ function init(){
     {
         
     document.body.addEventListener("keydown", function(e) {
-        
-        
-        
-        if( document.activeElement.id != "formText" &&
-           document.activeElement.id != "widgetLogin" &&
-           e.keyCode == 32 )
-        {
-            e.preventDefault();
-        };  // PREVENT SPACEBAR FROM SCROLLING THE PAGE DOWN
-        
-        
-        
+
         if ( socket ){
             
             switch( e.keyCode ){
-
+                    
                 case 13:
                     if ( document.activeElement.id == "formText" ) {
                         document.getElementById("game").focus();                
@@ -96,32 +90,33 @@ function init(){
         if ( document.activeElement.id != "formText" && socket ){
             
             switch( e.keyCode ){
-                case 65:
-                    socket.emit('btnRelease', { 'key' : 'A' });
-                    break;
-                    
-                case 68:
-                    socket.emit('btnRelease', { 'key' : 'D' });
-                    break;
-                    
+
                 case 32:
                     if( document.activeElement.id != "formText" ){                    
                         socket.emit('btnPress', { 'key' : 'SPACE' });
                     };
                     break;
-                    
+
+                case 65:
+                    socket.emit('btnRelease', { 'key' : 'A' });
+                    break;
+
+                case 68:
+                    socket.emit('btnRelease', { 'key' : 'D' });
+                    break;
+
                 case 84:
                     if( document.activeElement.id != "formText" ){
                         socket.emit('btnPress', { 'key' : 'T' });
                     };
                     break;
-                    
+
                 case 69:
                     if( localTarget && document.activeElement.id != "formText" ) {
                         socket.emit('btnPress', { 'key': 'E', 'parameter1': localTarget.id });
                     };
                     break;
-                    
+
                 case 70:
                     if ( localPlayer && document.activeElement.id != "formText" ) {
                         socket.emit('btnPress', { 'key': 'F',
@@ -131,19 +126,25 @@ function init(){
                     };
                     break;
 
+                case 82:
+                    if( document.activeElement.id != "formText" ){
+                        socket.emit('btnPress', { 'key' : 'R' });
+                    };                    
+                    break;
+
             };
 
         };
     });
 
     canvas.addEventListener("mousedown", shoot);
-        
+
     }; // CONTROLS
     
     // ### MAIN LOOP ### = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
         
     function update(){
-        
+
         $("#userCount").html( p.length );
 
         if( document.activeElement.id == "formText" || $('#widgetChat').is(":hover") ) {
@@ -153,18 +154,20 @@ function init(){
         };
         
         // ### RENDER ### //
-        context.drawImage(_image_Sky,0,0,1024,600);
+
+        context.fillStyle = grd;
+        context.fillRect( 0, 0, 1280, 800 );        
         
         if( clientState == 0 ) {
-            context.drawImage(_imgIsland, 0,0,1039,540);
-            context.drawImage(_imglogo, 0,0);
+            context.drawImage( _imgIsland, 0, 0, 1039, 540 );
+            context.drawImage( _imglogo, 0, 0 );
         } else {
 
             context.save();
             
             if( localPlayer ){     // IF WE HAVE OUR LOCAL PLAYER
                 context.translate(
-                    parseInt(cw * 0.5 - localPlayer.x),
+                    parseInt( cw * 0.5 - localPlayer.x ),
                     parseInt(Math.max( ch * 0.5 - localPlayer.y, -_gameWaterLever + ch * 0.5 ))
                 );
                 context.globalAlpha = 0.25;
@@ -178,19 +181,32 @@ function init(){
             };
 
             context.globalAlpha = 1;
-            context.drawImage(_level_TechnoTower,0,-860);
+
+            context.drawImage(_spriteLevelHub,-256,0);
+            context.drawImage(_spriteLevelGHZ,224,0);
+            context.drawImage(_spriteLevelHCZ,1568,-5568);
+
+            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
+
+            for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
+
+            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].do() } };
             
+            context.drawImage(_spriteLevelHCZ_o,1568,-5568);
+
+            //for ( var i = 0; i < level.length; i++) { if (level[i]) { level[i].draw() } }; // OBSOLETE
+
             localTarget = null;
 
             {
-            var dist = 200;
+            var dist = 200 * 200;
             for ( var i = 0; i < badniks.length; i++) {
             var b = badniks[i];            
                 if ( b ) {
                     b.draw();
                     if ( localPlayer ) {
-                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 && b.a ) {
-                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist ) {
+                        if( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < 200 * 200 && b.a ) {
+                            if ( distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 ) < dist * dist ) {
                                 dist = distance( b.x, b.y, localPlayer.x, localPlayer.y - 16 );
                                 localTarget = b;
                             };
@@ -200,23 +216,15 @@ function init(){
             };
             } // HOMING ATTACK ALGORITHM
             
-            if( localTarget ) {
+            if( localTarget && localPlayer.vY != 0 ) {
                 context.strokeStyle = "red";
-                context.lineWidth = 5;
+                context.lineWidth = 3;
                 context.beginPath();
                 context.arc( localTarget.x, localTarget.y, 15, 0, 2 * Math.PI );
                 context.stroke();
-            };
+            }; // DRAW NEAREST TARGET
             
-            context.lineWidth = 1;
-
-            for ( var i = 0; i < items.length; i++) { if ( items[i] ) { items[i].draw() } };
-
-            for ( var i = 0; i < level.length; i++) { level[i].draw() };
-
-            for ( var i = 0; i < proj.length; i++) { if( proj[i] ) { proj[i].draw() } };
-
-            for ( var i = 0; i < p.length; i++) { if (p[i]) { p[i].drawPlayer() } };
+            context.lineWidth = 1;            
             
             if( localPlayer ){
                 context.fillStyle = "rgba( 0, 0, 168,0.5)";
@@ -233,7 +241,7 @@ function init(){
                 drawBar(context, 0, ch - 15, "#80F", cw, 15, 3, localPlayer.XP, localPlayer.level * 100 );
                 context.font = "12px SonicTitle";
                 context.fillStyle = "#FFF";
-                context.textAlign = "left"
+                context.textAlign = "left";
                 context.strokeText("rings: "+localPlayer.Rings,11,85);
                 context.fillText("rings: "+localPlayer.Rings,11,85);
                 context.strokeText("score: "+localPlayer.Score,11,100);
@@ -245,11 +253,22 @@ function init(){
         requestAnimationFrame(update);
     };
 
+    $("#loadingScreen").hide();
+    toggleMusic();
+    document.getElementById("ost").play();
+    
     update();
 
 };
 
 //  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = //
+
+function toggleMusic(){
+    if( document.getElementById("optionsMusic").checked )
+        { document.getElementById("ost").volume = 0.25 }
+    else
+        { document.getElementById("ost").volume = 0.0 };    
+};
 
 const rectsOverlap = function(x1,y1,w1,h1,x2,y2,w2,h2){
     if( x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2 ) {
@@ -403,6 +422,6 @@ function shoot(){
     };
 };
 
-function distance(x1,y1,x2,y2){ return Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ) };
+function distance(x1,y1,x2,y2){ return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) };
     
 function rnd(value){ return parseInt( Math.random() * value ) };

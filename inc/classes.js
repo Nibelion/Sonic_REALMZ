@@ -52,8 +52,8 @@ global.player = function(x,y,name,ip){
     this.rings = 0;
     this.xp = 0;
     this.level = 1;
-    this.maxSpeed = 5;
-    this.accel = 0.12;
+    this.maxSpeed = 6;
+    this.accel = 0.15;
     this.keyA = false;
     this.keyD = false;
 
@@ -69,6 +69,7 @@ global.player = function(x,y,name,ip){
     this.target = null;
     this.cTimer = 0;
     this.doubleJump = false;
+    this.Levitate = 0;
 
     this.update = function(){
         var updateThis = false;
@@ -101,10 +102,11 @@ global.player = function(x,y,name,ip){
         
         if( this.Controllable ){
             this.cTimer = 0;
-            if( this.y >= 732 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
+            if( this.y >= 1032 ) { this.vY = 2; this.vX *= 0.93; };          // WATER PHYSICS
             if( this.keyA && this.vX > -this.maxSpeed ){ this.vX -= this.accel }; // MOVE LEFT
             if( this.keyD && this.vX < this.maxSpeed ){ this.vX += this.accel }; // MOVE LEFT
             if( !this.keyA && !this.keyD ) { this.vX *= 0.9 };
+            if( (this.keyA && this.vX > 0) || (this.keyD && this.vX < 0) ) { this.vX *= 0.9 };
 
             if( this.vX > -0.1 && this.vX < 0.1 && !this.keyA && !this.keyD ) 
                 { this.vX = 0; };
@@ -113,10 +115,10 @@ global.player = function(x,y,name,ip){
             if( this.vX > this.maxSpeed ){ this.vX = this.maxSpeed };
         };
 
-            if (this.y >= 700 + ch * 0.5 ) {
+            if (this.y >= 1000 + ch * 0.5 ) {
                 this.hp = this.maxHP;
-                this.x = Math.random() * 1900;
-                this.y = 300;
+                this.x = 0;
+                this.y = 0;
                 this.vY = 1;
                 this.socket.emit("event",{
                     name: "jump",
@@ -127,8 +129,8 @@ global.player = function(x,y,name,ip){
 
             if(this.hp <= 0) {
                 this.hp = this.maxHP,
-                    this.x = Math.random() * 1900;
-                    this.y = 300;
+                    this.x = 0;
+                    this.y = 0;
                     this.vY = 1;
                     this.socket.emit("event",{
                         name: "jump",
@@ -154,9 +156,10 @@ global.player = function(x,y,name,ip){
 
     this.useSkill = function(skill, parameter1, parameter2){
         switch( skill ){
+                
             case "jump":
                 if( this.vY == 0 && this.Energy >= 30 ){
-                    this.vY = -5;
+                    this.vY = -6.5;
                     this.Energy -= 30;
                     this.socket.emit("event",{
                         name: "jump",
@@ -165,7 +168,7 @@ global.player = function(x,y,name,ip){
                     });
                 } else if( this.vY != 0 && this.doubleJump && this.Energy >= 30 ) {
                     this.doubleJump = false;
-                    this.vY =-5;
+                    this.vY = -5.5;
                     this.Energy -= 30;
                     this.socket.emit("event",{
                         name: "jump",
@@ -174,6 +177,7 @@ global.player = function(x,y,name,ip){
                     });
                 };
                 break;
+                
             case "dash":
                 if( this.Energy >= 20 && this.vX != 0 ){
                     this.Energy -= 20;
@@ -181,11 +185,11 @@ global.player = function(x,y,name,ip){
                     if( this.vX > 0 ){ this.vX = 14 };
                 };
                 break;
+                
             case "homingAttack":
                 if( this.Energy >= 30 &&
                    this.vY != 0 &&
-                   distance(this.x, this.y, parameter1, parameter2) < 200 ){
-
+                   distance(this.x, this.y, parameter1, parameter2) < 200 * 200 ){
                     this.Controllable = false;
                     this.Energy -= 30;
                     var angle = Math.atan2( parameter2 - this.y + 16, parameter1 - this.x );
@@ -193,13 +197,21 @@ global.player = function(x,y,name,ip){
                     this.vY = Math.sin(angle) * 15;
                 };
                 break;
+                
             case "chaosControl":
-                if( this.Chaos >= 20 && distance(this.x, this.y, parameter1, parameter2)  < 360 ){
+                if( this.Chaos >= 20 && distance(this.x, this.y, parameter1, parameter2)  < 360 * 360 ){
                     this.x = parameter1;
                     this.y = parameter2;
                     this.Chaos -= 20;
                     this.vY = 0;
                 };
+                break;
+                
+            case "ESP_Levitate":
+                this.Levitate = 1 - this.Levitate;
+                break;
+
+            default:
                 break;
         };
     };
@@ -223,12 +235,14 @@ global.projectile = function(x1,y1,sX,sY,id){
     };
 };
 
-global.platform = function(x,y,w,h,i){
+global.platform = function(x,y,w,h,i,c,id){
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
     this.i = i;
+    this.c = c;
+    this.id = id;
 };
 
 global.item = function(x,y,type){
