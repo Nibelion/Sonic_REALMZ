@@ -2,7 +2,8 @@ var socket, userName, userPass, id, badniks = [];
 
 function netSocket()
 {
-    socket = io();  
+    //socket = io("http://vm14965.hv8.ru:1337");    // Uncomment after deployment
+    socket = io("http://localhost:1337");      // For local tests only
     
     socket.on('connect', function () {
             

@@ -20,6 +20,11 @@
     "Knuckles"
   ],
   "author": "Mikhail Galich",
+    "window": {
+    "toolbar": false,
+    "width": 800,
+    "height": 500
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Nibelion/Sonic_REALMZ/issues"

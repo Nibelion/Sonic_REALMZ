@@ -13,6 +13,9 @@
     </head>
     
 <body onload="init()">
+    <?php
+        echo "This";
+    ?>
     <div id="loadingScreen">LOADING.</div>
     <div id="wrap">
         

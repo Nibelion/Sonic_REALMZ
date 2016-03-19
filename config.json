@@ -1,5 +1,5 @@
 {
-    "port": 80,
+    "port": 1337,
     "maxPlayers": 100,
     "logging": false,
     "version": "1.8.0 - Water",

@@ -19,12 +19,12 @@ global.proj     = [];
 global.chat     = [];
 
 global.spawnPoints = [
-    { x: 0, y: 0 }
-    /*{ x: 5300, y: -1090 },
+    { x: 0, y: 0 },
+    { x: 5300, y: -1090 },
     { x: 6750, y: 450 },
     { x: 7400, y: -2560 },
     { x: 11050, y: -2350 },
-    { x: 11050, y: -2350 }*/
+    { x: 11050, y: -2350 }
 ];
 
 global.cw = 1024;
@@ -40,16 +40,6 @@ var recoveryHtml = "<b>Dear user</b><p>Here is your password for your character:
 require('./inc/classes.js');
 require('./inc/functions.js');
 require('./inc/level.js');
-
-app.get('/*', function(req,res){
-    var reqPath = req.path;
-    if( reqPath == "/*" ) { reqPath = "./index.html" };
-    if( reqPath == "/server.js" ) { reqPath = "./404.html" };
-    fs.exists(__dirname + reqPath, function(exists){
-        if(!exists && reqPath != "/wpad.dat") { log( req.connection.remoteAddress + " - Error 404: Couldn't serve: "+__dirname+req.path); res.redirect('/404.html'); };
-        if(exists) { res.sendFile(__dirname + reqPath) };
-    });
-});     // HTTP SERVER
 
 setInterval(function(){
     
